@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Categorias\CategoriaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Security\AsignarController;
 use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\UserController;
@@ -47,6 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/store/permiso', [PermissionController::class, 'storePermission'])->name('permisos.storePermission');
     Route::post('/update/permiso/{id}', [PermissionController::class, 'updatePermiso'])->name('permisos.updatePermiso');
     Route::delete('/delete/permiso/{id}', [PermissionController::class, 'deletePermiso'])->name('permisos.deletePermiso');
+
+
+    Route::get('/asignar', [AsignarController::class, 'index'])->name('asignar.index');
+    Route::get('/get/index/data/asignar', [AsignarController::class, 'getDataIndexAsiganr'])->name('asignar.getDataIndexAsiganr');
+    Route::post('/store/permisos', [AsignarController::class, 'storeAsignarPermisosRoles'])->name('asignar.storeAsignarPermisosRoles');
+    Route::post('/asignar/todo', [AsignarController::class, 'AsignarTodo'])->name('asignar.AsignarTodo');
+    Route::post('/revocar/todo', [AsignarController::class, 'RevocarTodo'])->name('asignar.RevocarTodo');
 
 });
 

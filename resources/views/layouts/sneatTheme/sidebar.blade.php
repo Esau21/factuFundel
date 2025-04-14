@@ -107,8 +107,8 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="layouts-blank.html" class="menu-link">
-                        <div class="text-truncate" data-i18n="Blank">Asignar</div>
+                    <a href="{{ route('asignar.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Blank">Asignar permisos</div>
                     </a>
                 </li>
             </ul>
