@@ -140,7 +140,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('productos.index') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Proveedores">Productos</div>
                     </a>
                 </li>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Categorias\CategoriaController;
+use App\Http\Controllers\Producto\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Proveedor\ProveedorController;
 use App\Http\Controllers\Security\AsignarController;
@@ -63,6 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/store/proveedor', [ProveedorController::class, 'storeProveedor'])->name('proveedores.storeProveedor');
     Route::post('/update/proveedor/{id}', [ProveedorController::class, 'updateProveedor'])->name('proveedores.updateProveedor');
     Route::delete('/delete/proveedor/{id}', [ProveedorController::class, 'deleteProveedor'])->name('proveedor.deleteProveedor');
+
+    Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
+    Route::get('/productos/get/index/data', [ProductoController::class, 'getIndexDataProductos'])->name('productos.getIndexDataProductos');
 
 });
 
