@@ -32,9 +32,10 @@ class Producto extends Model
 
     public static function getProductosData()
     {
-        $data = Producto::join('categorias as c', 'c.id', '=', 'productos.categoria_id')
+        $data = Producto::leftJoin('categorias as c', 'c.id', '=', 'productos.categoria_id')
         ->select('productos.*', 'c.categoria_nombre as categoria')
-        ->orderBy('productos.id', 'desc')->get();
+        ->orderBy('productos.id', 'desc')
+        ->get();
 
         return $data;
     }

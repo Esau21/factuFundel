@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers\Producto;
 
+use App\Exports\ArrayExport;
+use App\Exports\ProductosPlantillaExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ProductosImport;
 use App\Models\Producto\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Excel as ExcelFormat;
 
 class ProductoController extends Controller
 {
@@ -53,12 +60,84 @@ class ProductoController extends Controller
                     return $data->estado ?? 'no data';
                 })
                 ->addColumn('categoria', function ($data) {
-                    return $data->categoria ?? 'no data';
+                    return $data->categoria ?? 'sin categoria';
                 })
                 ->addColumn('acciones', function ($data) {
                     return 'acciones';
                 })
-                ->rawColumns(['acciones', 'estado'])->make(true);
+                ->rawColumns(['acciones', 'estado', 'imagen'])->make(true);
         }
+    }
+
+    public function descargarPlantilla()
+    {
+        return Excel::download(new ProductosPlantillaExport, 'plantilla_productos.xlsx');
+    }
+
+    public function enviarCargaMasivadeProductos(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv',
+        ]);
+
+        /* Ruta pública donde se guardarán los archivos */
+        $publicPath = public_path('uploads/productos');
+        if (!File::exists($publicPath)) {
+            File::makeDirectory($publicPath, 0755, true);
+        }
+
+        /* Guardar archivo en el servidor */
+        $file = $request->file('file');
+        $fileName = Str::random(10) . '.' . $file->getClientOriginalExtension();
+        $file->move($publicPath, $fileName);
+
+        /* Ruta completa del archivo para usar en la respuesta */
+        $fileUrl = asset('uploads/productos/' . $fileName);
+
+        /* Ejecutamos la importación */
+        $import = new ProductosImport();
+        Excel::import($import, $publicPath . '/' . $fileName);
+
+        /* Verificar si hay productos duplicados (con error 'Producto con código o nombre ya existe') */
+        $productosExistentes = collect($import->errores)->filter(function ($producto) {
+            return isset($producto['error']) && $producto['error'] === 'Producto con código o nombre ya existe';
+        });
+
+        /* Si hay productos duplicados, solo devolvemos el archivo de errores */
+        if ($productosExistentes->isNotEmpty()) {
+            /**
+             * Exportar errores (productos existentes)
+             */
+            $nombreArchivoError = 'errores_productos_' . now()->format('Ymd_His') . '.xlsx';
+            $rutaError = 'exports/' . $nombreArchivoError;
+            Excel::store(new ArrayExport($productosExistentes->values()->toArray()), $rutaError, 'public');
+            $errores_url = asset('storage/' . $rutaError);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Algunos productos ya existen. Solo se descargará el archivo de errores.',
+                'errores_url' => $errores_url,
+                'file_url' => $fileUrl,
+            ]);
+        }
+
+        /**
+         *  Si no hay errores, exportar productos válidos
+         */
+        $productos_url = null;
+        if (!empty($import->validos)) {
+            $nombreArchivoExito = 'productos_subidos_correctamente_' . now()->format('Ymd_His') . '.xlsx';
+            $rutaExito = 'exports/' . $nombreArchivoExito;
+            Excel::store(new ArrayExport($import->validos), $rutaExito, 'public');
+            $productos_url = asset('storage/' . $rutaExito);
+        }
+
+
+        return response()->json([
+            'success' => true,
+            'productos' => $import->validos,
+            'productos_url' => $productos_url,
+            'file_url' => $fileUrl,
+        ]);
     }
 }

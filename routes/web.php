@@ -67,6 +67,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
     Route::get('/productos/get/index/data', [ProductoController::class, 'getIndexDataProductos'])->name('productos.getIndexDataProductos');
+    Route::get('/descargar/plantilla/productos', [ProductoController::class, 'descargarPlantilla'])->name('productos.descargarPlantilla');
+    Route::post('/carga/masiva/productos-import', [ProductoController::class, 'enviarCargaMasivadeProductos'])->name('productos.enviarCargaMasivadeProductos');
 
 });
 
