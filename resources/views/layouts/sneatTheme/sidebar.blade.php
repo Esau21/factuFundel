@@ -121,18 +121,32 @@
             </a>
         </li>
 
-    
+
 
         <!-- Apps & Pages -->
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Modulos &amp; Pages</span>
+            <span class="menu-header-text">Modulos</span>
         </li>
+
         <li class="menu-item">
-            <a href="{{ route('categorias.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-category"></i>
-                <div class="text-truncate" data-i18n="Categorias">Categorias</div>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-copy"></i>
+                <div class="text-truncate" data-i18n="LayoutsPC">Productos y mas</div>
             </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('categorias.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Categorias">Categorias</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                        <div class="text-truncate" data-i18n="Proveedores">Productos</div>
+                    </a>
+                </li>
+            </ul>
         </li>
+
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <svg class="menu-icon tf-icons" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -149,19 +163,13 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('proveedores.index') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Proveedores">Proveedores</div>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                <div class="text-truncate" data-i18n="Productos">Productos</div>
-            </a>
-        </li>
-        <!-- Pages -->
+
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-store"></i>
@@ -185,6 +193,8 @@
                 </li>
             </ul>
         </li>
+
+        <!-- Pages -->
 
         <li class="menu-item">
             <a href="{{ route('categorias.index') }}" class="menu-link">

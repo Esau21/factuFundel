@@ -17,7 +17,7 @@
                     @csrf
                     <input type="hidden" name="permiso_id" id="permiso_id">
                     <div class="col-12 form-control-validation">
-                        <label class="form-label w-100" for="categoria_nombre">Nombre permiso</label>
+                        <label class="form-label w-100" for="namepermission">Nombre permiso</label>
                         <div class="input-group input-group-merge">
                             <input id="name" name="name" class="form-control" type="text"
                                 placeholder="ejemplo" />

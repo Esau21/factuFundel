@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="sysconta-datatable" class="table table-bordered table-hover m-0">
+                            <table id="sysconta-datatable" class="display cell-border stripe hover order-column">
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="text-left">ID</th>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Categorias\CategoriaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Proveedor\ProveedorController;
 use App\Http\Controllers\Security\AsignarController;
 use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\Security\RoleController;
@@ -55,6 +56,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/store/permisos', [AsignarController::class, 'storeAsignarPermisosRoles'])->name('asignar.storeAsignarPermisosRoles');
     Route::post('/asignar/todo', [AsignarController::class, 'AsignarTodo'])->name('asignar.AsignarTodo');
     Route::post('/revocar/todo', [AsignarController::class, 'RevocarTodo'])->name('asignar.RevocarTodo');
+
+
+    Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
+    Route::get('/get/index/data/proveedores', [ProveedorController::class, 'getIndexDataProveedores'])->name('proveedores.getIndexDataProveedores');
 
 });
 

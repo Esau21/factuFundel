@@ -16,7 +16,7 @@
                 <form id="addNewRole" class="row g-6" onsubmit="return false">
                     @csrf
                     <div class="col-12 form-control-validation">
-                        <label class="form-label w-100" for="categoria_nombre">Nombre rol</label>
+                        <label class="form-label w-100" for="namerole">Nombre rol</label>
                         <div class="input-group input-group-merge">
                             <input id="name" name="name" class="form-control" type="text"
                                 placeholder="ejemplo" />
