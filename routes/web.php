@@ -60,6 +60,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
     Route::get('/get/index/data/proveedores', [ProveedorController::class, 'getIndexDataProveedores'])->name('proveedores.getIndexDataProveedores');
+    Route::post('/store/proveedor', [ProveedorController::class, 'storeProveedor'])->name('proveedores.storeProveedor');
+    Route::post('/update/proveedor/{id}', [ProveedorController::class, 'updateProveedor'])->name('proveedores.updateProveedor');
+    Route::delete('/delete/proveedor/{id}', [ProveedorController::class, 'deleteProveedor'])->name('proveedor.deleteProveedor');
 
 });
 

@@ -59,6 +59,7 @@
     </div>
 
     @include('proveedores.modal.form')
+    @include('proveedores.modal.formEdit')
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -176,4 +177,63 @@
             }
         });
     });
+</script>
+
+<script>
+    function confirmDeleteProveedor(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((resultado) => {
+            if (resultado.isConfirmed) {
+                $.ajax({
+                    url: '/delete/proveedor/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name="_token"]').val(),
+                    },
+                    success: function(respuesta) {
+                        Swal.fire({
+                            title: 'El proveedor se elimino con éxito',
+                            icon: 'success'
+                        }).then(() => {
+                            var table = $('#sysconta-datatable').DataTable();
+                            table.ajax.reload();
+                        });
+                    },
+                    error: function(e) {
+                        if (e.status === 422) {
+                            let errors = e.responseJSON.errors;
+                            let errorMessage = '';
+                            $.each(errors, function(key, value) {
+                                errorMessage += value.join('<br>');
+                            });
+                            Swal.fire({
+                                title: 'Errores de validación.',
+                                html: errorMessage,
+                                icon: 'error',
+                            });
+                        } else if (e.status === 405) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: e.responseJSON
+                                    .error,
+                                icon: 'error',
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Algo salió mal al insertar datos de muestra.',
+                                icon: 'error'
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
 </script>

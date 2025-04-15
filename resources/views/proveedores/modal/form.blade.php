@@ -13,7 +13,7 @@
                             data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
-                <form id="addNewRole" class="row g-6" onsubmit="return false">
+                <form id="addNewProveedor" class="row g-6" onsubmit="return false">
                     @csrf
                     <div class="col-4 form-control-validation">
                         <label class="form-label w-100" for="proveedor">Nombre proveedor</label>
@@ -71,6 +71,16 @@
                     </div>
 
 
+                    <div class="col-12 form-control-validation">
+                        <label class="form-label w-100" for="notas">Notas</label>
+                        <div class="input-group input-group-merge">
+                            <textarea name="notas" id="notas" cols="30" rows="1" class="form-control"
+                                placeholder="Ingresa tu descripcion"></textarea>
+                            <span class="input-group-text cursor-pointer"><span class="card-type me-n2"></span></span>
+                        </div>
+                    </div>
+
+
                     <div class="col-6 form-control-validation">
                         <label class="form-label w-100" for="giro">Giro</label>
                         <div class="input-group input-group-merge">
@@ -99,12 +109,12 @@
                     </div>
 
                     <div class="col-6 form-control-validation">
-                        <label class="form-label w-100" for="contacto_cargo">Nombre del contacto a cargo</label>
+                        <label class="form-label w-100" for="contacto_cargo">Estado</label>
                         <div class="input-group input-group-merge">
                             <select name="estado" id="estado" class="form-control">
                                 <option value="">Elegir</option>
                                 <option value="activo">activo</option>
-                                <option value="deshabilitado">estado</option>
+                                <option value="deshabilitado">deshabilitado</option>
                             </select>
                             <span class="input-group-text cursor-pointer"><span class="card-type me-n2"></span></span>
                         </div>
@@ -128,9 +138,9 @@
 
 <script>
     $(document).ready(function() {
-        $("#addNewRole").on('submit', function(e) {
+        $("#addNewProveedor").on('submit', function(e) {
             e.preventDefault();
-            let url = "{{ route('roles.StoreRole') }}";
+            let url = "{{ route('proveedores.storeProveedor') }}";
             var btnSubmit = $(this);
             btnSubmit.prop('disabled', true);
             $.ajax({
@@ -141,14 +151,14 @@
                     'X-CSRF-TOKEN': $('input[name="_token"]').val(),
                 },
                 success: function() {
-                    $('#addRole').modal('hide');
-                    $('#addNewRole')[0].reset();
+                    $('#addProveedor').modal('hide');
+                    $('#addNewProveedor')[0].reset();
 
                     var table = $('#sysconta-datatable').DataTable();
                     table.ajax.reload(null, false);
 
                     Toastify({
-                        text: "El rol se agregó correctamente.",
+                        text: "El proveedor se agregó correctamente.",
                         className: "info",
                         style: {
                             background: "linear-gradient(to right, #3b3f5c, #3b3f5c)",
@@ -156,8 +166,8 @@
                     }).showToast();
                 },
                 error: function(e) {
-                    $('#addRole').modal('hide');
-                    $('#addNewRole')[0].reset();
+                    $('#addProveedor').modal('hide');
+                    $('#addNewProveedor')[0].reset();
                     if (e.status === 422) {
                         let errors = e.responseJSON.errors;
                         let errorMessage = '';
