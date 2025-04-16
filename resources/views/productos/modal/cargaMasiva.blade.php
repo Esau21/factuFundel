@@ -214,7 +214,13 @@
 
         document.getElementById('cerrarModalBtn').addEventListener('click', function() {
             $('#cargaMasivaProductos').modal('hide');
+            document.getElementById('seleccionarPlantilla').reset();
+            document.getElementById('nombreArchivo').textContent = '';
+            document.getElementById('btnProcesarWrapper').classList.add('d-none');
+            document.getElementById('tablaProductosProcesados').classList.add(
+            'd-none');
             $('#sysconta-datatable').DataTable().ajax.reload();
         });
+
     });
 </script>
