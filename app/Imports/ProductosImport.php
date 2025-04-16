@@ -28,7 +28,9 @@ class ProductosImport implements OnEachRow, WithHeadingRow
         $existeNombre = Producto::where('nombre', $nombre)->exists();
 
         if ($existeCodigo || $existeNombre) {
-            $this->errores[] = array_merge($data, ['error' => 'Producto con código o nombre ya existe']);
+            $this->errores[] = array_merge($data, [
+                'error' => 'Producto con código o nombre ya existe'
+            ]);            
             return;
         }
 

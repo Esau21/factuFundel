@@ -137,18 +137,15 @@ class ProductoController extends Controller
         });
 
         /* Si hay productos duplicados, solo devolvemos el archivo de errores */
-        if ($productosExistentes->isNotEmpty()) {
-            /**
-             * Exportar errores (productos existentes)
-             */
+        if (empty($import->validos) && $productosExistentes->isNotEmpty()) {
             $nombreArchivoError = 'errores_productos_' . now()->format('Ymd_His') . '.xlsx';
             $rutaError = 'exports/' . $nombreArchivoError;
             Excel::store(new ArrayExport($productosExistentes->values()->toArray()), $rutaError, 'public');
-            $errores_url = asset('storage/' . $rutaError);
 
+            $errores_url = asset('storage/' . $rutaError);
             return response()->json([
                 'success' => false,
-                'message' => 'Algunos productos ya existen. Solo se descargará el archivo de errores.',
+                'message' => 'Todos los productos ya existen. No se insertó ningún producto.',
                 'errores_url' => $errores_url,
                 'file_url' => $fileUrl,
             ]);
@@ -236,14 +233,14 @@ class ProductoController extends Controller
         }
 
         $imagePath = public_path('storage/' . $producto->imagen);
-        if($producto->imagen && file_exists($imagePath)){
+        if ($producto->imagen && file_exists($imagePath)) {
             @unlink($imagePath);
         }
 
-        if($producto->delete()){
+        if ($producto->delete()) {
             return response()->json(['success' => 'Se elimino correctemante el producto'], 200);
         }
 
-        return response()->json(['error' => 'Algo salio mal al intentar eliminar el producto'], 422);
+        return response()->json(['error' => 'Algo salio mal al intentar elimnar el producto'], 422);
     }
 }
