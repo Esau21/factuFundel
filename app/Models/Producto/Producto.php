@@ -33,10 +33,21 @@ class Producto extends Model
     public static function getProductosData()
     {
         $data = Producto::leftJoin('categorias as c', 'c.id', '=', 'productos.categoria_id')
-        ->select('productos.*', 'c.categoria_nombre as categoria')
-        ->orderBy('productos.id', 'desc')
-        ->get();
+            ->select('productos.*', 'c.categoria_nombre as categoria')
+            ->orderBy('productos.id', 'desc')
+            ->get();
 
         return $data;
+    }
+
+    public function getImagenAttribute($value)
+    {
+        $imagen = $value ?? $this->attributes['imagen'] ?? null;
+
+        if ($imagen && file_exists(public_path('storage/' . $imagen))) {
+            return asset('storage/' . $imagen);
+        } else {
+            return asset('img/camara1.png');
+        }
     }
 }
