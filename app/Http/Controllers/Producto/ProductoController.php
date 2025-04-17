@@ -171,6 +171,56 @@ class ProductoController extends Controller
         ]);
     }
 
+    public function addProduct()
+    {
+        $categorias = Categoria::all();
+
+        return view('productos.add', compact('categorias'));
+    }
+
+    public function storeProduct(Request $request)
+    {
+        $request->validate([
+            'codigo' => 'required|string|max:255',
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'precio_compra' => 'required|numeric',
+            'precio_venta' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'stock_minimo' => 'nullable|numeric',
+            'unidad_medida' => 'nullable|string',
+            'marca' => 'nullable|string',
+            'estado' => 'required|in:activo,inactivo',
+            'categoria_id' => 'required|exists:categorias,id',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $producto = new Producto($request->except('imagen'));
+
+        if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
+            $path = 'productos';
+
+            $storagePath = storage_path('app/public/' . $path);
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0755, true);
+            }
+
+            $imagen = $request->file('imagen');
+            $imagenName = time() . '_' . $imagen->getClientOriginalName();
+
+            $imagen->move(public_path('storage/' . $path), $imagenName);
+
+            $producto->imagen = $path . '/' . $imagenName;
+        }
+
+        if ($producto) {
+            $producto->save();
+            return response()->json(['success' => 'Producto agregado corretamente'], 200);
+        }
+
+        return response()->json(['error' => 'Algo salio mal al agregar el producto'], 422);
+    }
+
     public function updateProducto(Request $request, $id)
     {
         $request->validate([

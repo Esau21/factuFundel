@@ -189,7 +189,7 @@
          let marca = $(this).data('marca');
          let estado = $(this).data('estado');
 
-         // Rellenamos los campos del formulario con los valores obtenidos
+         /* Rellenamos los campos del formulario con los valores obtenidos */
          $('#editProducto #producto_id').val(id);
          $('#editProducto #codigo').val(codigo);
          $('#editProducto #nombre').val(nombre);
@@ -203,13 +203,13 @@
          $('#editProducto #marca').val(marca);
          $('#editProducto #estado').val(estado);
 
-         // Si la imagen es proporcionada, mostrarla en el preview
+        /* Si la imagen es proporcionada, mostrarla en el preview */
          if (imagen) {
              $('#imagen-preview').attr('src', imagen);
          }
      });
 
-     // Manejo del envío del formulario para actualizar el producto
+    /* Manejo del envío del formulario para actualizar el producto */
      $('#editFormProduct').on('submit', function(e) {
          e.preventDefault();
 

@@ -10,9 +10,9 @@
                     <div class="card-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom mb-3">
                         <h5 class="card-title mb-0">Productos del sistema.</h5>
                         <div class="d-flex align-items-center gap-2">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProduct">
+                            <a href="{{ route('productos.addProduct') }}" class="btn btn-primary">
                                 <i class="bx bx-plus"></i> Producto Nuevo
-                            </button>
+                            </a>
                             <button type="button" class="btn btn-link text-dark d-flex align-items-center"
                                 data-bs-toggle="modal" data-bs-target="#cargaMasivaProductos">
                                 <i class="bx bx-cloud-download me-1"></i> Importar
@@ -66,8 +66,6 @@
             </div>
         </div>
     </div>
-
-    @include('productos.modal.form')
     @include('productos.modal.formEdit')
     @include('productos.modal.cargaMasiva')
 @endsection

@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
     Route::get('/productos/get/index/data', [ProductoController::class, 'getIndexDataProductos'])->name('productos.getIndexDataProductos');
     Route::get('/descargar/plantilla/productos', [ProductoController::class, 'descargarPlantilla'])->name('productos.descargarPlantilla');
+    Route::get('/productos/add', [ProductoController::class, 'addProduct'])->name('productos.addProduct');
+    Route::post('/new/producto/save', [ProductoController::class, 'storeProduct'])->name('productos.storeProduct');
     Route::post('/carga/masiva/productos-import', [ProductoController::class, 'enviarCargaMasivadeProductos'])->name('productos.enviarCargaMasivadeProductos');
     Route::post('/update/producto/{id}', [ProductoController::class, 'updateProducto'])->name('productos.updateProducto');
     Route::delete('/producto/delete/{id}', [ProductoController::class, 'deleteProducto'])->name('productos.deleteProducto');
