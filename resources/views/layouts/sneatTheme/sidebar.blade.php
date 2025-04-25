@@ -158,7 +158,7 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('clientes.index') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Clientes">Clientes</div>
                     </a>
                 </li>

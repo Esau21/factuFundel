@@ -7,9 +7,10 @@
         <div class="row">
             <div class="col-12">
                 <div class="card h-100 d-flex flex-column">
-                    <div class="card-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom mb-3">
-                        <h5 class="card-title mb-0">Productos del sistema.</h5>
-                        <div class="d-flex align-items-center gap-2">
+                    <div
+                        class="card-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom mb-3 flex-wrap">
+                        <h5 class="card-title mb-0 w-100 w-md-auto">Productos del sistema.</h5>
+                        <div class="d-flex align-items-center gap-2 w-100 w-md-auto justify-content-md-end">
                             <a href="{{ route('productos.addProduct') }}" class="btn btn-primary">
                                 <i class="bx bx-plus"></i> Producto Nuevo
                             </a>

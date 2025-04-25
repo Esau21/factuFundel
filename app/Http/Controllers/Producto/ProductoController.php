@@ -193,6 +193,30 @@ class ProductoController extends Controller
             'estado' => 'required|in:activo,inactivo',
             'categoria_id' => 'required|exists:categorias,id',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'codigo.required' => 'El código del producto es obligatorio.',
+            'codigo.string' => 'El código debe ser una cadena de texto.',
+            'codigo.max' => 'El código no debe superar los 255 caracteres.',
+            'nombre.required' => 'El nombre del producto es obligatorio.',
+            'nombre.string' => 'El nombre debe ser una cadena de texto.',
+            'nombre.max' => 'El nombre no debe superar los 255 caracteres.',
+            'descripcion.string' => 'La descripción debe ser una cadena de texto.',
+            'precio_compra.required' => 'El precio de compra es obligatorio.',
+            'precio_compra.numeric' => 'El precio de compra debe ser un número.',
+            'precio_venta.required' => 'El precio de venta es obligatorio.',
+            'precio_venta.numeric' => 'El precio de venta debe ser un número.',
+            'stock.required' => 'El stock es obligatorio.',
+            'stock.numeric' => 'El stock debe ser un número.',
+            'stock_minimo.numeric' => 'El stock mínimo debe ser un número.',
+            'unidad_medida.string' => 'La unidad de medida debe ser una cadena de texto.',
+            'marca.string' => 'La marca debe ser una cadena de texto.',
+            'estado.required' => 'El estado es obligatorio.',
+            'estado.in' => 'El estado debe ser "activo" o "inactivo".',
+            'categoria_id.required' => 'Debes seleccionar una categoría válida.',
+            'categoria_id.exists' => 'La categoría seleccionada no existe.',
+            'imagen.image' => 'El archivo debe ser una imagen.',
+            'imagen.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg o gif.',
+            'imagen.max' => 'La imagen no debe superar los 2 MB.',
         ]);
 
         $producto = new Producto($request->except('imagen'));
@@ -236,7 +260,32 @@ class ProductoController extends Controller
             'estado' => 'required|in:activo,inactivo',
             'categoria_id' => 'required|exists:categorias,id',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'codigo.required' => 'El código del producto es obligatorio.',
+            'codigo.string' => 'El código debe ser una cadena de texto.',
+            'codigo.max' => 'El código no debe superar los 255 caracteres.',
+            'nombre.required' => 'El nombre del producto es obligatorio.',
+            'nombre.string' => 'El nombre debe ser una cadena de texto.',
+            'nombre.max' => 'El nombre no debe superar los 255 caracteres.',
+            'descripcion.string' => 'La descripción debe ser una cadena de texto.',
+            'precio_compra.required' => 'El precio de compra es obligatorio.',
+            'precio_compra.numeric' => 'El precio de compra debe ser un número.',
+            'precio_venta.required' => 'El precio de venta es obligatorio.',
+            'precio_venta.numeric' => 'El precio de venta debe ser un número.',
+            'stock.required' => 'El stock es obligatorio.',
+            'stock.numeric' => 'El stock debe ser un número.',
+            'stock_minimo.numeric' => 'El stock mínimo debe ser un número.',
+            'unidad_medida.string' => 'La unidad de medida debe ser una cadena de texto.',
+            'marca.string' => 'La marca debe ser una cadena de texto.',
+            'estado.required' => 'El estado es obligatorio.',
+            'estado.in' => 'El estado debe ser "activo" o "inactivo".',
+            'categoria_id.required' => 'Debes seleccionar una categoría válida.',
+            'categoria_id.exists' => 'La categoría seleccionada no existe.',
+            'imagen.image' => 'El archivo debe ser una imagen.',
+            'imagen.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg o gif.',
+            'imagen.max' => 'La imagen no debe superar los 2 MB.',
         ]);
+        
 
         $producto = Producto::find($id);
 

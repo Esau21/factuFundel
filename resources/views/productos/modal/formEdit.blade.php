@@ -51,10 +51,10 @@
                      </div>
 
 
-                     <div class="col-12 form-control-validation">
+                     <div class="col-4 form-control-validation">
                          <label class="form-label w-100" for="categoria_id">Categoria</label>
                          <div class="input-group input-group-merge">
-                             <select name="categoria_id" id="categoria_id" class="select2 w-100 form-control"
+                             <select name="categoria_id" id="categoria_id" class="select2 w-90"
                                  data-dropdown-parent="#editProducto">
                                  <option value="">Elegir</option>
                                  @foreach ($categorias as $c)
@@ -228,13 +228,13 @@
              },
              success: function(response) {
                  $('#editProducto').modal('hide');
-                 $('#editFormProduct')[0].reset(); // Reiniciamos el formulario
+                 $('#editFormProduct')[0].reset(); /* Reiniciamos el formulario */
 
-                 // Recargamos la tabla con los nuevos datos
+                 /* Recargamos la tabla con los nuevos datos */
                  var table = $('#sysconta-datatable').DataTable();
                  table.ajax.reload(null, false);
 
-                 // Mostramos un mensaje de éxito
+                 /* Mostramos un mensaje de exito */
                  Toastify({
                      text: "Producto actualizado correctamente.",
                      className: "info",
@@ -244,7 +244,7 @@
                  }).showToast();
              },
              error: function(e) {
-                 // Manejo de errores
+                 /* Manejo de errores */
                  if (e.status === 422) {
                      let errors = e.responseJSON.errors;
                      let errorMessage = '';

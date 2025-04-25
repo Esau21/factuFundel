@@ -8,6 +8,7 @@ use App\Http\Controllers\Security\AsignarController;
 use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\UserController;
+use App\Http\Controllers\SociosNegocios\ClienteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -73,6 +74,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/carga/masiva/productos-import', [ProductoController::class, 'enviarCargaMasivadeProductos'])->name('productos.enviarCargaMasivadeProductos');
     Route::post('/update/producto/{id}', [ProductoController::class, 'updateProducto'])->name('productos.updateProducto');
     Route::delete('/producto/delete/{id}', [ProductoController::class, 'deleteProducto'])->name('productos.deleteProducto');
+
+
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
+    Route::get('/index/getData/clientes', [ClienteController::class, 'getIndexDataClientes'])->name('clientes.getIndexDataClientes');
+    Route::get('/clientes/add', [ClienteController::class, 'addCliente'])->name('clientes.add');
+    Route::post('/store/clientes', [ClienteController::class, 'storeCliente'])->name('store.storeCliente');
 
 });
 
