@@ -29,11 +29,7 @@ return new class extends Migration
             $table->enum('tipo_persona', ['natural', 'juridica']);
             $table->boolean('es_extranjero')->default(false);
             $table->string('pais')->nullable();
-            $table->integer('empresa_id')->unsigned();
             $table->timestamps();
-
-
-            $table->foreign('empresa_id')->references('id')->on('empresas');
         });
     }
 

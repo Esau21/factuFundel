@@ -26,7 +26,6 @@ class ClienteController extends Controller
 
             return DataTables::of($data)
                 ->addColumn('nombre', fn($data) => $data->nombre)
-                ->addColumn('empresa', fn($data) => $data->empresa ?? 'sin data')
                 ->addColumn('tipo_documento', fn($data) => $data->tipo_documento)
                 ->addColumn('numero_documento', fn($data) => $data->numero_documento)
                 ->addColumn('nit', fn($data) => $data->nit ?? 'sin data')
@@ -84,7 +83,6 @@ class ClienteController extends Controller
             'telefono' => 'nullable|string|max:20',
             'correo_electronico' => 'nullable|email|max:255',
             'tipo_contribuyente' => 'required|string',
-            'empresa_id' => 'required',
 
             /* Solo si es persona jurídica */
             'nrc' => 'nullable|required_if:tipo_persona,juridica|string|max:20',  /* Permite null si no es requerido */
@@ -101,7 +99,6 @@ class ClienteController extends Controller
             'numero_documento.required_if' => 'El número de documento es obligatorio para personas naturales.',
             'nrc.string' => 'El NRC debe ser una cadena de texto.',
             'giro.string' => 'El giro debe ser una cadena de texto.',
-            'empresa_id.required' => 'La empresa es requerida.',
         ]);
 
 
@@ -121,8 +118,7 @@ class ClienteController extends Controller
             'codigo_actividad' => $request->codigo_actividad ?: null,
             'tipo_persona' => $request->tipo_persona,
             'es_extranjero' => $request->boolean('es_extranjero'),
-            'pais' => $request->pais ?: null,
-            'empresa_id' => $request->empresa_id
+            'pais' => $request->pais ?: null
         ]);
 
         $clientes->save();

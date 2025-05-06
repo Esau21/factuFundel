@@ -181,17 +181,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6 form-control-validation mb-3">
-                                    <label class="form-label w-100" for="empresa_id">Empresa</label>
-                                    <div class="input-group input-group-merge">
-                                        <select name="empresa_id" id="empresa_id" class="form-control select2" required>
-                                            <option value="">Elegir</option>
-                                            @foreach ($empresas as $em)
-                                                <option value="{{ $em->id }}">{{ $em->nombre }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
 
                                 <!-- Botones de acción -->
                                 <div class="col-12 text-center">

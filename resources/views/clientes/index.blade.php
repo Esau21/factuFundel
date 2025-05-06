@@ -27,7 +27,6 @@
                                     <tr>
                                         <th class="text-left">ID</th>
                                         <th class="text-left">Nombre</th>
-                                        <th class="text-left">Empresa</th>
                                         <th class="text-left">Tipo documento</th>
                                         <th class="text-left">Numero documento</th>
                                         <th class="text-left">Nit</th>
@@ -49,7 +48,6 @@
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
-                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -103,10 +101,6 @@
                 {
                     data: 'nombre',
                     name: 'nombre'
-                },
-                {
-                    data: 'empresa',
-                    name: 'empresa'
                 },
                 {
                     data: 'tipo_documento',

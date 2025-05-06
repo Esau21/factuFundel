@@ -51,7 +51,7 @@ class ConfiguracionesSeeder extends Seeder
             'name' => 'Michelle',
             'email_verified_at' => '2023-09-11 22:44:25',
             'email' => 'michelle@gmail.com',
-            'profile' => 'ROOT',
+            'profile' => 'ADMINISTRADOR',
             'status' => 'Active',
             'password' => bcrypt('12345678'),
             'empresa_id' => 2

@@ -56,6 +56,20 @@
                         </div>
                     </div>
 
+
+                    <div class="col-12 form-control-validation">
+                        <label class="form-label w-100" for="empresa_id">Empresa</label>
+                        <div class="input-group input-group-merge">
+                            <select name="empresa_id" id="empresa_id" class="select2 w-100 form-control"
+                                data-dropdown-parent="#addUser">
+                                <option value="">Elegir</option>
+                                @foreach ($empresas as $em)
+                                    <option value="{{ $em->id }}">{{ $em->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="col-12 form-control-validation">
                         <label class="form-label w-100" for="status">Estado</label>
                         <div class="input-group input-group-merge">

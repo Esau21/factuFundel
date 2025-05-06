@@ -36,8 +36,7 @@ class Clientes extends Model
 
     public static function getDtaClientes($tipo = null)
     {
-        $query = Clientes::join('empresas as em', 'em.id', '=', 'clientes.empresa_id')
-            ->select('clientes.*', 'em.nombre as empresa')->orderBy('clientes.id', 'desc');
+        $query = Clientes::select('clientes.*')->orderBy('clientes.id', 'desc');
 
         if ($tipo) {
             $query->where('tipo_persona', $tipo);

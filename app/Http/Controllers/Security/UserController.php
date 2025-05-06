@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Security;
 
 use App\Http\Controllers\Controller;
+use App\Models\SociosNegocios\Empresa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,8 +20,9 @@ class UserController extends Controller
     {
         $users = User::all();
         $roles = Role::all();
+        $empresas = Empresa::all();
 
-        return view('users.index', compact('users', 'roles'));
+        return view('users.index', compact('users', 'roles', 'empresas'));
     }
 
     public function getDataUsersIndex(Request $request)
@@ -64,6 +66,7 @@ class UserController extends Controller
                                 data-email="' . e($data->email) . '"
                                 data-profile="' . e($data->profile) . '"
                                 data-status="' . $data->status . '"
+                                data-empresa_id="' . $data->empresa_id . '"
                                 title="Editar">
                                 <i class="bx bx-edit"></i>
                                 </a>';
@@ -142,6 +145,7 @@ class UserController extends Controller
             'password' => 'required',
             'profile' => 'required|exists:roles,name',
             'status' => 'required|string',
+            'empresa_id' => 'required',
         ], [
             'name.required' => 'El nombre es obligatorio.',
             'email.required' => 'El correo electrónico es obligatorio.',
@@ -149,6 +153,7 @@ class UserController extends Controller
             'password.required' => 'La contraseña es obligatoria.',
             'profile.required' => 'El perfil es obligatorio.',
             'status.required' => 'El estado es obligatorio.',
+            'empresa_id' => 'La empresa para el usuario es requerida.'
         ]);
 
 
@@ -162,6 +167,7 @@ class UserController extends Controller
             'password' => bcrypt($request->input('password')),
             'profile' => $request->input('profile'),
             'status' => $request->input('status'),
+            'empresa_id' => $request->input('empresa_id'),
         ]);
 
         $user->syncRoles($request->input('profile'));
@@ -183,6 +189,7 @@ class UserController extends Controller
             'password' => 'required',
             'profile' => 'required|exists:roles,name',
             'status' => 'required|string',
+            'empresa_id' => 'required',
         ], [
             'name.required' => 'El nombre es obligatorio.',
             'email.required' => 'El correo electrónico es obligatorio.',
@@ -190,6 +197,7 @@ class UserController extends Controller
             'password.required' => 'La contraseña es obligatoria.',
             'profile.required' => 'El perfil es obligatorio.',
             'status.required' => 'El estado es obligatorio.',
+            'empresa_id' => 'La empresa para el usuario es requerida.'
         ]);
 
         $user = User::find($id);
@@ -204,6 +212,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'profile' => $request->profile,
             'status' => $request->status,
+            'empresa_id' => $request->input('empresa_id'),
         ]);
 
         $user->syncRoles($request->input('profile'));
@@ -221,6 +230,8 @@ class UserController extends Controller
             return response()->json(['error' => 'No se puede eliminar el usuario root'], 405);
         } elseif (Auth::id() == $user->id) {
             return response()->json(['error' => 'No puedes eliminar el usuario autenticado'], 405);
+        } elseif ($user->empresa){
+            return response()->json(['error' => 'No se puede eliminar el usuario ya que tiene asiganada una empresa.'], 405);
         }
 
         $user->delete();
