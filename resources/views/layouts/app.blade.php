@@ -6,7 +6,13 @@
                 <div class="d-flex align-items-start row">
                     <div class="col-sm-7">
                         <div class="card-body">
-                            <h5 class="card-title text-primary mb-3">Congratulations John! 🎉</h5>
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <i class="bi bi-person-circle me-2 fs-4"></i>
+                                <div>
+                                    Bienvenido de vuelta, <strong>{{ Auth::user()->name ?? 'Usuario' }}</strong> 👋<br>
+                                    Empresa: <span class="fw-semibold">{{ Auth::user()->empresa?->nombre ?? 'Sin empresa' }}</span>
+                                </div>
+                            </div>                                                                                
                             <p class="mb-6">
                                 You have done 72% more sales today.<br />Check your new badge in your profile.
                             </p>
@@ -16,7 +22,7 @@
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">
                         <div class="card-body pb-0 px-0 px-md-6">
-                            <img src="../assets/img/illustrations/man-with-laptop.png" height="175"
+                            <img src="{{ empresaLogo() }}" height="175"
                                 alt="View Badge User" />
                         </div>
                     </div>
