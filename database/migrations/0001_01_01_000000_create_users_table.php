@@ -19,10 +19,13 @@ return new class extends Migration
             $table->string('password');
             $table->string('profile', 50, ['', ''])->default('');
             $table->enum('status', ['Active', 'Locked'])->default('Active');
+            $table->integer('empresa_id')->unsigned();
             $table->rememberToken();
             $table->timestamps();
 
             $table->softDeletes();
+
+            $table->foreign('empresa_id')->references('id')->on('empresas');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

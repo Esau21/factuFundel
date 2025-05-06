@@ -24,17 +24,25 @@ class Clientes extends Model
         'codigo_actividad',
         'tipo_persona',
         'es_extranjero',
-        'pais'
+        'pais',
+        'empresa_id'
     ];
+
+
+    public function empresas()
+    {
+        return $this->belongsTo(Empresa::class, 'empresa_id');
+    }
 
     public static function getDtaClientes($tipo = null)
     {
-        $query = Clientes::select('*')->orderBy('id', 'desc');
+        $query = Clientes::join('empresas as em', 'em.id', '=', 'clientes.empresa_id')
+            ->select('clientes.*', 'em.nombre as empresa')->orderBy('clientes.id', 'desc');
 
         if ($tipo) {
             $query->where('tipo_persona', $tipo);
         }
-        
+
         $data = $query->get();
         return $data;
     }

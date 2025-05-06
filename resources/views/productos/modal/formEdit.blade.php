@@ -17,7 +17,7 @@
                      @csrf
                      <input type="hidden" name="producto_id" id="producto_id">
                      <div class="col-12 form-control-validation">
-                         <label class="form-label w-100" for="codigo">Imagen</label>
+                         <label class="form-label w-100" for="imagen">Imagen</label>
                          <div class="input-group input-group-merge">
                              <input id="imagen" name="imagen" class="form-control" type="file" />
                              <span class="input-group-text cursor-pointer">
@@ -54,7 +54,7 @@
                      <div class="col-4 form-control-validation">
                          <label class="form-label w-100" for="categoria_id">Categoria</label>
                          <div class="input-group input-group-merge">
-                             <select name="categoria_id" id="categoria_id" class="select2 w-90"
+                             <select name="categoria_id" id="categoria_id" class="select2"
                                  data-dropdown-parent="#editProducto">
                                  <option value="">Elegir</option>
                                  @foreach ($categorias as $c)

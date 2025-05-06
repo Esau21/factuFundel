@@ -9,6 +9,7 @@ use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\UserController;
 use App\Http\Controllers\SociosNegocios\ClienteController;
+use App\Http\Controllers\SociosNegocios\EmpresaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -80,6 +81,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/index/getData/clientes', [ClienteController::class, 'getIndexDataClientes'])->name('clientes.getIndexDataClientes');
     Route::get('/clientes/add', [ClienteController::class, 'addCliente'])->name('clientes.add');
     Route::post('/store/clientes', [ClienteController::class, 'storeCliente'])->name('store.storeCliente');
+    Route::get('/detalles/edit/cliente/{id}', [ClienteController::class, 'editarCliente'])->name('clientes.edit');
+    Route::post('/update/cliente/{id}', [ClienteController::class, 'updateCliente'])->name('clientes.update');
+
+
+    Route::get('/empresas', [EmpresaController::class, 'index'])->name('empresas.index');
+    Route::get('/empresa/get/data', [EmpresaController::class, 'indexGetDataEmpresa'])->name('empresas.getData');
+    Route::get('/empresa/add', [EmpresaController::class, 'addviewEmpresa'])->name('empresas.add');
+    Route::post('/empresa/store', [EmpresaController::class, 'storeEmpresa'])->name('empresas.store');
+    Route::get('/empresas/edit/{id}', [EmpresaController::class, 'editarEmpresa'])->name('empresas.edit');
+    Route::post('/update/empresa/{id}', [EmpresaController::class, 'updateEmpresa'])->name('empresas.update');
 
 });
 

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\SociosNegocios\Empresa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,7 +26,8 @@ class User extends Authenticatable
         'email',
         'password',
         'profile',
-        'status'
+        'status',
+        'empresa_id'
     ];
 
     /**
@@ -52,8 +55,13 @@ class User extends Authenticatable
 
     public static function getDataUsers()
     {
-        $data = User::select('*')->orderBy('id', 'asc')->get();
+        $data = User::join('empresas as em', 'em.id', '=', 'users.empresa_id')
+            ->select('users.*', 'em.nombre as empresa')->orderBy('users.id', 'asc')->get();
         return $data;
     }
 
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
 }

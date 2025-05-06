@@ -1,0 +1,204 @@
+@extends('layouts.sneatTheme.base')
+@section('title', 'Nueva empresa')
+@section('content')
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card h-100 d-flex flex-column">
+                <div class="card-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom mb-3">
+                    <h5 class="card-title mb-0">Agregar nueva empresa.</h5>
+                </div>
+                <div class="card-body mt-5">
+                    <form id="addFormEmpresa" class="row g-6" onsubmit="return false" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+
+                            <!-- Imagen -->
+                            <div class="col-12 form-control-validation">
+                                <label class="form-label w-100" for="imagen">Imagen</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="logo" name="logo" class="form-control" type="file"
+                                        onchange="previewLogo(event)" />
+                                    <span class="input-group-text cursor-pointer">
+                                        <span class="card-type me-n2"></span>
+                                    </span>
+                                </div>
+                                <div id="logoPreviewContainer" class="mt-2">
+                                    <img id="logoPreview" src="" alt="Vista previa de la imagen"
+                                        style="max-width: 100%; max-height: 300px; display: none;" />
+                                </div>
+                            </div>
+
+
+                            <!-- Nombre empresa -->
+                            <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <label class="form-label w-100" for="nombre">Nombre empresa</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="nombre" name="nombre" class="form-control" type="text"
+                                        placeholder="ejemplo" />
+                                    <span class="input-group-text cursor-pointer"><span
+                                            class="card-type me-n2"></span></span>
+                                </div>
+                            </div>
+
+                            <!-- Nrc -->
+                            <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <label class="form-label w-100" for="nrc">Nrc</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="nrc" name="nrc" class="form-control" type="text" placeholder="ejemplo" />
+                                    <span class="input-group-text cursor-pointer"><span
+                                            class="card-type me-n2"></span></span>
+                                </div>
+                            </div>
+
+                            <!-- Nit -->
+                            <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <label class="form-label w-100" for="nit">Nit</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="nit" name="nit" class="form-control" type="text" placeholder="ejemplo" />
+                                    <span class="input-group-text cursor-pointer"><span
+                                            class="card-type me-n2"></span></span>
+                                </div>
+                            </div>
+
+                            <!-- Giro -->
+                            <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <label class="form-label w-100" for="giro">Giro</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="giro" name="giro" class="form-control" type="text"
+                                        placeholder="ejemplo" />
+                                    <span class="input-group-text cursor-pointer"><span
+                                            class="card-type me-n2"></span></span>
+                                </div>
+                            </div>
+
+                            <!-- Direccion -->
+                            <div class="col-12 col-md-12 form-control-validation mb-3">
+                                <label class="form-label w-100" for="direccion">Direccion</label>
+                                <div class="input-group input-group-merge">
+                                    <textarea name="direccion" id="direccion" cols="30" rows="1" class="form-control"
+                                        placeholder="Ingresa tu direccion"></textarea>
+                                    <span class="input-group-text cursor-pointer"><span
+                                            class="card-type me-n2"></span></span>
+                                </div>
+                            </div>
+
+
+                            <!-- Telefono -->
+                            <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <label class="form-label w-100" for="telefono">Telefono</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="telefono" name="telefono" class="form-control" type="text"
+                                        placeholder="ejemplo" />
+                                    <span class="input-group-text cursor-pointer"><span
+                                            class="card-type me-n2"></span></span>
+                                </div>
+                            </div>
+
+                            <!-- Correo electronico -->
+                            <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <label class="form-label w-100" for="correo_electronico">Correo electronico</label>
+                                <div class="input-group input-group-merge">
+                                    <input id="correo" name="correo" class="form-control" type="text"
+                                        placeholder="ejemplo" />
+                                    <span class="input-group-text cursor-pointer"><span
+                                            class="card-type me-n2"></span></span>
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Guardar</button>
+                                <a href="{{ route('empresas.index') }}"
+                                    class="btn btn-label-secondary btn-reset">Regresar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script>
+    function previewLogo(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const logoPreview = document.getElementById('logoPreview');
+            logoPreview.src = e.target.result;
+            logoPreview.style.display = 'block';
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#addFormEmpresa").on('submit', function (e) {
+            e.preventDefault();
+            let url = "{{ route('empresas.store') }}";
+            const form = this;
+            const formData = new FormData(form);
+            var btnSubmit = $(form).find('button[type="submit"]');
+            btnSubmit.prop('disabled', true);
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="_token"]').val(),
+                },
+                success: function () {
+                    Toastify({
+                        text: "La empresa se agregó correctamente.",
+                        className: "info",
+                        style: {
+                            background: "linear-gradient(to right, #3b3f5c, #3b3f5c)",
+                        }
+                    }).showToast();
+                    setTimeout(() => {
+                        window.location.href = "{{ route('empresas.index') }}";
+                    }, 2000);
+                },
+                error: function (e) {
+                    if (e.status === 422) {
+                        let errors = e.responseJSON.errors;
+                        let errorMessage = '';
+                        $.each(errors, function (key, value) {
+                            errorMessage += value.join('<br>');
+                        });
+                        Swal.fire({
+                            title: 'Errores de validación.',
+                            html: errorMessage,
+                            icon: 'error',
+                        });
+                        setTimeout(() => {
+                            window.location.href = "{{ route('empresas.index') }}";
+                        }, 2000);
+                    } else if (e.status === 405) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: e.responseJSON.error,
+                            icon: 'error',
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Algo salió mal al insertar los datos.',
+                            icon: 'error'
+                        });
+                    }
+                }
+            });
+        });
+
+    });
+</script>

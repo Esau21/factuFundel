@@ -1,5 +1,5 @@
 @extends('layouts.sneatTheme.base')
-@section('title', 'Nuevo cliente')
+@section('title', 'Editar cliente')
 @section('content')
 
     <div class="container-fluid">
@@ -7,20 +7,21 @@
             <div class="col-12">
                 <div class="card h-100 d-flex flex-column">
                     <div class="card-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom mb-3">
-                        <h5 class="card-title mb-0">Agregar nuevo cliente al sistema.</h5>
+                        <h5 class="card-title mb-0">Editar detalle del cliente | {{ $cliente->nombre }}.</h5>
                     </div>
                     <div class="card-body">
-                        <form id="addFormCliente" class="row g-6" onsubmit="return false">
+                        <form id="UpdatedCliente" class="row g-6" onsubmit="return false">
                             @csrf
-
                             <!-- Tipo de persona -->
                             <div class="col-12 col-md-6 form-control-validation mb-3">
                                 <label class="form-label w-100" for="tipo_persona">Tipo de persona</label>
                                 <div class="input-group input-group-merge">
                                     <select name="tipo_persona" id="tipo_persona" class="form-control" required>
                                         <option value="">Elegir</option>
-                                        <option value="natural">Natural</option>
-                                        <option value="juridica">Juridica</option>
+                                        <option value="natural" {{ $cliente->tipo_persona == 'natural' ? 'selected' : '' }}>
+                                            Natural</option>
+                                        <option value="juridica"
+                                            {{ $cliente->tipo_persona == 'juridica' ? 'selected' : '' }}>Juridica</option>
                                     </select>
                                     <span class="input-group-text cursor-pointer"><span
                                             class="card-type me-n2"></span></span>
@@ -33,7 +34,7 @@
                                     <label class="form-label w-100" for="nombre">Nombre cliente</label>
                                     <div class="input-group input-group-merge">
                                         <input id="nombre" name="nombre" class="form-control" type="text"
-                                            placeholder="ejemplo" />
+                                            placeholder="ejemplo" value="{{ $cliente->nombre }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -45,10 +46,15 @@
                                     <div class="input-group input-group-merge">
                                         <select name="tipo_documento" id="tipo_documento" class="form-control" required>
                                             <option value="">Elegir</option>
-                                            <option value="DUI">DUI</option>
-                                            <option value="NIT">NIT</option>
-                                            <option value="PASAPORTE">Pasaporte</option>
-                                            <option value="CEDULA">Cédula</option>
+                                            <option value="DUI"
+                                                {{ $cliente->tipo_documento == 'DUI' ? 'selected' : '' }}>DUI</option>
+                                            <option value="NIT"
+                                                {{ $cliente->tipo_documento == 'NIT' ? 'selected' : '' }}>NIT</option>
+                                            <option value="PASAPORTE"
+                                                {{ $cliente->tipo_documento == 'PASAPORTE' ? 'selected' : '' }}>Pasaporte
+                                            </option>
+                                            <option value="CEDULA"
+                                                {{ $cliente->tipo_documento == 'CEDULA' ? 'selected' : '' }}>Cédula</option>
                                         </select>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
@@ -60,7 +66,7 @@
                                     <label class="form-label w-100" for="numero_documento">Numero de documento</label>
                                     <div class="input-group input-group-merge">
                                         <input id="numero_documento" name="numero_documento" class="form-control"
-                                            type="text" placeholder="ejemplo" />
+                                            type="text" placeholder="ejemplo" value="{{ $cliente->numero_documento }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -71,7 +77,7 @@
                                     <label class="form-label w-100" for="nrc">Nrc</label>
                                     <div class="input-group input-group-merge">
                                         <input id="nrc" name="nrc" class="form-control" type="text"
-                                            placeholder="ejemplo" />
+                                            placeholder="ejemplo" value="{{ $cliente->nrc ?? 'sin datos' }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -82,7 +88,7 @@
                                     <label class="form-label w-100" for="nit">Nit</label>
                                     <div class="input-group input-group-merge">
                                         <input id="nit" name="nit" class="form-control" type="text"
-                                            placeholder="ejemplo" />
+                                            placeholder="ejemplo" value="{{ $cliente->nit ?? 'sin datos' }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -93,7 +99,7 @@
                                     <label class="form-label w-100" for="giro">Giro</label>
                                     <div class="input-group input-group-merge">
                                         <input id="giro" name="giro" class="form-control" type="text"
-                                            placeholder="ejemplo" />
+                                            placeholder="ejemplo" value="{{ $cliente->giro ?? 'sin giro' }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -104,7 +110,7 @@
                                     <label class="form-label w-100" for="direccion">Direccion</label>
                                     <div class="input-group input-group-merge">
                                         <textarea name="direccion" id="direccion" cols="30" rows="1" class="form-control"
-                                            placeholder="Ingresa tu direccion"></textarea>
+                                            placeholder="Ingresa tu descripcion">{{ old('direccion', $cliente->direccion) }}</textarea>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -116,7 +122,6 @@
                                     <div class="input-group input-group-merge">
                                         <select name="departamento" id="departamento" class="form-control select2"
                                             required>
-
                                         </select>
                                     </div>
                                 </div>
@@ -136,7 +141,7 @@
                                     <label class="form-label w-100" for="telefono">Telefono</label>
                                     <div class="input-group input-group-merge">
                                         <input id="telefono" name="telefono" class="form-control" type="text"
-                                            placeholder="ejemplo" />
+                                            placeholder="ejemplo" value="{{ $cliente->telefono ?? 'sin tel' }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -147,7 +152,8 @@
                                     <label class="form-label w-100" for="correo_electronico">Correo electronico</label>
                                     <div class="input-group input-group-merge">
                                         <input id="correo_electronico" name="correo_electronico" class="form-control"
-                                            type="text" placeholder="ejemplo" />
+                                            type="text" placeholder="ejemplo"
+                                            value="{{ $cliente->correo_electronico ?? 'sin correo' }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
@@ -160,10 +166,18 @@
                                         <select name="tipo_contribuyente" id="tipo_contribuyente" class="form-control"
                                             required>
                                             <option value="">Elegir</option>
-                                            <option value="contribuyente">Contribuyente</option>
-                                            <option value="gubernamental">Gubernamental</option>
-                                            <option value="exento">Exento</option>
-                                            <option value="consumidor_final">Consumidor Final</option>
+                                            <option value="contribuyente"
+                                                {{ $cliente->tipo_contribuyente == 'contribuyente' ? 'selected' : '' }}>
+                                                Contribuyente</option>
+                                            <option value="gubernamental"
+                                                {{ $cliente->tipo_contribuyente == 'gubernamental' ? 'selected' : '' }}>
+                                                Gubernamental</option>
+                                            <option value="exento"
+                                                {{ $cliente->tipo_contribuyente == 'exento' ? 'selected' : '' }}>Exento
+                                            </option>
+                                            <option value="consumidor_final"
+                                                {{ $cliente->tipo_contribuyente == 'consumidor_final' ? 'selected' : '' }}>
+                                                Consumidor Final</option>
                                         </select>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
@@ -178,18 +192,6 @@
                                             type="text" placeholder="ejemplo" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-md-6 form-control-validation mb-3">
-                                    <label class="form-label w-100" for="empresa_id">Empresa</label>
-                                    <div class="input-group input-group-merge">
-                                        <select name="empresa_id" id="empresa_id" class="form-control select2" required>
-                                            <option value="">Elegir</option>
-                                            @foreach ($empresas as $em)
-                                                <option value="{{ $em->id }}">{{ $em->nombre }}</option>
-                                            @endforeach
-                                        </select>
                                     </div>
                                 </div>
 
@@ -209,6 +211,11 @@
 @endsection
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
+    const clienteDepartamento = @json($departamento);
+    const clienteMunicipio = @json($municipio);
+</script>
+
+<script>
     $(document).ready(function() {
 
         const $departamento = $("#departamento");
@@ -227,11 +234,16 @@
 
             $municipio.empty().append('<option value="">Elegir</option>');
             municipios.forEach(muni => {
-                $municipio.append(`<option value="${muni}">${muni}</option>`);
+                const selected = (selectedDep === clienteDepartamento && muni ===
+                    clienteMunicipio) ? 'selected' : '';
+                $municipio.append(`<option value="${muni}" ${selected}>${muni}</option>`);
             });
         });
 
-
+        /* Si venimos de modo edición, precargamos valores */
+        if (clienteDepartamento) {
+            $departamento.val(clienteDepartamento).trigger('change');
+        }
 
         function toggleFields(tipo) {
             if (tipo === 'natural' || tipo === 'juridica') {
@@ -257,13 +269,13 @@
             toggleFields($(this).val());
         });
 
-        $("#addFormCliente").on('submit', function(e) {
+        $("#UpdatedCliente").on('submit', function(e) {
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
             var btnSubmit = $(form).find('button[type="submit"]');
             btnSubmit.prop('disabled', true);
-            let url = "{{ route('store.storeCliente') }}";
+            let url = "{{ route('clientes.update', $cliente->id) }}";
 
             $.ajax({
                 url: url,
@@ -276,7 +288,7 @@
                 contentType: false,
                 success: function() {
                     Toastify({
-                        text: "El cliente se agregó correctamente.",
+                        text: "El cliente se modifico correctamente.",
                         className: "info",
                         style: {
                             background: "linear-gradient(to right, #3b3f5c, #3b3f5c)",

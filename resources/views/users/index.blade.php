@@ -34,6 +34,7 @@
                                     <tr>
                                         <th class="text-left">ID</th>
                                         <th class="text-left">Nombre</th>
+                                        <th class="text-left">Empresa</th>
                                         <th class="text-left">Email</th>
                                         <th class="text-left">Perfil</th>
                                         <th class="text-left">Estado</th>
@@ -43,6 +44,7 @@
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -79,6 +81,10 @@
                 {
                     data: 'name',
                     name: 'name'
+                },
+                {
+                    data: 'empresa',
+                    name: 'empresa'
                 },
                 {
                     data: 'email',

@@ -31,6 +31,9 @@ class UserController extends Controller
                 ->addColumn('name', function ($data) {
                     return $data->name ?? '';
                 })
+                ->addColumn('empresa', function($data){
+                    return $data?->empresa ?? 'sin datos de empresa';
+                })
                 ->addColumn('email', function ($data) {
                     return $data->email ?? '';
                 })
