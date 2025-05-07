@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Categorias\CategoriaController;
+use App\Http\Controllers\Post\SalesController;
 use App\Http\Controllers\Producto\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Proveedor\ProveedorController;
@@ -91,6 +92,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/empresa/store', [EmpresaController::class, 'storeEmpresa'])->name('empresas.store');
     Route::get('/empresas/edit/{id}', [EmpresaController::class, 'editarEmpresa'])->name('empresas.edit');
     Route::post('/update/empresa/{id}', [EmpresaController::class, 'updateEmpresa'])->name('empresas.update');
+
+
+    Route::get('/sales/post/index', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/buscar/productos', [SalesController::class, 'buscarProductos'])->name('sales.buscarProductos');
 
 });
 

@@ -136,12 +136,12 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="#" class="menu-link" target="_blank">
+                    <a href="{{ route('sales.index') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Basic">Generar venta</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link" target="_blank">
+                    <a href="#" class="menu-link">
                         <div class="text-truncate" data-i18n="Basic">Ventas del dia</div>
                     </a>
                 </li>
