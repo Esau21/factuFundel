@@ -45,9 +45,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mt-3">
-                            <span class="badge badge-success" style="display: none;">Generando Factura, espera...</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -60,7 +57,7 @@
                         <!-- Resumen Total y Artículos -->
                         <div class="card mb-4">
                             <div class="card-body">
-                                <h3 class="text-success">Total: $<span id="totalAmount"></span></h3>
+                                <h3 class="text-success text-uppercase">Total: $<span id="totalAmount"></span></h3>
                                 <h4 class="mt-3">Artículos: <span id="totalItems"></span></h4>
                             </div>
                         </div>
@@ -76,34 +73,37 @@
                             </select>
                         </div>
 
-                        <!-- Tipo de Documento -->
-                        <div class="mb-4">
-                            <label class="form-label">Tipo de Documento</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="tipo_doc" id="ccf"
-                                    value="ccf">
-                                <label class="form-check-label" for="ccf">CCF</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="tipo_doc" id="factura"
-                                    value="factura">
-                                <label class="form-check-label" for="factura">Factura</label>
-                            </div>
-                        </div>
-
                         <!-- Efectivo -->
                         <div class="input-group mb-4">
                             <span class="input-group-text bg-dark text-white">EFECTIVO</span>
-                            <input type="number" id="cash" class="form-control text-center" value="100">
+                            <input type="number" id="cash" class="form-control text-center" value="0.00">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="descuento_porcentaje" class="form-label">Descuento porcentaje</label>
+                            <select name="descuento_porcentaje[]" id="descuento_porcentaje"
+                                class="form-select descuento_porcentaje">
+                                <option value="">Seleccione</option>
+                                <option value="10%">10%</option>
+                                <option value="15%">15%</option>
+                                <option value="20%">20%</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="descuento_en_dolar" class="form-label">Descuento en dolar</label>
+                            <input type="text" name="descuento_en_dolar" id="descuento_en_dolar" class="form-control"
+                                placeholder="En dolar">
                         </div>
 
                         <!-- Monto de Cambio -->
-                        <h4 class="text-muted text-center mb-4">Cambio: $<span id="changeAmount">20.00</span></h4>
+                        <h4 class="text-muted text-center mb-4">Cambio: $<span id="changeAmount">0.00</span></h4>
+                        <input type="hidden" name="cambio" id="cambioInput" value="0">
 
                         <!-- Botones -->
                         <div class="d-grid gap-2">
-                            <button class="btn btn-danger" type="button">CANCELAR F4</button>
-                            <button class="btn btn-primary" type="button">GUARDAR VENTA</button>
+                            <button class="btn btn-danger" type="button" id="guardarCotizacion">COTIZACIÓN F4</button>
+                            <button class="btn btn-primary" type="button" id="guardarVenta">GUARDAR VENTA F5</button>
                         </div>
                     </div>
                 </div>

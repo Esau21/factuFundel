@@ -17,7 +17,10 @@ return new class extends Migration
             $table->integer('producto_id')->unsigned();
             $table->integer('cantidad');
             $table->decimal('precio_unitario', 10, 2);
+            $table->decimal('cambio', 10, 2);
             $table->decimal('sub_total', 10, 2);
+            $table->decimal('descuento_porcentaje', 10, 2)->nullable();
+            $table->decimal('descuento_en_dolar', 10, 2)->nullable();
             $table->timestamps();
 
             $table->foreign('sale_id')->references('id')->on('sales');

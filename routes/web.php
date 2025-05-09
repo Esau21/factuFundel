@@ -96,6 +96,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/sales/post/index', [SalesController::class, 'index'])->name('sales.index');
     Route::get('/buscar/productos', [SalesController::class, 'buscarProductos'])->name('sales.buscarProductos');
+    Route::post('/generar/sale', [SalesController::class, 'generarSale'])->name('sales.generarSale');
+    Route::post('/generar/cotizacion', [SalesController::class, 'generarCotizacion'])->name('sales.generarCotizacion');
 
 });
 
