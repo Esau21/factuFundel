@@ -22,10 +22,10 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div id="productSearchResults"
-                            style="border: 1px solid #ccc; display: none; position: absolute; background: white; width: 100%; z-index: 1000;">
+                            style="border: 1px solid #ddd; display: none; position: absolute; background: #fff; width: 100%; max-height: 300px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000; border-radius: 8px; padding: 10px;">
                         </div>
-
 
                         <!-- Tabla de productos -->
                         <div class="table-responsive mt-5" style="max-height: 650px; overflow-y: auto;">
@@ -78,6 +78,7 @@
                             <span class="input-group-text bg-dark text-white">EFECTIVO</span>
                             <input type="number" id="cash" class="form-control text-center" value="0.00">
                         </div>
+
 
                         <div class="mb-4">
                             <label for="descuento_porcentaje" class="form-label">Descuento porcentaje</label>

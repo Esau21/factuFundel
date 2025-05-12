@@ -1,8 +1,8 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Busqueda de productos
-        $('#buscar_producto').on('keyup', function () {
+        $('#buscar_producto').on('keyup', function() {
             var query = $(this).val();
             if (query.length === 0) {
                 $('#productSearchResults').hide();
@@ -14,10 +14,10 @@
                 data: {
                     query: query
                 },
-                success: function (response) {
+                success: function(response) {
                     var productOptions = '';
                     if (response.length > 0) {
-                        response.forEach(function (producto) {
+                        response.forEach(function(producto) {
                             productOptions += `
                             <div class="product-option" 
                                 data-id="${producto.id}" 
@@ -34,14 +34,14 @@
                         $('#productSearchResults').hide();
                     }
                 },
-                error: function () {
+                error: function() {
                     console.error("Error en la búsqueda de productos.");
                 }
             });
         });
 
         // Seleccionar producto
-        $(document).on('click', '.product-option', function () {
+        $(document).on('click', '.product-option', function() {
             var productoId = $(this).data('id');
             var productoNombre = $(this).data('nombre');
             var productoPrecio = $(this).data('precio');
@@ -71,7 +71,7 @@
         });
 
         // Cantidad modificada
-        $(document).on('click', '.increase-qty, .decrease-qty', function () {
+        $(document).on('click', '.increase-qty, .decrease-qty', function() {
             var row = $(this).closest('tr');
             var cantidad = row.find('.cantidad');
             if ($(this).hasClass('increase-qty')) {
@@ -81,26 +81,40 @@
             }
             actualizarSubtotal();
             actualizarTotal();
+            Toastify({
+                text: "Cantidad actualizada.",
+                className: "success",
+                style: {
+                    background: "linear-gradient(to right, #3b3f5c, #3b3f5c)"
+                }
+            }).showToast();
         });
 
-        $(document).on('change keyup', '.cantidad, .precio_unitario', function () {
+        $(document).on('change keyup', '.cantidad, .precio_unitario', function() {
             actualizarSubtotal();
             actualizarTotal();
         });
 
-        $(document).on('click', '.remove-row', function () {
+        $(document).on('click', '.remove-row', function() {
             $(this).closest('tr').remove();
             actualizarSubtotal();
             actualizarTotal();
+            Toastify({
+                text: "Producto eliminado.",
+                className: "success",
+                style: {
+                    background: "linear-gradient(to right, #3b3f5c, #3b3f5c)"
+                }
+            }).showToast();
         });
 
         // Aplicar descuento
-        $('#descuento_porcentaje, #descuento_en_dolar').on('input change', function () {
+        $('#descuento_porcentaje, #descuento_en_dolar').on('input change', function() {
             actualizarSubtotal();
             actualizarTotal();
         });
 
-        $('#cash').on('input', function () {
+        $('#cash').on('input', function() {
             actualizarTotal();
         });
 
@@ -110,7 +124,7 @@
             let porcentaje = parseFloat($('#descuento_porcentaje').val()) || 0;
 
             // Calcular el total bruto y el subtotal bruto de cada producto
-            $("#productRows tr").each(function () {
+            $("#productRows tr").each(function() {
                 const row = $(this);
                 const precio = parseFloat(row.find('.precio_unitario').val()) || 0;
                 const cantidad = parseInt(row.find('.cantidad').val()) || 0;
@@ -120,7 +134,7 @@
             });
 
             // Aplicar descuento por porcentaje y fijo sobre los productos
-            $("#productRows tr").each(function () {
+            $("#productRows tr").each(function() {
                 const row = $(this);
                 const subTotalBruto = row.data('sub_total_bruto');
                 let subTotalConDescuento = subTotalBruto;
@@ -146,10 +160,10 @@
         function actualizarTotal() {
             let total = 0;
             let totalItems = 0;
-            $('.sub_total').each(function () {
+            $('.sub_total').each(function() {
                 total += parseFloat($(this).val()) || 0;
             });
-            $('.cantidad').each(function () {
+            $('.cantidad').each(function() {
                 totalItems += parseInt($(this).val()) || 0;
             });
 
@@ -163,7 +177,7 @@
         }
 
         //escuchamos el evento de la tecla F5
-        $(document).on('keydown', function (e) {
+        $(document).on('keydown', function(e) {
             if (e.which === 116) {
                 e.preventDefault();
                 $('#guardarVenta').click();
@@ -171,14 +185,14 @@
         });
 
         // Guardamos la venta
-        $(document).on('click', '#guardarVenta', function (e) {
+        $(document).on('click', '#guardarVenta', function(e) {
             e.preventDefault();
             var producto_id = [],
                 cantidad = [],
                 precio_unitario = [],
                 sub_total = [];
 
-            $("#productRows tr").each(function () {
+            $("#productRows tr").each(function() {
                 var id = $(this).find('td:first').text().trim();
                 var cant = parseInt($(this).find('.cantidad').val());
                 var precio = parseFloat($(this).find('.precio_unitario').val());
@@ -199,7 +213,8 @@
             var tipo_pago = 'EFECTIVO';
             var cambio = $('#cambioInput').val();
 
-            var descuento_porcentaje = parseFloat($('#descuento_porcentaje').val().replace('%', '')) || 0;
+            var descuento_porcentaje = parseFloat($('#descuento_porcentaje').val().replace('%', '')) ||
+                0;
             var descuento_en_dolar = $('#descuento_en_dolar').val();
 
             $("#guardarVenta").prop('disabled', true);
@@ -224,7 +239,7 @@
                 xhrFields: {
                     responseType: 'blob'
                 },
-                success: function (response) {
+                success: function(response) {
                     Toastify({
                         text: "Venta guardada exitosamente.",
                         className: "success",
@@ -238,7 +253,7 @@
                         window.location.href = "{{ route('sales.index') }}";
                     }, 2000);
                 },
-                error: function () {
+                error: function() {
                     Toastify({
                         text: "Error al guardar la venta.",
                         className: "error",
@@ -252,7 +267,7 @@
         });
 
 
-          //escuchamos el evento de tecla f4
+        //escuchamos el evento de tecla f4
         $(document).on('keydown', function(e) {
             if (e.key === "F4") {
                 e.preventDefault();
@@ -289,7 +304,8 @@
             var tipo_pago = 'COTIZACION';
             var cambio = $('#cambioInput').val();
 
-            var descuento_porcentaje = parseFloat($('#descuento_porcentaje').val().replace('%', '')) || 0;
+            var descuento_porcentaje = parseFloat($('#descuento_porcentaje').val().replace('%', '')) ||
+                0;
             var descuento_en_dolar = $('#descuento_en_dolar').val();
 
             $("#guardarCotizacion").prop('disabled', true);

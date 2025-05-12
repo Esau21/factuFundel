@@ -10,9 +10,10 @@
                                 <i class="bi bi-person-circle me-2 fs-4"></i>
                                 <div>
                                     Bienvenido de vuelta, <strong>{{ Auth::user()->name ?? 'Usuario' }}</strong> 👋<br>
-                                    Empresa: <span class="fw-semibold">{{ Auth::user()->empresa?->nombre ?? 'Sin empresa' }}</span>
+                                    Empresa: <span
+                                        class="fw-semibold">{{ Auth::user()->empresa?->nombre ?? 'Sin empresa' }}</span>
                                 </div>
-                            </div>                                                                                
+                            </div>
                             <p class="mb-6">
                                 You have done 72% more sales today.<br />Check your new badge in your profile.
                             </p>
@@ -22,8 +23,7 @@
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">
                         <div class="card-body pb-0 px-0 px-md-6">
-                            <img src="{{ empresaLogo() }}" height="175"
-                                alt="View Badge User" />
+                            <img src="{{ empresaLogo() }}" height="175" alt="View Badge User" />
                         </div>
                     </div>
                 </div>

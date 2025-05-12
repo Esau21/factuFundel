@@ -19,6 +19,7 @@ class Sales extends Model
         'status',
         'tipo_pago',
         'observaciones',
+        'documento_dte_id',
     ];
 
     public function clientes()
@@ -34,5 +35,14 @@ class Sales extends Model
     public function detalles()
     {
         return $this->hasMany(SalesDetails::class, 'sale_id');
+    }
+
+    public static function getSalesdelDia()
+    {
+        $data = Sales::select('sales.*')
+            ->whereDate('sales.fecha_venta', now()->toDateString())
+            ->get();
+
+        return $data;
     }
 }

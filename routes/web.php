@@ -26,6 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
+    //categorias del sistema
     Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
     Route::get('/get-categories', [CategoriaController::class, 'getCategories'])->name('categorias.getCategories');
     Route::post('/categoria/save', [CategoriaController::class, 'storeCategoria'])->name('categorias.storeCategoria');
@@ -33,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/delete/categoria/{id}', [CategoriaController::class, 'deleteCategoria'])->name('categorias.deleteCategoria');
     
 
+    //usuarios del sistema
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
     Route::get('/get/index/dataUsers', [UserController::class, 'getDataUsersIndex'])->name('usuarios.getDataUsersIndex');
     Route::get('/show/user/{id}', [UserController::class, 'showUser'])->name('usuarios.showUser');
@@ -42,12 +45,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/update/user/{id}', [UserController::class, 'updateUser'])->name('usuarios.updateUser');
     Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('usuarios.updateProfile');
 
+
+    //roles del sistema
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/get/roles/data', [RoleController::class, 'getDataRoles'])->name('roles.getDataRoles');
     Route::post('/add/role', [RoleController::class, 'StoreRole'])->name('roles.StoreRole');
     Route::delete('/delete/role/{id}', [RoleController::class, 'deleteRole'])->name('roles.deleteRole');
     Route::post('/update/role/{id}', [RoleController::class, 'updateRoles'])->name('roles.updateRoles');
 
+
+    //permisos
     Route::get('/permisos', [PermissionController::class, 'index'])->name('permisos.index');
     Route::get('/get/index/data/permisos', [PermissionController::class, 'getIndexDataPermisos'])->name('permisos.getIndexDataPermisos');
     Route::post('/store/permiso', [PermissionController::class, 'storePermission'])->name('permisos.storePermission');
@@ -55,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/delete/permiso/{id}', [PermissionController::class, 'deletePermiso'])->name('permisos.deletePermiso');
 
 
+    //asigancion de permisos
     Route::get('/asignar', [AsignarController::class, 'index'])->name('asignar.index');
     Route::get('/get/index/data/asignar', [AsignarController::class, 'getDataIndexAsiganr'])->name('asignar.getDataIndexAsiganr');
     Route::post('/store/permisos', [AsignarController::class, 'storeAsignarPermisosRoles'])->name('asignar.storeAsignarPermisosRoles');
@@ -62,12 +70,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/revocar/todo', [AsignarController::class, 'RevocarTodo'])->name('asignar.RevocarTodo');
 
 
+    //proveedores
     Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index');
     Route::get('/get/index/data/proveedores', [ProveedorController::class, 'getIndexDataProveedores'])->name('proveedores.getIndexDataProveedores');
     Route::post('/store/proveedor', [ProveedorController::class, 'storeProveedor'])->name('proveedores.storeProveedor');
     Route::post('/update/proveedor/{id}', [ProveedorController::class, 'updateProveedor'])->name('proveedores.updateProveedor');
     Route::delete('/delete/proveedor/{id}', [ProveedorController::class, 'deleteProveedor'])->name('proveedor.deleteProveedor');
 
+
+    //productos
     Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
     Route::get('/productos/get/index/data', [ProductoController::class, 'getIndexDataProductos'])->name('productos.getIndexDataProductos');
     Route::get('/descargar/plantilla/productos', [ProductoController::class, 'descargarPlantilla'])->name('productos.descargarPlantilla');
@@ -78,6 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/producto/delete/{id}', [ProductoController::class, 'deleteProducto'])->name('productos.deleteProducto');
 
 
+    //clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
     Route::get('/index/getData/clientes', [ClienteController::class, 'getIndexDataClientes'])->name('clientes.getIndexDataClientes');
     Route::get('/clientes/add', [ClienteController::class, 'addCliente'])->name('clientes.add');
@@ -86,6 +98,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/update/cliente/{id}', [ClienteController::class, 'updateCliente'])->name('clientes.update');
 
 
+    //empresas
     Route::get('/empresas', [EmpresaController::class, 'index'])->name('empresas.index');
     Route::get('/empresa/get/data', [EmpresaController::class, 'indexGetDataEmpresa'])->name('empresas.getData');
     Route::get('/empresa/add', [EmpresaController::class, 'addviewEmpresa'])->name('empresas.add');
@@ -94,10 +107,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/update/empresa/{id}', [EmpresaController::class, 'updateEmpresa'])->name('empresas.update');
 
 
+    //sales
     Route::get('/sales/post/index', [SalesController::class, 'index'])->name('sales.index');
     Route::get('/buscar/productos', [SalesController::class, 'buscarProductos'])->name('sales.buscarProductos');
     Route::post('/generar/sale', [SalesController::class, 'generarSale'])->name('sales.generarSale');
     Route::post('/generar/cotizacion', [SalesController::class, 'generarCotizacion'])->name('sales.generarCotizacion');
+    Route::get('/sales/days/get', [SalesController::class, 'ventasDays'])->name('sales.getdays');
+    Route::get('/sales/days/get/data', [SalesController::class, 'ventasDelDia'])->name('sales.ventasDelDia');
+    Route::get('/detalles/ventas/{id}', [SalesController::class, 'verDetallesdeVenta'])->name('sales.verDetallesdeVenta');
+    Route::get('/generar/pdf/ventas/dia/{id}', [SalesController::class, 'generarPDfDetalles'])->name('sales.generarPDfDetalles');
 
 });
 

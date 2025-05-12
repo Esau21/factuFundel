@@ -150,9 +150,6 @@ h<!DOCTYPE html>
             <p>Monto Recibido: {{ number_format($venta->monto_recibido, 2, ',', '.') }}</p>
         @endif
 
-        @if ($detalle->cambio)
-            <p>Cambio: {{ number_format($detalle->cambio, 2, ',', '.') }}</p>
-        @endif
     </div>
 
     <div class="thank">Gracias por confiar en nosotros</div>

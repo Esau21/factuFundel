@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 
 class SalesController extends Controller
 {
@@ -215,5 +216,95 @@ class SalesController extends Controller
                 'message' => $e->getMessage()
             ], 422);
         }
+    }
+
+
+    public function ventasDays()
+    {
+        return view('salesday.index');
+    }
+
+    public function ventasDelDia(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Sales::getSalesdelDia();
+            return DataTables::of($data)
+                ->addColumn('cliente', function ($data) {
+                    return $data?->clientes?->nombre ?? 'sin data';
+                })
+                ->addColumn('usuario', function ($data) {
+                    return $data?->users?->name ?? 'sin data';
+                })
+                ->addColumn('fecha_venta', function ($data) {
+                    return $data?->fecha_venta ?? 'sin data';
+                })
+                ->addColumn('tipo_pago', function ($data) {
+                    return $data?->tipo_pago ?? 'sin data';
+                })
+                ->addColumn('status', function ($data) {
+                    return $data?->status ?? 'sin data';
+                })
+                ->addColumn('total', function ($data) {
+                    return number_format($data?->total, 2) ?? 'sin data';
+                })
+                ->addColumn('acciones', function ($data) {
+                    $viewsalesdetails =
+                        '<a href="#" 
+                        class="btn btn-success mt-mobile w-90 mx-2 btn-show-details"
+                        data-bs-toggle="modal"
+                        data-bs-target="#verSale"
+                        data-id="' . $data->id . '"
+                        title="Ver detalles de esta venta">
+                        <i class="bx bx-show"></i>
+                    </a>';
+                    $imprimir = '<a href=" ' . route('sales.generarPDfDetalles', $data->id) . ' " 
+                                    class="btn btn-dark mt-mobile w-90 mx-2"
+                                    title="Imprimir" target="_blank">
+                                    <i class="bx bx-printer"></i>
+                             </a>';
+
+                    return $viewsalesdetails . $imprimir;
+                })
+                ->rawColumns(['acciones'])
+                ->make(true);
+        }
+    }
+
+
+    public function verDetallesdeVenta($id)
+    {
+        $sale = Sales::with([
+            'clientes:id,nombre',
+            'users:id,name',
+            'detalles.producto:id,nombre,codigo'
+        ])->find($id);
+
+        if (!$sale) {
+            return response()->json(['error' => 'No se encontró el detalle de esta venta'], 422);
+        }
+
+        return response()->json([
+            'venta' => $sale
+        ]);
+    }
+
+    public function generarPDfDetalles($id)
+    {
+        $sale = Sales::with([
+            'clientes:id,nombre',
+            'users:id,name',
+            'detalles.producto:id,nombre,codigo'
+        ])->find($id);
+
+
+        if (!$sale) {
+            return response()->json(['error' => 'No se encontro este documento'], 422);
+        }
+
+        $pdf = Pdf::loadView('salesday.pdfSalesdays', compact('sale'));
+
+        return $pdf->stream('salesday.reportedeVenta');
+
+        return response()->json(['success' => 'El pdf se genero correctamente'], 200);
     }
 }
