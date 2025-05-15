@@ -23,6 +23,11 @@ class DocumentosDte extends Model
     ];
 
 
+    public function detallesdte()
+    {
+        return $this->hasMany(DocumentosDteDetalles::class);
+    }
+
     public function cliente()
     {
         return $this->belongsTo(Clientes::class, 'cliente_id');

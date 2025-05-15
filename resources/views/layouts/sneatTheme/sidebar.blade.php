@@ -44,7 +44,7 @@
         <!-- Layouts -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-cog"></i>
+                <img src="{{ asset('assets/img/gear.png') }}" class="menu-icon tf-icons" alt="img">
                 <div class="text-truncate" data-i18n="Layouts">Configuraciones</div>
             </a>
 
@@ -74,7 +74,7 @@
 
         <li class="menu-item">
             <a href="{{ route('empresas.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-book-content"></i>
+                <img src="{{ asset('assets/img/empresa.png') }}" class="menu-icon tf-icons" alt="img">
                 <div class="text-truncate" data-i18n="Categorias">Empresas</div>
             </a>
         </li>
@@ -88,7 +88,21 @@
 
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-shopping-bags"></i>
+                <img src="{{ asset('assets/img/piggy-bank.png') }}" class="menu-icon tf-icons" alt="img">
+                <div class="text-truncate" data-i18n="Account Settings">Bancos</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('bancos.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Bancos">Bancos | Cuentas</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <img src="{{ asset('assets/img/box.png') }}" class="menu-icon tf-icons" alt="img">
                 <div class="text-truncate" data-i18n="LayoutsPC">Productos y mas</div>
             </a>
             <ul class="menu-sub">
@@ -107,7 +121,7 @@
 
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-briefcase"></i>
+                <img src="{{ asset('assets/img/briefcase.png') }}" class="menu-icon tf-icons" alt="img">
                 <div class="text-truncate" data-i18n="Account Settings">Socios de negocios</div>
             </a>
             <ul class="menu-sub">
@@ -126,7 +140,7 @@
 
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bxs-cart-alt"></i>
+                <img src="{{ asset('assets/img/wallet.png') }}" class="menu-icon tf-icons" alt="img">
                 <div class="text-truncate" data-i18n="Authentications">Ventas</div>
             </a>
             <ul class="menu-sub">
@@ -152,7 +166,7 @@
 
         <li class="menu-item">
             <a href="{{ route('categorias.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-file-json"></i>
+                <img src="{{ asset('assets/img/files.png') }}" class="menu-icon tf-icons" alt="img">
                 <div class="text-truncate" data-i18n="Josn">Lector JSON</div>
             </a>
         </li>

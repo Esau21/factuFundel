@@ -2,6 +2,7 @@
 
 namespace App\Models\Ventas;
 
+use App\Models\Bancos\Bancos;
 use App\Models\Producto\Producto;
 use App\Models\SociosNegocios\Clientes;
 use App\Models\User;
@@ -19,6 +20,7 @@ class Sales extends Model
         'status',
         'tipo_pago',
         'observaciones',
+        'banco_id',
         'documento_dte_id',
     ];
 
@@ -30,6 +32,11 @@ class Sales extends Model
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function banco()
+    {
+        return $this->belongsTo(Bancos::class, 'banco_id');
     }
 
     public function detalles()

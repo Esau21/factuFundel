@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Categorias\CategoriaController;
+use App\Http\Controllers\Cobros\BancosController;
 use App\Http\Controllers\Post\SalesController;
 use App\Http\Controllers\Producto\ProductoController;
 use App\Http\Controllers\ProfileController;
@@ -105,6 +106,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/empresa/store', [EmpresaController::class, 'storeEmpresa'])->name('empresas.store');
     Route::get('/empresas/edit/{id}', [EmpresaController::class, 'editarEmpresa'])->name('empresas.edit');
     Route::post('/update/empresa/{id}', [EmpresaController::class, 'updateEmpresa'])->name('empresas.update');
+
+    //bancos
+    Route::get('/bancos', [BancosController::class, 'index'])->name('bancos.index');
+    Route::get('/get/index/data/bancos', [BancosController::class, 'bancosgetIndexData'])->name('bancos.bancosgetIndexData');
+    Route::post('/store/banco', [BancosController::class, 'storeBanco'])->name('bancos.store');
+    Route::post('/update/banco/{id}', [BancosController::class, 'updateBanco'])->name('bancos.update');
+    //Cuentas Bancarias
+    Route::get('/cuentas/bancarias/{id}', [BancosController::class, 'indexCuentasBancarias'])->name('cuentas.indexCuentasBancarias');
+    Route::get('/cuentas/bancarias/index/data/{id}', [BancosController::class, 'indexGetCuentasBancarias'])->name('cuentas.indexGetCuentasBancarias');
+    Route::post('/cuenta/bancaria/store/{bancoId}', [BancosController::class, 'storeCuentasBancarias'])->name('cuentas.storeCuentasBancarias');
+    Route::post('/cuenta/update/bancaria/{cuentaId}', [BancosController::class, 'updateCuentaBancaria'])->name('cuentas.updateCuentaBancaria');
 
 
     //sales

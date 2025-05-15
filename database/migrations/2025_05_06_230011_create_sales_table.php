@@ -20,12 +20,14 @@ return new class extends Migration
             $table->enum('status', ['PAID', 'PENDING', 'CANCEL'])->default('PENDING');
             $table->string('tipo_pago');
             $table->text('observaciones');
+            $table->integer('banco_id')->unsigned()->nullable();
             $table->integer('documento_dte_id')->unsigned();
             $table->timestamps();
 
 
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('banco_id')->references('id')->on('bancos');
             $table->foreign('documento_dte_id')->references('id')->on('documentos_dtes');
         });
     }
