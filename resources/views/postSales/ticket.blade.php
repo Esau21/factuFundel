@@ -152,16 +152,7 @@
 
         <!-- Total de la venta -->
         <div class="total">TOTAL = {{ number_format($venta->total, 2, ',', '.') }}</div>
-
-        <!-- Monto recibido (si es necesario mostrarlo) -->
-        @if ($venta->monto_recibido)
-            <div class="total">MONTO RECIBIDO = {{ number_format($venta->monto_recibido, 2, ',', '.') }}</div>
-        @endif
-
-        <!-- Cambio (si el campo 'cambio' está presente en los detalles de la venta) -->
-        @if ($detalle->cambio)
-            <div class="total">CAMBIO = {{ number_format($detalle->cambio, 2, ',', '.') }}</div>
-        @endif
+        <div class="total">CAMBIO = {{ number_format($venta->cambio, 2, ',', '.') }}</div>
         <hr>
         <hr>
 

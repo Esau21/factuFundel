@@ -36,8 +36,6 @@
                                         <th class="text-left">Precio_venta</th>
                                         <th class="text-left">Stock</th>
                                         <th class="text-left">Stock_minimo</th>
-                                        <th class="text-left">U.Medida</th>
-                                        <th class="text-left">Marca</th>
                                         <th class="text-left">Estado</th>
                                         <th class="text-left">Acciones</th>
                                     </tr>
@@ -45,8 +43,6 @@
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
-                                        <th></th>
-                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -121,14 +117,6 @@
                 {
                     data: 'stock_minimo',
                     name: 'stock_minimo'
-                },
-                {
-                    data: 'unidad_medida',
-                    name: 'unidad_medida'
-                },
-                {
-                    data: 'marca',
-                    name: 'marca'
                 },
                 {
                     data: 'estado',

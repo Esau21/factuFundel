@@ -14,7 +14,6 @@ class SalesDetails extends Model
         'producto_id',
         'cantidad',
         'precio_unitario',
-        'cambio',
         'sub_total',
         'descuento_porcentaje',
         'descuento_en_dolar'

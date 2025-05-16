@@ -1,6 +1,59 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
     $(document).ready(function() {
+        //seleccionamos el tipo de pago
+        $('#tipo_pago').on('change', function() {
+            var tipoPago = $(this).val();
+            //Ocultamos todos los campos
+            $('#cheque_fields, #transferencia_fields, #efectivo_fields').hide();
+
+            if (tipoPago === 'cheque') {
+                $('#cheque_fields').show();
+            } else if (tipoPago === 'transferencia') {
+                $('#transferencia_fields').show();
+            } else if (tipoPago === 'efectivo') {
+                $('#efectivo_fields').show();
+            } else if (tipoPago === 'mixto_cheque_efectivo') {
+                $('#cheque_fields').show();
+                $('#efectivo_fields').show();
+            } else if (tipoPago === 'mixto_transferencia_efectivo') {
+                $('#transferencia_fields').show();
+                $('#efectivo_fields').show();
+            }
+        });
+
+        function actualizarTotalPago() {
+            let totalVenta = parseFloat($('#totalAmount').text()) || 0;
+
+            let montoCheque = parseFloat($('#monto').val()) || 0;
+            let montoTransferencia = parseFloat($('#monto_transferencia').val()) || 0;
+            let montoEfectivo = parseFloat($('#cash').val()) || 0;
+
+            // Total pagado (suma de todos)
+            let totalPagado = montoCheque + montoTransferencia + montoEfectivo;
+
+            // Monto a cubrir con efectivo = totalVenta - (cheque + transferencia)
+            let efectivoNecesario = totalVenta - (montoCheque + montoTransferencia);
+
+            // Cambio solo si efectivo entregado > efectivo necesario, sino 0
+            let cambio = montoEfectivo > efectivoNecesario ? montoEfectivo - efectivoNecesario : 0;
+
+            // Mostrar el cambio
+            $('#changeAmount').text(cambio.toFixed(2));
+            $('#cambioInput').val(cambio);
+
+            // Mensaje y habilitar botón según si el pago cubre total
+            if (totalPagado < totalVenta) {
+                $('#mensajePago').text('El pago total es menor al total de la venta.');
+                $('#guardarVenta').prop('disabled', true);
+            } else {
+                $('#mensajePago').text('');
+                $('#guardarVenta').prop('disabled', false);
+            }
+        }
+
+        $('#monto, #monto_transferencia, #cash').on('input', actualizarTotalPago);
+
         // Busqueda de productos
         $('#buscar_producto').on('keyup', function() {
             var query = $(this).val();
@@ -192,6 +245,31 @@
                 precio_unitario = [],
                 sub_total = [];
 
+            var tipo_pago = $('#tipo_pago').val();
+            var cheque_bancario_id = null;
+            var datos_cheque = {};
+            var datos_transferencia = {};
+
+            if (tipo_pago === 'cheque') {
+                datos_cheque = {
+                    numero_cheque: $('#numero_cheque').val(),
+                    cuenta_bancaria_id: $('#cuenta_id').val(),
+                    fecha_emision: $('#fecha_emision').val(),
+                    monto: $('#monto').val(),
+                    estado: $('#estado').val(),
+                    observaciones: $('#observaciones').val(),
+                    correlativo: $('#correlativo').val()
+                };
+            }
+
+            if (tipo_pago === 'transferencia') {
+                datos_transferencia = {
+                    cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
+                    monto_transferencia: $('#monto_transferencia').val()
+                };
+            }
+
+
             $("#productRows tr").each(function() {
                 var id = $(this).find('td:first').text().trim();
                 var cant = parseInt($(this).find('.cantidad').val());
@@ -210,7 +288,7 @@
             var cliente_id = $('#cliente_id').val();
             var efectivo = parseFloat($('#cash').val());
             var total = parseFloat($('#totalAmount').text());
-            var tipo_pago = 'EFECTIVO';
+            var tipo_pago = $('#tipo_pago').val();
             var cambio = $('#cambioInput').val();
 
             var descuento_porcentaje = parseFloat($('#descuento_porcentaje').val().replace('%', '')) ||
@@ -234,7 +312,38 @@
                     precio_unitario,
                     sub_total, // Aquí estás enviando el valor con descuento
                     descuento_porcentaje,
-                    descuento_en_dolar
+                    descuento_en_dolar,
+                    // Campos planos de cheque (solo si aplica)
+                    ...(tipo_pago === 'cheque' ? {
+                        cliente_id,
+                        numero_cheque: $('#numero_cheque').val(),
+                        cuenta_bancaria_id: $('#cuenta_id').val(),
+                        fecha_emision: $('#fecha_emision').val(),
+                        monto: $('#monto').val(),
+                        estado: $('#estado').val(),
+                        observaciones: $('#observaciones').val(),
+                        correlativo: $('#correlativo').val()
+                    } : {}),
+
+                    ...(tipo_pago === 'mixto_cheque_efectivo' ? {
+                        cliente_id,
+                        numero_cheque: $('#numero_cheque').val(),
+                        cuenta_bancaria_id: $('#cuenta_id').val(),
+                        fecha_emision: $('#fecha_emision').val(),
+                        monto: $('#monto').val(),
+                        estado: $('#estado').val(),
+                        observaciones: $('#observaciones').val(),
+                        correlativo: $('#correlativo').val(),
+                        efectivo,
+                        cambio
+                    } : {}),
+
+                    // Campos planos de transferencia (solo si aplica)
+                    ...(tipo_pago === 'transferencia' ? {
+                        cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
+                        monto_transferencia: $('#monto_transferencia').val()
+                    } : {})
+
                 },
                 xhrFields: {
                     responseType: 'blob'

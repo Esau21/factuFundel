@@ -18,8 +18,6 @@ class Producto extends Model
         'precio_venta',
         'stock',
         'stock_minimo',
-        'unidad_medida',
-        'marca',
         'imagen',
         'estado',
         'categoria_id'

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('cliente_id')->unsigned();
             $table->integer('cuenta_bancaria_id')->unsigned(); 
             $table->string('numero_cheque');
-            $table->string('banco_emisor'); 
             $table->decimal('monto', 12, 2);
             $table->date('fecha_emision');
             $table->date('fecha_pago')->nullable(); 

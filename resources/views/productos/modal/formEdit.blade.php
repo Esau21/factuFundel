@@ -113,26 +113,6 @@
                          </div>
                      </div>
 
-                     <div class="col-3 form-control-validation">
-                         <label class="form-label w-100" for="unidad_medida">Unidad medida</label>
-                         <div class="input-group input-group-merge">
-                             <input id="unidad_medida" name="unidad_medida" class="form-control" type="text"
-                                 placeholder="ejemplo" />
-                             <span class="input-group-text cursor-pointer"><span
-                                     class="card-type me-n2"></span></span>
-                         </div>
-                     </div>
-
-                     <div class="col-3 form-control-validation">
-                         <label class="form-label w-100" for="marca">Marca</label>
-                         <div class="input-group input-group-merge">
-                             <input id="marca" name="marca" class="form-control" type="text"
-                                 placeholder="ejemplo" />
-                             <span class="input-group-text cursor-pointer"><span
-                                     class="card-type me-n2"></span></span>
-                         </div>
-                     </div>
-
                      <div class="col-6 form-control-validation">
                          <label class="form-label w-100" for="estado">Estado</label>
                          <div class="input-group input-group-merge">
@@ -185,8 +165,6 @@
          let precio_venta = $(this).data('precio_venta');
          let stock = $(this).data('stock');
          let stock_minimo = $(this).data('stock_minimo');
-         let unidad_medida = $(this).data('unidad_medida');
-         let marca = $(this).data('marca');
          let estado = $(this).data('estado');
 
          /* Rellenamos los campos del formulario con los valores obtenidos */
@@ -199,17 +177,15 @@
          $('#editProducto #precio_venta').val(precio_venta);
          $('#editProducto #stock').val(stock);
          $('#editProducto #stock_minimo').val(stock_minimo);
-         $('#editProducto #unidad_medida').val(unidad_medida);
-         $('#editProducto #marca').val(marca);
          $('#editProducto #estado').val(estado);
 
-        /* Si la imagen es proporcionada, mostrarla en el preview */
+         /* Si la imagen es proporcionada, mostrarla en el preview */
          if (imagen) {
              $('#imagen-preview').attr('src', imagen);
          }
      });
 
-    /* Manejo del envío del formulario para actualizar el producto */
+     /* Manejo del envío del formulario para actualizar el producto */
      $('#editFormProduct').on('submit', function(e) {
          e.preventDefault();
 

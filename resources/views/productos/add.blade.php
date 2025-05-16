@@ -114,27 +114,8 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-12 form-control-validation">
-                                <label class="form-label w-100" for="unidad_medida">Unidad medida</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="unidad_medida" name="unidad_medida" class="form-control" type="text"
-                                        placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
 
-                            <div class="col-md-6 col-12 form-control-validation">
-                                <label class="form-label w-100" for="marca">Marca</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="marca" name="marca" class="form-control" type="text"
-                                        placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-                            <div class="col-12 form-control-validation">
+                            <div class="col-lg-3 form-control-validation">
                                 <label class="form-label w-100" for="estado">Estado</label>
                                 <div class="input-group input-group-merge">
                                     <select name="estado" id="estado" class="form-control">

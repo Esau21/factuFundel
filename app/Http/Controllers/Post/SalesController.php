@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bancos\Bancos;
+use App\Models\Bancos\ChequeRecibido;
+use App\Models\Bancos\CuentasBancarias;
 use App\Models\Producto\Producto;
 use App\Models\SociosNegocios\Clientes;
 use App\Models\Ventas\Sales;
@@ -21,7 +24,9 @@ class SalesController extends Controller
     {
         $productos = Producto::all();
         $clientes = Clientes::all();
-        return view('postSales.index', compact('productos', 'clientes'));
+        $bancos = Bancos::all();
+        $cuentas_bancarias = CuentasBancarias::all();
+        return view('postSales.index', compact('productos', 'clientes', 'bancos', 'cuentas_bancarias'));
     }
 
     public function buscarProductos(Request $request)
@@ -42,13 +47,8 @@ class SalesController extends Controller
         return response()->json($productos);
     }
 
-
     public function generarSale(Request $request)
     {
-        /**
-         * aqui vamos a trabajar la logica del backend
-         * 
-         */
 
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
@@ -62,52 +62,90 @@ class SalesController extends Controller
             'sub_total.*' => 'required|numeric|min:0',
             'descuento_porcentaje.*' => 'nullable|numeric|min:0|max:100',
             'descuento_en_dolar.*' => 'nullable|numeric|min:0',
-        ]);
 
+            /* Solo si es cheque */
+            'cuenta_bancaria_id' => 'required_if:tipo_pago,cheque,transferencia|exists:cuentas_bancarias,id',
+            'numero_cheque' => 'required_if:tipo_pago,cheque|string',
+            'fecha_emision' => 'required_if:tipo_pago,cheque|date',
+            'estado' => 'nullable|string',
+            'observaciones' => 'nullable|string',
+        ]);
 
         DB::beginTransaction();
         try {
-            /**
-             * 
-             * Creamos la venta
-             */
+            $tipo_pago = $request->tipo_pago;
+
+            /* Creamos la venta */
             $sale = Sales::create([
                 'cliente_id'   => $request->cliente_id,
-                'user_id'      => Auth::user()->id,
+                'user_id'      => Auth::id(),
                 'fecha_venta'  => Carbon::now(),
                 'total'        => $request->total,
+                'cambio'       => floatval($request->cambio),
                 'status'       => 'PAID',
-                'tipo_pago'    => $request->tipo_pago,
+                'tipo_pago'    => $tipo_pago,
                 'observaciones' => $request->observaciones ?? '',
+                'monto_efectivo' => $request->monto_efectivo ?? 0,
+                'monto_transferencia' => $request->monto_transferencia ?? 0,
+                'cuenta_bancaria_id' => $request->cuenta_bancaria_id ?? null,
             ]);
 
-            /**
-             * 
-             * Guardamos los detalles de la venta
-             */
-            foreach ($request->producto_id as $index => $productoId) {
-
-                $cantidad = $request->cantidad[$index];
-                $cambio = floatval($request->cambio);
-
-                /**
-                 * creamos el detalle de la venta
-                 */
-                SalesDetails::create([
-                    'sale_id'        => $sale->id,
-                    'producto_id'    => $productoId,
-                    'cantidad'       => $request->cantidad[$index],
-                    'precio_unitario' => $request->precio_unitario[$index],
-                    'sub_total'      => $request->sub_total[$index],
-                    'cambio'         =>  $cambio,
-                    'descuento_porcentaje' => $request->descuento_porcentaje[$index] ?? null,
-                    'descuento_en_dolar'  => $request->descuento_en_dolar[$index] ?? null,
+            /* Si el tipo de pago es cheque */
+            if ($tipo_pago === 'cheque') {
+                $cheque = $sale->cheque()->create([
+                    'cliente_id'   => $request->cliente_id,
+                    'numero_cheque' => $request->numero_cheque,
+                    'cuenta_bancaria_id' => $request->cuenta_bancaria_id,
+                    'fecha_emision' => $request->fecha_emision,
+                    'monto' => $request->monto ?? $request->total,
+                    'estado' => $request->estado,
+                    'observaciones' => $request->observaciones,
                 ]);
 
-                /**
-                 * 
-                 * actualizamos el stock de los productos
-                 */
+                /* Asociamos el cheque a la venta (si hay campo cheque_bancario_id) */
+                $sale->cheque_bancario_id = $cheque->id;
+                $sale->save();
+            }
+
+            if ($tipo_pago === 'mixto_cheque_efectivo') {
+                $cheque = $sale->cheque()->create([
+                    'cliente_id'   => $request->cliente_id,
+                    'numero_cheque' => $request->numero_cheque,
+                    'cuenta_bancaria_id' => $request->cuenta_bancaria_id,
+                    'fecha_emision' => $request->fecha_emision,
+                    'monto' => $request->monto ?? $request->total,
+                    'estado' => $request->estado,
+                    'observaciones' => $request->observaciones,
+                ]);
+
+                /* Asociamos el cheque a la venta (si hay campo cheque_bancario_id) */
+                $sale->cheque_bancario_id = $cheque->id;
+                $sale->save();
+            }
+
+            /* Si el tipo de pago es transferencia */
+            if ($tipo_pago === 'transferencia') {
+                $sale->cuenta()->create([
+                    'cuenta_bancaria_id' => $request->cuenta_bancaria_id,
+                    'monto_transferencia' => $request->monto_transferencia ?? $request->total,
+                ]);
+            }
+
+            /* Guardamos los detalles de la venta */
+            foreach ($request->producto_id as $index => $productoId) {
+                $cantidad = $request->cantidad[$index];
+
+                SalesDetails::create([
+                    'sale_id' => $sale->id,
+                    'producto_id' => $productoId,
+                    'cantidad' => $cantidad,
+                    'precio_unitario' => $request->precio_unitario[$index],
+                    'sub_total' => $request->sub_total[$index],
+                    'descuento_porcentaje' => $request->descuento_porcentaje[$index] ?? null,
+                    'descuento_en_dolar' => $request->descuento_en_dolar[$index] ?? null,
+                ]);
+
+                /* Actualizamos stock */
                 $producto = Producto::find($productoId);
                 if ($producto->stock < $cantidad) {
                     throw new \Exception("El stock es insuficiente para el producto: {$producto->nombre}");
@@ -119,6 +157,7 @@ class SalesController extends Controller
 
             DB::commit();
 
+            /* Generamos el ticket en PDF */
             $pdf = Pdf::loadView('postSales.ticket', [
                 'venta' => $sale->load('clientes', 'detalles.producto'),
             ]);
@@ -126,11 +165,6 @@ class SalesController extends Controller
             return response($pdf->output(), 200)
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'inline; filename="venta_ticket.pdf"');
-
-
-            return response()->json([
-                'success' => 'Venta registrada correctamente.'
-            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -139,6 +173,7 @@ class SalesController extends Controller
             ], 422);
         }
     }
+
 
     public function generarCotizacion(Request $request)
     {

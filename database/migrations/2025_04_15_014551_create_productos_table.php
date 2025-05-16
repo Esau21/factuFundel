@@ -20,8 +20,6 @@ return new class extends Migration
             $table->decimal('precio_venta', 10, 2);
             $table->integer('stock');
             $table->integer('stock_minimo');
-            $table->string('unidad_medida')->nullable();
-            $table->string('marca')->nullable();
             $table->string('imagen')->nullable();
             $table->enum('estado', ['activo', 'deshabilitado'])->default('activo');
             $table->integer('categoria_id')->unsigned()->nullable();

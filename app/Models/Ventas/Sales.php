@@ -3,6 +3,8 @@
 namespace App\Models\Ventas;
 
 use App\Models\Bancos\Bancos;
+use App\Models\Bancos\ChequeRecibido;
+use App\Models\Bancos\CuentasBancarias;
 use App\Models\Producto\Producto;
 use App\Models\SociosNegocios\Clientes;
 use App\Models\User;
@@ -21,12 +23,27 @@ class Sales extends Model
         'tipo_pago',
         'observaciones',
         'banco_id',
+        'cambio',
         'documento_dte_id',
+        'cheque_bancario_id',
+        'cuenta_bancaria_id',
+        'monto_efectivo',
+        'monto_transferencia'
     ];
 
     public function clientes()
     {
         return $this->belongsTo(Clientes::class, 'cliente_id');
+    }
+
+    public function cheque()
+    {
+        return $this->belongsTo(ChequeRecibido::class, 'cheque_bancario_id');
+    }
+
+    public function cuenta()
+    {
+        return $this->belongsTo(CuentasBancarias::class, 'cuenta_bancaria_id');
     }
 
     public function users()

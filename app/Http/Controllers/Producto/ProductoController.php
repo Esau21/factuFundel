@@ -52,14 +52,12 @@ class ProductoController extends Controller
                 ->addColumn('stock_minimo', function ($data) {
                     return $data->stock_minimo ?? 'no data';
                 })
-                ->addColumn('unidad_medida', function ($data) {
-                    return $data->unidad_medida ?? 'no data';
-                })
-                ->addColumn('marca', function ($data) {
-                    return $data->marca ?? 'no data';
-                })
                 ->addColumn('estado', function ($data) {
-                    return $data->estado ?? 'no data';
+                    if($data->estado == 'activo'){
+                         return '<span class="badge badge-center rounded-pill text-bg-success"><i class="icon-base bx bx-check"></i></span>';
+                    } else {
+                        return '<span class="badge badge-center rounded-pill text-bg-danger"><i class="icon-base bx bx-x-circle"></i></span>';
+                    }
                 })
                 ->addColumn('categoria', function ($data) {
                     return $data->categoria ?? 'sin categoria';
@@ -82,8 +80,6 @@ class ProductoController extends Controller
                                     data-precio_venta="' . e($data->precio_venta) . '"
                                     data-stock="' . e($data->stock) . '"
                                     data-stock_minimo="' . e($data->stock_minimo) . '"
-                                    data-unidad_medida="' . e($data->unidad_medida) . '"
-                                    data-marca="' . e($data->marca) . '"
                                     data-estado="' . e($data->estado) . '"
                                     data-imagen="' . e($data->imagen) . '"
                                     title="Editar">
@@ -188,9 +184,7 @@ class ProductoController extends Controller
             'precio_venta' => 'required|numeric',
             'stock' => 'required|numeric',
             'stock_minimo' => 'nullable|numeric',
-            'unidad_medida' => 'nullable|string',
-            'marca' => 'nullable|string',
-            'estado' => 'required|in:activo,inactivo',
+            'estado' => 'required|in:activo,deshabilitado',
             'categoria_id' => 'required|exists:categorias,id',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
@@ -208,10 +202,8 @@ class ProductoController extends Controller
             'stock.required' => 'El stock es obligatorio.',
             'stock.numeric' => 'El stock debe ser un número.',
             'stock_minimo.numeric' => 'El stock mínimo debe ser un número.',
-            'unidad_medida.string' => 'La unidad de medida debe ser una cadena de texto.',
-            'marca.string' => 'La marca debe ser una cadena de texto.',
             'estado.required' => 'El estado es obligatorio.',
-            'estado.in' => 'El estado debe ser "activo" o "inactivo".',
+            'estado.in' => 'El estado debe ser "activo" o "deshabilitado".',
             'categoria_id.required' => 'Debes seleccionar una categoría válida.',
             'categoria_id.exists' => 'La categoría seleccionada no existe.',
             'imagen.image' => 'El archivo debe ser una imagen.',
@@ -255,9 +247,7 @@ class ProductoController extends Controller
             'precio_venta' => 'required|numeric',
             'stock' => 'required|numeric',
             'stock_minimo' => 'nullable|numeric',
-            'unidad_medida' => 'nullable|string',
-            'marca' => 'nullable|string',
-            'estado' => 'required|in:activo,inactivo',
+            'estado' => 'required|in:activo,deshabilitado',
             'categoria_id' => 'required|exists:categorias,id',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
@@ -275,10 +265,8 @@ class ProductoController extends Controller
             'stock.required' => 'El stock es obligatorio.',
             'stock.numeric' => 'El stock debe ser un número.',
             'stock_minimo.numeric' => 'El stock mínimo debe ser un número.',
-            'unidad_medida.string' => 'La unidad de medida debe ser una cadena de texto.',
-            'marca.string' => 'La marca debe ser una cadena de texto.',
             'estado.required' => 'El estado es obligatorio.',
-            'estado.in' => 'El estado debe ser "activo" o "inactivo".',
+            'estado.in' => 'El estado debe ser "activo" o "deshabilitado".',
             'categoria_id.required' => 'Debes seleccionar una categoría válida.',
             'categoria_id.exists' => 'La categoría seleccionada no existe.',
             'imagen.image' => 'El archivo debe ser una imagen.',
