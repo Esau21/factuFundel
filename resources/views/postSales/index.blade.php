@@ -3,10 +3,57 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <!-- Contenido principal -->
-            <div class="col-12 col-lg-8 d-flex flex-column gap-4 order-2 order-lg-1">
+        <div class="row align-items-start">
+            <!-- Búsqueda de productos -->
+            <div class="col-12 col-lg-8 d-flex flex-column gap-4">
+                <div class="card mb-0">
+                    <div class="card-header">
+                        <h6 class="alert alert-dark d-flex align-items-center gap-2" role="alert">
+                            <i class='bx bx-error-circle fs-4'></i>
+                            ¡Aviso Importante! Tienes que buscar y seleccionar el producto, que quieres agregar a la venta.
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="buscar_producto" class="form-label"><b class="text-danger">***Buscar producto***</b></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bx bx-search" style="font-size: 1.3rem;"></i>
+                                </span>
+                                <input type="text" name="buscar_producto" id="buscar_producto" class="form-control"
+                                    placeholder="Buscar producto...">
+                            </div>
+                        </div>
+
+                        <div id="productSearchResults" class="mt-2"
+                            style="border: 1px solid #ddd; display: none; position: absolute; background: #fff; width: 100%; max-height: 300px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; border-radius: 8px; padding: 10px;">
+                        </div>
+
+                        <!-- Tabla -->
+                        <div class="table-responsive mt-5" style="max-height: 650px; overflow-y: auto;">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">#</th>
+                                        <th class="text-start">PRODUCTO</th>
+                                        <th class="text-center">PRECIO</th>
+                                        <th width="13%" class="text-center">CANT</th>
+                                        <th class="text-center">IMPORTE</th>
+                                        <th class="text-center">PROCESOS</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productRows"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
+                    <div class="card-header">
+                        <h6 class="alert alert-dark d-flex align-items-center gap-2" role="alert">
+                            <i class='bx bx-error-circle fs-4'></i>
+                            ¡Aviso Importante! Tienes que ir llenando los campos que son solicitados, en los tipos de pagos.
+                        </h6>
+                    </div>
                     <div class="card-body">
                         <!-- Selección de Cliente y Pago -->
                         <div class="row g-4">
@@ -69,7 +116,8 @@
                                 <div class="row g-3">
                                     <div class="col-sm-6">
                                         <label for="numero_cheque" class="form-label">Número de cheque</label>
-                                        <input type="text" class="form-control" id="numero_cheque" name="numero_cheque">
+                                        <input type="text" class="form-control" id="numero_cheque"
+                                            name="numero_cheque">
                                     </div>
 
                                     <div class="col-sm-6">
@@ -87,7 +135,8 @@
 
                                     <div class="col-sm-6">
                                         <label for="fecha_emision" class="form-label">Fecha de emisión</label>
-                                        <input type="date" class="form-control" id="fecha_emision" name="fecha_emision">
+                                        <input type="date" class="form-control" id="fecha_emision"
+                                            name="fecha_emision">
                                     </div>
 
                                     <div class="col-sm-6">
@@ -150,55 +199,17 @@
                 </div>
             </div>
 
-            <!-- Búsqueda de productos -->
-            <div class="col-12 col-lg-8 mb-4 order-2 order-lg-1 mt-5">
-                <div class="card flex-grow-1">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="buscar_producto" class="form-label">Buscar producto:</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light">
-                                    <i class="bx bx-search" style="font-size: 1.3rem;"></i>
-                                </span>
-                                <input type="text" name="buscar_producto" id="buscar_producto" class="form-control"
-                                    placeholder="Buscar producto...">
-                            </div>
-                        </div>
-
-                        <div id="productSearchResults" class="mt-2"
-                            style="border: 1px solid #ddd; display: none; position: absolute; background: #fff; width: 100%; max-height: 300px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; border-radius: 8px; padding: 10px;">
-                        </div>
-
-                        <!-- Tabla -->
-                        <div class="table-responsive mt-5" style="max-height: 650px; overflow-y: auto;">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th width="10%">#</th>
-                                        <th class="text-start">PRODUCTO</th>
-                                        <th class="text-center">PRECIO</th>
-                                        <th width="13%" class="text-center">CANT</th>
-                                        <th class="text-center">IMPORTE</th>
-                                        <th class="text-center">PROCESOS</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="productRows"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Resumen de ventas -->
-            <div class="col-12 col-lg-4 order-1 order-lg-2 d-flex" style="margin-top: -200px;">
-                <div class="card shadow-sm w-100" style="position: sticky; top: 20px;">
+            <div class="col-12 col-lg-4 d-flex self-start">
+                <div class="card shadow-sm w-100 sticky-sidebar">
                     <div class="card-body d-flex flex-column justify-content-between position-relative">
 
                         <!-- Imagen decorativa centrada -->
                         <img src="{{ asset('assets/img/piggy-bank.png') }}" alt="Decoración"
                             style="max-width: 100px; margin: 0 auto 10px auto; display: block; opacity: 0.4;">
 
-                        <h5 class="text-center mb-4">RESUMEN DE VENTAS</h5>
+                        <h5 class="text-center mb-4"><b>***RESUMEN DE VENTAS***</b></h5>
 
                         <div class="card mb-4">
                             <div class="card-body">
@@ -219,9 +230,6 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
     @include('postSales.scripts.scriptsPostventas')

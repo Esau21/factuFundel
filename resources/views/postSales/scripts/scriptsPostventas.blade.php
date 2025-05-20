@@ -310,7 +310,7 @@
                     producto_id,
                     cantidad,
                     precio_unitario,
-                    sub_total, // Aquí estás enviando el valor con descuento
+                    sub_total, // Aquí enviamos el valor con descuento
                     descuento_porcentaje,
                     descuento_en_dolar,
                     // Campos planos de cheque (solo si aplica)
@@ -342,6 +342,13 @@
                     ...(tipo_pago === 'transferencia' ? {
                         cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
                         monto_transferencia: $('#monto_transferencia').val()
+                    } : {}),
+
+                    ...(tipo_pago === 'mixto_transferencia_efectivo' ? {
+                        cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
+                        monto_transferencia: $('#monto_transferencia').val(),
+                        efectivo,
+                        cambio
                     } : {})
 
                 },

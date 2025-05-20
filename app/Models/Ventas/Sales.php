@@ -22,7 +22,6 @@ class Sales extends Model
         'status',
         'tipo_pago',
         'observaciones',
-        'banco_id',
         'cambio',
         'documento_dte_id',
         'cheque_bancario_id',
@@ -50,12 +49,7 @@ class Sales extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    public function banco()
-    {
-        return $this->belongsTo(Bancos::class, 'banco_id');
-    }
-
+    
     public function detalles()
     {
         return $this->hasMany(SalesDetails::class, 'sale_id');

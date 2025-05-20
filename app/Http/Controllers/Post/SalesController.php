@@ -123,13 +123,7 @@ class SalesController extends Controller
                 $sale->save();
             }
 
-            /* Si el tipo de pago es transferencia */
-            if ($tipo_pago === 'transferencia') {
-                $sale->cuenta()->create([
-                    'cuenta_bancaria_id' => $request->cuenta_bancaria_id,
-                    'monto_transferencia' => $request->monto_transferencia ?? $request->total,
-                ]);
-            }
+
 
             /* Guardamos los detalles de la venta */
             foreach ($request->producto_id as $index => $productoId) {
