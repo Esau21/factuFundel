@@ -37,10 +37,10 @@
                                     <tr>
                                         <th width="10%">#</th>
                                         <th class="text-start">PRODUCTO</th>
-                                        <th class="text-center">PRECIO</th>
-                                        <th width="13%" class="text-center">CANT</th>
-                                        <th width="13%" class="text-center">D%</th>
-                                        <th width="13%" class="text-center">D$</th>
+                                        <th width="30%" class="text-center">PRECIO</th>
+                                        <th width="20%" class="text-center">CANT</th>
+                                        <th width="20%" class="text-center">%</th>
+                                        <th width="20%" class="text-center">$</th>
                                         <th class="text-center">IMPORTE</th>
                                         <th class="text-center">PROCESOS</th>
                                     </tr>
@@ -84,6 +84,18 @@
                                 </select>
                             </div>
 
+                            <!-- Tipo de comprobante -->
+                            <div class="col-sm-6">
+                                <label for="tipo_documento" class="form-label">Tipo de comprobante</label>
+                                <select name="tipo_documento" id="tipo_documento" class="form-select">
+                                    <option value="">Seleccione</option>
+                                    <option value="factura">Factura Electrónica</option>
+                                    <option value="ccf">Crédito Fiscal</option>
+                                    <option value="ticket">Consumidor Final</option>
+                                </select>
+                            </div>
+
+
                             <!-- Efectivo -->
                             <div id="efectivo_fields" class="col-12 mt-3" style="display: none;">
                                 <div class="col-sm-6 mt-3">
@@ -101,8 +113,7 @@
                                 <div class="row g-3">
                                     <div class="col-sm-6">
                                         <label for="numero_cheque" class="form-label">Número de cheque</label>
-                                        <input type="text" class="form-control" id="numero_cheque"
-                                            name="numero_cheque">
+                                        <input type="text" class="form-control" id="numero_cheque" name="numero_cheque">
                                     </div>
 
                                     <div class="col-sm-6">
@@ -186,7 +197,7 @@
 
 
             <!-- Resumen de ventas -->
-            <div class="col-12 col-lg-4 d-flex self-start">
+            <div class="col-12 col-md-4 d-flex self-start">
                 <div class="card shadow-sm w-100 sticky-sidebar">
                     <div class="card-body d-flex flex-column justify-content-between position-relative">
 
@@ -210,7 +221,7 @@
 
                         <div class="d-grid gap-2">
                             <button class="btn btn-danger" type="button" id="guardarCotizacion">COTIZACIÓN F4</button>
-                            <button class="btn btn-primary" type="button" id="guardarVenta">GUARDAR VENTA F5</button>
+                            <button class="btn btn-primary" type="button" id="guardarVenta">GENERAR VENTA F5</button>
                         </div>
                     </div>
                 </div>

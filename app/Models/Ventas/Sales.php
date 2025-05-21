@@ -2,10 +2,9 @@
 
 namespace App\Models\Ventas;
 
-use App\Models\Bancos\Bancos;
 use App\Models\Bancos\ChequeRecibido;
 use App\Models\Bancos\CuentasBancarias;
-use App\Models\Producto\Producto;
+use App\Models\DGII\DocumentosDte;
 use App\Models\SociosNegocios\Clientes;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -27,13 +26,20 @@ class Sales extends Model
         'cheque_bancario_id',
         'cuenta_bancaria_id',
         'monto_efectivo',
-        'monto_transferencia'
+        'monto_transferencia',
+        'documento_dte_id'
     ];
 
     public function clientes()
     {
         return $this->belongsTo(Clientes::class, 'cliente_id');
     }
+
+    public function documentoDte()
+    {
+        return $this->belongsTo(DocumentosDte::class, 'documento_dte_id');
+    }
+
 
     public function cheque()
     {
@@ -49,7 +55,7 @@ class Sales extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    
+
     public function detalles()
     {
         return $this->hasMany(SalesDetails::class, 'sale_id');

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('monto_transferencia', 12, 2)->nullable();
             $table->integer('cuenta_bancaria_id')->unsigned()->nullable();
             $table->integer('cheque_bancario_id')->unsigned()->nullable();
-            //$table->integer('documento_dte_id')->unsigned();
+            $table->integer('documento_dte_id')->unsigned();
             $table->timestamps();
 
 
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('cuenta_bancaria_id')->references('id')->on('cuentas_bancarias');
             $table->foreign('cheque_bancario_id')->references('id')->on('cheque_recibidos');
-            //$table->foreign('documento_dte_id')->references('id')->on('documentos_dtes');
+            $table->foreign('documento_dte_id')->references('id')->on('documentos_dtes');
         });
     }
 

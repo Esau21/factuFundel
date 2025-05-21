@@ -116,7 +116,7 @@
                                 <td>
                                     <!-- Descuento Porcentaje -->
                                     <select name="descuento_porcentaje[]" class="form-select descuento_porcentaje">
-                                        <option value="">Seleccionar</option>
+                                        <option value="">Elg.</option>
                                         <option value="10">10%</option>
                                         <option value="15">15%</option>
                                         <option value="20">20%</option>
@@ -292,6 +292,7 @@
             const total = parseFloat($('#totalAmount').text()) || 0;
             const tipo_pago = $('#tipo_pago').val();
             const cambio = parseFloat($('#cambioInput').val()) || 0;
+            const tipo_documento = $('#tipo_documento').val();
 
             $("#guardarVenta").prop('disabled', true);
 
@@ -311,6 +312,7 @@
                     sub_total,
                     descuento_porcentaje,
                     descuento_en_dolar,
+                    tipo_documento,
 
                     // Si es cheque o mixto con cheque
                     ...(tipo_pago === 'cheque' || tipo_pago === 'mixto_cheque_efectivo' ? {
@@ -330,10 +332,19 @@
                             monto_transferencia: $('#monto_transferencia').val(),
                         } : {})
                 },
-                xhrFields: {
-                    responseType: 'blob'
-                },
                 success: function(response) {
+                    if (response.error) {
+                        Toastify({
+                            text: response.message || "Error al guardar la venta.",
+                            className: "error",
+                            style: {
+                                background: "linear-gradient(to right, #dc3545, #c82333)"
+                            }
+                        }).showToast();
+                        $("#guardarVenta").prop('disabled', false);
+                        return;
+                    }
+
                     Toastify({
                         text: "Venta guardada exitosamente.",
                         className: "success",
@@ -342,7 +353,16 @@
                         }
                     }).showToast();
 
-                    const url = URL.createObjectURL(response);
+                    // Crear y abrir PDF desde base64
+                    const pdfData = atob(response.pdf_base64);
+                    const array = new Uint8Array(pdfData.length);
+                    for (let i = 0; i < pdfData.length; i++) {
+                        array[i] = pdfData.charCodeAt(i);
+                    }
+                    const blob = new Blob([array], {
+                        type: 'application/pdf'
+                    });
+                    const url = URL.createObjectURL(blob);
                     window.open(url, '_blank');
 
                     setTimeout(() => {

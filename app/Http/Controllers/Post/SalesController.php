@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Bancos\Bancos;
 use App\Models\Bancos\ChequeRecibido;
 use App\Models\Bancos\CuentasBancarias;
+use App\Models\DGII\DocumentosDte;
 use App\Models\Producto\Producto;
 use App\Models\SociosNegocios\Clientes;
+use App\Models\SociosNegocios\Empresa;
 use App\Models\Ventas\Sales;
 use App\Models\Ventas\SalesDetails;
+use App\Services\DteGeneratorService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,9 +50,9 @@ class SalesController extends Controller
         return response()->json($productos);
     }
 
+
     public function generarSale(Request $request)
     {
-
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
             'tipo_pago' => 'required|string',
@@ -58,12 +61,10 @@ class SalesController extends Controller
             'producto_id.*' => 'exists:productos,id',
             'cantidad.*' => 'required|integer|min:1',
             'precio_unitario.*' => 'required|numeric|min:0',
-            'cambio.*' => 'required|numeric|min:0',
+            'cambio' => 'required|numeric|min:0',
             'sub_total.*' => 'required|numeric|min:0',
             'descuento_porcentaje.*' => 'nullable|numeric|min:0|max:100',
             'descuento_en_dolar.*' => 'nullable|numeric|min:0',
-
-            /* Solo si es cheque */
             'cuenta_bancaria_id' => 'required_if:tipo_pago,cheque,transferencia|exists:cuentas_bancarias,id',
             'numero_cheque' => 'required_if:tipo_pago,cheque|string',
             'fecha_emision' => 'required_if:tipo_pago,cheque|date',
@@ -75,7 +76,129 @@ class SalesController extends Controller
         try {
             $tipo_pago = $request->tipo_pago;
 
-            /* Creamos la venta */
+            /* Preparar items para el DTE */
+            $itemsParaDTE = [];
+            foreach ($request->producto_id as $index => $productoId) {
+                $producto = Producto::findOrFail($productoId);
+                $cantidad = $request->cantidad[$index];
+
+                if ($producto->stock < $cantidad) {
+                    throw new \Exception("Stock insuficiente para el producto: {$producto->nombre}");
+                }
+
+                $itemsParaDTE[] = [
+                    'numero_linea' => $index + 1,
+                    'codigo' => $producto->codigo ?? 'N/A',
+                    'descripcion' => $producto->nombre,
+                    'cantidad' => $cantidad,
+                    'precio_unitario' => number_format($request->precio_unitario[$index], 2, '.', ''),
+                    'precio_venta' => number_format($request->sub_total[$index], 2, '.', ''),
+                    'subtotal' => number_format($request->sub_total[$index], 2, '.', ''),
+                    'total' => number_format($request->sub_total[$index], 2, '.', ''),
+                ];
+            }
+
+            // Datos cliente para DTE
+            $cliente = Clientes::findOrFail($request->cliente_id);
+            $empresa = Auth::user()->empresa;
+            $total = floatval($request->total);
+            $subtotal = $total / 1.13;
+            $total_iva = $total - $subtotal;
+            $tipoDte = match ($request->tipo_documento) {
+                'factura' => '01',
+                'ccf'     => '03',
+                'ticket'  => '05',
+                default   => '01',
+            };
+            $dteDatos = [
+                'tipo_dte' => $tipoDte,
+                'emisor' => [
+                    'nombre' => $empresa->nombre,
+                    'nombre_comercial' => $empresa->nombre,
+                    'nit' => $empresa->nit,
+                    'nrc' => $empresa->nrc,
+                    'giro' => $empresa->giro,
+                    'direccion' => $empresa->direccion,
+                    'departamento' => 'San Salvador',
+                    'municipio' => 'San Salvador',
+                ],
+                'cliente' => [
+                    'nombre' => $cliente->nombre,
+                    'tipo_documento' => $cliente->tipo_documento,
+                    'numero_documento' => $cliente->numero_documento,
+                    'direccion' => $cliente->direccion,
+                    'departamento' => $cliente->departamento,
+                    'municipio' => $cliente->municipio,
+                ],
+                'items' => $itemsParaDTE,
+                'resumen' => [
+                    'total_gravada' => round($subtotal, 2),
+                    'total_iva' => round($total_iva, 2),
+                    'subtotal' => round($subtotal, 2),
+                    'total' => round($total, 2),
+                ],
+            ];
+
+
+            /**
+             * Creamos DTE antes de la venta
+             **/
+            $dteService = new DteGeneratorService();
+            $rutaXml = $dteService->generarFacturaElectronica($dteDatos);
+
+            $xml = simplexml_load_file($rutaXml);
+            $xml->registerXPathNamespace('dte', 'http://www.mh.gob.sv/dte/wsv');
+
+            $identificacionNodes = $xml->xpath('//dte:Identificacion');
+            if (!$identificacionNodes || count($identificacionNodes) === 0) {
+                throw new \Exception('No se encontró nodo Identificacion en el XML');
+            }
+            $identificacion = $identificacionNodes[0];
+
+            /**
+             * Acceso correcto a nodos con namespace
+             */
+            $ns = 'http://www.mh.gob.sv/dte/wsv';
+            $identificacionChildren = $identificacion->children($ns);
+
+            $tipoDocumento = isset($identificacionChildren->TipoDte) ? (string)$identificacionChildren->TipoDte : null;
+            $numeroControl = isset($identificacionChildren->NumeroControl) ? (string)$identificacionChildren->NumeroControl : null;
+            $codigoGeneracion = isset($identificacionChildren->CodigoGeneracion) ? (string)$identificacionChildren->CodigoGeneracion : null;
+            $fechaEmision = isset($identificacionChildren->FechaEmision) ? (string)$identificacionChildren->FechaEmision : null;
+
+            if (empty($fechaEmision)) {
+                $fechaEmision = now()->format('Y-m-d H:i:s');
+            } else {
+                /**
+                 * Transformar formato fecha ISO a formato MySQL si es necesario
+                 */
+                try {
+                    $fechaEmision = \Carbon\Carbon::parse($fechaEmision)->format('Y-m-d H:i:s');
+                } catch (\Exception $e) {
+                    $fechaEmision = now()->format('Y-m-d H:i:s');
+                }
+            }
+
+            if (!$tipoDocumento || !$numeroControl || !$codigoGeneracion) {
+                throw new \Exception('Faltan datos obligatorios en el XML para registrar documento DTE');
+            }
+
+            /**
+             * Guardamos el documento DTE
+             */
+            $documentoDte = DocumentosDte::create([
+                'tipo_documento'    => $tipoDocumento,
+                'numero_control'    => $numeroControl,
+                'codigo_generacion' => $codigoGeneracion,
+                'fecha_emision'     => $fechaEmision,
+                'cliente_id'        => $request->cliente_id,
+                'empresa_id'        => Auth::user()->empresa_id,
+                'estado'            => 'generado',
+                /**Estado correcto para evitar truncamiento */
+                'xml_firmado'       => $rutaXml,
+            ]);
+
+            /* Creamos la venta con el documento_dte_id */
             $sale = Sales::create([
                 'cliente_id'   => $request->cliente_id,
                 'user_id'      => Auth::id(),
@@ -88,44 +211,25 @@ class SalesController extends Controller
                 'monto_efectivo' => $request->monto_efectivo ?? 0,
                 'monto_transferencia' => $request->monto_transferencia ?? 0,
                 'cuenta_bancaria_id' => $request->cuenta_bancaria_id ?? null,
+                'documento_dte_id' => $documentoDte->id,
             ]);
 
-            /* Si el tipo de pago es cheque */
-            if ($tipo_pago === 'cheque') {
+            /* Guardar cheque si aplica */
+            if (in_array($tipo_pago, ['cheque', 'mixto_cheque_efectivo'])) {
                 $cheque = $sale->cheque()->create([
-                    'cliente_id'   => $request->cliente_id,
-                    'numero_cheque' => $request->numero_cheque,
+                    'cliente_id'         => $request->cliente_id,
+                    'numero_cheque'      => $request->numero_cheque,
                     'cuenta_bancaria_id' => $request->cuenta_bancaria_id,
-                    'fecha_emision' => $request->fecha_emision,
-                    'monto' => $request->monto ?? $request->total,
-                    'estado' => $request->estado,
-                    'observaciones' => $request->observaciones,
+                    'fecha_emision'      => $request->fecha_emision,
+                    'monto'              => $request->monto ?? $request->total,
+                    'estado'             => $request->estado ?? 'PENDIENTE',
+                    'observaciones'      => $request->observaciones,
                 ]);
-
-                /* Asociamos el cheque a la venta (si hay campo cheque_bancario_id) */
                 $sale->cheque_bancario_id = $cheque->id;
                 $sale->save();
             }
 
-            if ($tipo_pago === 'mixto_cheque_efectivo') {
-                $cheque = $sale->cheque()->create([
-                    'cliente_id'   => $request->cliente_id,
-                    'numero_cheque' => $request->numero_cheque,
-                    'cuenta_bancaria_id' => $request->cuenta_bancaria_id,
-                    'fecha_emision' => $request->fecha_emision,
-                    'monto' => $request->monto ?? $request->total,
-                    'estado' => $request->estado,
-                    'observaciones' => $request->observaciones,
-                ]);
-
-                /* Asociamos el cheque a la venta (si hay campo cheque_bancario_id) */
-                $sale->cheque_bancario_id = $cheque->id;
-                $sale->save();
-            }
-
-
-
-            /* Guardamos los detalles de la venta */
+            /* Guardar detalles y actualizar stock */
             foreach ($request->producto_id as $index => $productoId) {
                 $cantidad = $request->cantidad[$index];
 
@@ -139,34 +243,39 @@ class SalesController extends Controller
                     'descuento_en_dolar' => $request->descuento_en_dolar[$index] ?? null,
                 ]);
 
-                /* Actualizamos stock */
                 $producto = Producto::find($productoId);
-                if ($producto->stock < $cantidad) {
-                    throw new \Exception("El stock es insuficiente para el producto: {$producto->nombre}");
-                }
-
                 $producto->stock -= $cantidad;
                 $producto->save();
             }
 
             DB::commit();
 
-            /* Generamos el ticket en PDF */
-            $pdf = Pdf::loadView('postSales.ticket', [
+            /* Generar PDF ticket */
+            $pdf = PDF::loadView('postSales.ticket', [
                 'venta' => $sale->load('clientes', 'detalles.producto'),
             ]);
 
-            return response($pdf->output(), 200)
-                ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'inline; filename="venta_ticket.pdf"');
+            return response()->json([
+                'mensaje' => 'Venta creada y factura electrónica generada',
+                'ruta_xml' => $rutaXml,
+                'pdf_base64' => base64_encode($pdf->output()),
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
+
+            if (isset($rutaXml) && file_exists($rutaXml)) {
+                unlink($rutaXml);
+            }
+
             return response()->json([
-                'error' => true,
-                'message' => $e->getMessage()
-            ], 422);
+                'message' => 'Error al generar la venta: ' . $e->getMessage(),
+            ], 500);
         }
     }
+
+
+
+
 
 
     public function generarCotizacion(Request $request)
