@@ -47,14 +47,22 @@ class ProductoController extends Controller
                     return '$' . number_format($data->precio_venta, 2) ?? '';
                 })
                 ->addColumn('stock', function ($data) {
-                    return $data->stock ?? 'no data';
+                    if ($data->stock >= 20) {
+                        return '<span class="badge rounded-pill bg-primary text-white px-3 py-1">' . $data->stock . '</span>';
+                    } else {
+                        return '<span class="badge rounded-pill bg-warning text-white px-3 py-1">' . $data->stock . '</span>';
+                    }
                 })
                 ->addColumn('stock_minimo', function ($data) {
-                    return $data->stock_minimo ?? 'no data';
+                     if ($data->stock_minimo >= 20) {
+                        return '<span class="badge rounded-pill bg-success text-white px-3 py-1">' . $data->stock_minimo . '</span>';
+                    } else {
+                        return '<span class="badge rounded-pill bg-warning text-white px-3 py-1">' . $data->stock_minimo . '</span>';
+                    }
                 })
                 ->addColumn('estado', function ($data) {
-                    if($data->estado == 'activo'){
-                         return '<span class="badge badge-center rounded-pill text-bg-success"><i class="icon-base bx bx-check"></i></span>';
+                    if ($data->estado == 'activo') {
+                        return '<span class="badge badge-center rounded-pill text-bg-success"><i class="icon-base bx bx-check"></i></span>';
                     } else {
                         return '<span class="badge badge-center rounded-pill text-bg-danger"><i class="icon-base bx bx-x-circle"></i></span>';
                     }
@@ -94,7 +102,7 @@ class ProductoController extends Controller
 
                     return $editar . $eliminar;
                 })
-                ->rawColumns(['acciones', 'estado', 'imagen'])->make(true);
+                ->rawColumns(['acciones', 'estado', 'imagen', 'stock', 'stock_minimo'])->make(true);
         }
     }
 
@@ -273,7 +281,7 @@ class ProductoController extends Controller
             'imagen.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg o gif.',
             'imagen.max' => 'La imagen no debe superar los 2 MB.',
         ]);
-        
+
 
         $producto = Producto::find($id);
 

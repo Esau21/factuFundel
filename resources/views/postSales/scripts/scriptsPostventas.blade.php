@@ -101,21 +101,40 @@
             var productoImagen = $(this).data('imagen');
 
             var newRow = `
-        <tr>
-            <td>${productoId}</td>
-            <td>
-                ${productoNombre}
-                ${productoImagen ? `<img src="${productoImagen}" alt="Imagen" width="60">` : ''}
-            </td>
-            <td><input type="number" class="form-control precio_unitario" name="precio_unitario[]" value="${productoPrecio}" step="0.01"></td>
-            <td><input type="number" class="form-control cantidad" name="cantidad[]" value="1" min="1"></td>
-            <td><input type="text" class="form-control sub_total" name="sub_total[]" value="${parseFloat(productoPrecio).toFixed(2)}" readonly></td>
-            <td>
-                <button type="button" class="btn btn-danger remove-row"><i class="bx bx-trash"></i></button>
-                <button type="button" class="btn btn-warning decrease-qty"><i class="bx bx-minus"></i></button>
-                <button type="button" class="btn btn-dark increase-qty"><i class="bx bx-plus"></i></button>
-            </td>
-        </tr>`;
+                            <tr>
+                                <td>${productoId}</td>
+                                <td>
+                                    ${productoNombre}
+                                    ${productoImagen ? `<img src="${productoImagen}" alt="Imagen" width="60">` : ''}
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control precio_unitario" name="precio_unitario[]" value="${productoPrecio}" step="0.01">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control cantidad" name="cantidad[]" value="1" min="1">
+                                </td>
+                                <td>
+                                    <!-- Descuento Porcentaje -->
+                                    <select name="descuento_porcentaje[]" class="form-select descuento_porcentaje">
+                                        <option value="">Seleccionar</option>
+                                        <option value="10">10%</option>
+                                        <option value="15">15%</option>
+                                        <option value="20">20%</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <!-- Descuento en Dólar -->
+                                    <input type="text" name="descuento_en_dolar[]" class="form-control descuento_en_dolar" placeholder="$">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control sub_total" name="sub_total[]" value="${parseFloat(productoPrecio).toFixed(2)}" readonly>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row"><i class="bx bx-trash"></i></button>
+                                    <button type="button" class="btn btn-warning decrease-qty"><i class="bx bx-minus"></i></button>
+                                    <button type="button" class="btn btn-dark increase-qty"><i class="bx bx-plus"></i></button>
+                                </td>
+                            </tr>`;
             $('#productRows').append(newRow);
             $('#productSearchResults').hide();
             $('#buscar_producto').val('');
@@ -162,10 +181,11 @@
         });
 
         // Aplicar descuento
-        $('#descuento_porcentaje, #descuento_en_dolar').on('input change', function() {
+        $(document).on('input change', '.descuento_porcentaje, .descuento_en_dolar', function() {
             actualizarSubtotal();
             actualizarTotal();
         });
+
 
         $('#cash').on('input', function() {
             actualizarTotal();
@@ -173,10 +193,8 @@
 
         function actualizarSubtotal() {
             let totalBruto = 0;
-            let descuentoFijo = parseFloat($('#descuento_en_dolar').val()) || 0;
-            let porcentaje = parseFloat($('#descuento_porcentaje').val()) || 0;
 
-            // Calcular el total bruto y el subtotal bruto de cada producto
+            // Primero calculamos el total bruto
             $("#productRows tr").each(function() {
                 const row = $(this);
                 const precio = parseFloat(row.find('.precio_unitario').val()) || 0;
@@ -186,24 +204,26 @@
                 totalBruto += subTotalBruto;
             });
 
-            // Aplicar descuento por porcentaje y fijo sobre los productos
+            // Luego aplicamos los descuentos por fila
             $("#productRows tr").each(function() {
                 const row = $(this);
                 const subTotalBruto = row.data('sub_total_bruto');
+
+                const porcentaje = parseFloat(row.find('.descuento_porcentaje').val()) || 0;
+                const descuentoFijo = parseFloat(row.find('.descuento_en_dolar').val()) || 0;
+
                 let subTotalConDescuento = subTotalBruto;
 
-                // Descuento por porcentaje
+                // Aplica descuento en porcentaje
                 if (porcentaje > 0) {
                     subTotalConDescuento -= subTotalBruto * (porcentaje / 100);
                 }
 
-                // Descuento fijo (se reparte proporcionalmente entre los productos)
-                if (descuentoFijo > 0 && totalBruto > 0) {
-                    const proporcion = subTotalBruto / totalBruto;
-                    subTotalConDescuento -= descuentoFijo * proporcion;
+                // Aplica descuento en dólares (fijo)
+                if (descuentoFijo > 0) {
+                    subTotalConDescuento -= descuentoFijo;
                 }
 
-                // Establecemos el valor con descuento en el campo de "sub_total"
                 row.find('.sub_total').val(subTotalConDescuento.toFixed(2));
             });
         }
@@ -240,60 +260,38 @@
         // Guardamos la venta
         $(document).on('click', '#guardarVenta', function(e) {
             e.preventDefault();
-            var producto_id = [],
+
+            let producto_id = [],
                 cantidad = [],
                 precio_unitario = [],
-                sub_total = [];
-
-            var tipo_pago = $('#tipo_pago').val();
-            var cheque_bancario_id = null;
-            var datos_cheque = {};
-            var datos_transferencia = {};
-
-            if (tipo_pago === 'cheque') {
-                datos_cheque = {
-                    numero_cheque: $('#numero_cheque').val(),
-                    cuenta_bancaria_id: $('#cuenta_id').val(),
-                    fecha_emision: $('#fecha_emision').val(),
-                    monto: $('#monto').val(),
-                    estado: $('#estado').val(),
-                    observaciones: $('#observaciones').val(),
-                    correlativo: $('#correlativo').val()
-                };
-            }
-
-            if (tipo_pago === 'transferencia') {
-                datos_transferencia = {
-                    cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
-                    monto_transferencia: $('#monto_transferencia').val()
-                };
-            }
-
+                sub_total = [],
+                descuento_porcentaje = [],
+                descuento_en_dolar = [];
 
             $("#productRows tr").each(function() {
-                var id = $(this).find('td:first').text().trim();
-                var cant = parseInt($(this).find('.cantidad').val());
-                var precio = parseFloat($(this).find('.precio_unitario').val());
-                var subtotal = parseFloat($(this).find('.sub_total')
-                    .val()); // Verifica que este valor tenga el descuento
+                const row = $(this);
+                const id = row.find('td:first').text().trim();
+                const cant = parseInt(row.find('.cantidad').val()) || 0;
+                const precio = parseFloat(row.find('.precio_unitario').val()) || 0;
+                const subtotal = parseFloat(row.find('.sub_total').val()) || 0;
+                const porcentaje = parseFloat(row.find('.descuento_porcentaje').val()) || 0;
+                const dolar = parseFloat(row.find('.descuento_en_dolar').val()) || 0;
 
-                if (id && !isNaN(cant) && !isNaN(precio) && !isNaN(subtotal)) {
+                if (id && cant > 0 && precio >= 0) {
                     producto_id.push(id);
                     cantidad.push(cant);
                     precio_unitario.push(precio);
-                    sub_total.push(subtotal); // Este es el valor con descuento
+                    sub_total.push(subtotal);
+                    descuento_porcentaje.push(porcentaje);
+                    descuento_en_dolar.push(dolar);
                 }
             });
 
-            var cliente_id = $('#cliente_id').val();
-            var efectivo = parseFloat($('#cash').val());
-            var total = parseFloat($('#totalAmount').text());
-            var tipo_pago = $('#tipo_pago').val();
-            var cambio = $('#cambioInput').val();
-
-            var descuento_porcentaje = parseFloat($('#descuento_porcentaje').val().replace('%', '')) ||
-                0;
-            var descuento_en_dolar = $('#descuento_en_dolar').val();
+            const cliente_id = $('#cliente_id').val();
+            const efectivo = parseFloat($('#cash').val()) || 0;
+            const total = parseFloat($('#totalAmount').text()) || 0;
+            const tipo_pago = $('#tipo_pago').val();
+            const cambio = parseFloat($('#cambioInput').val()) || 0;
 
             $("#guardarVenta").prop('disabled', true);
 
@@ -310,23 +308,12 @@
                     producto_id,
                     cantidad,
                     precio_unitario,
-                    sub_total, // Aquí enviamos el valor con descuento
+                    sub_total,
                     descuento_porcentaje,
                     descuento_en_dolar,
-                    // Campos planos de cheque (solo si aplica)
-                    ...(tipo_pago === 'cheque' ? {
-                        cliente_id,
-                        numero_cheque: $('#numero_cheque').val(),
-                        cuenta_bancaria_id: $('#cuenta_id').val(),
-                        fecha_emision: $('#fecha_emision').val(),
-                        monto: $('#monto').val(),
-                        estado: $('#estado').val(),
-                        observaciones: $('#observaciones').val(),
-                        correlativo: $('#correlativo').val()
-                    } : {}),
 
-                    ...(tipo_pago === 'mixto_cheque_efectivo' ? {
-                        cliente_id,
+                    // Si es cheque o mixto con cheque
+                    ...(tipo_pago === 'cheque' || tipo_pago === 'mixto_cheque_efectivo' ? {
                         numero_cheque: $('#numero_cheque').val(),
                         cuenta_bancaria_id: $('#cuenta_id').val(),
                         fecha_emision: $('#fecha_emision').val(),
@@ -334,23 +321,14 @@
                         estado: $('#estado').val(),
                         observaciones: $('#observaciones').val(),
                         correlativo: $('#correlativo').val(),
-                        efectivo,
-                        cambio
                     } : {}),
 
-                    // Campos planos de transferencia (solo si aplica)
-                    ...(tipo_pago === 'transferencia' ? {
-                        cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
-                        monto_transferencia: $('#monto_transferencia').val()
-                    } : {}),
-
-                    ...(tipo_pago === 'mixto_transferencia_efectivo' ? {
-                        cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
-                        monto_transferencia: $('#monto_transferencia').val(),
-                        efectivo,
-                        cambio
-                    } : {})
-
+                    // Si es transferencia o mixto con transferencia
+                    ...(tipo_pago === 'transferencia' || tipo_pago ===
+                        'mixto_transferencia_efectivo' ? {
+                            cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
+                            monto_transferencia: $('#monto_transferencia').val(),
+                        } : {})
                 },
                 xhrFields: {
                     responseType: 'blob'
@@ -363,24 +341,33 @@
                             background: "linear-gradient(to right, #28a745, #218838)"
                         }
                     }).showToast();
-                    var url = URL.createObjectURL(response);
+
+                    const url = URL.createObjectURL(response);
                     window.open(url, '_blank');
+
                     setTimeout(() => {
                         window.location.href = "{{ route('sales.index') }}";
                     }, 2000);
                 },
-                error: function() {
+                error: function(xhr) {
+                    let msg = 'Error al guardar la venta.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    }
+
                     Toastify({
-                        text: "Error al guardar la venta.",
+                        text: msg,
                         className: "error",
                         style: {
                             background: "linear-gradient(to right, #dc3545, #c82333)"
                         }
                     }).showToast();
+
                     $("#guardarVenta").prop('disabled', false);
                 }
             });
         });
+
 
 
         //escuchamos el evento de tecla f4

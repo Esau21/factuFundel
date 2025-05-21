@@ -15,7 +15,8 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="buscar_producto" class="form-label"><b class="text-danger">***Buscar producto***</b></label>
+                            <label for="buscar_producto" class="form-label"><b class="text-danger">***Buscar
+                                    producto***</b></label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light">
                                     <i class="bx bx-search" style="font-size: 1.3rem;"></i>
@@ -38,6 +39,8 @@
                                         <th class="text-start">PRODUCTO</th>
                                         <th class="text-center">PRECIO</th>
                                         <th width="13%" class="text-center">CANT</th>
+                                        <th width="13%" class="text-center">D%</th>
+                                        <th width="13%" class="text-center">D$</th>
                                         <th class="text-center">IMPORTE</th>
                                         <th class="text-center">PROCESOS</th>
                                     </tr>
@@ -79,24 +82,6 @@
                                     <option value="mixto_cheque_efectivo">MIXTO CHEQUE EFECTIVO</option>
                                     <option value="mixto_transferencia_efectivo">MIXTO TRANSFERENCIA EFECTIVO</option>
                                 </select>
-                            </div>
-
-                            <!-- Descuento Porcentaje -->
-                            <div class="col-sm-6">
-                                <label for="descuento_porcentaje" class="form-label">Descuento porcentaje</label>
-                                <select name="descuento_porcentaje[]" id="descuento_porcentaje" class="form-select">
-                                    <option value="">Seleccione</option>
-                                    <option value="10%">10%</option>
-                                    <option value="15%">15%</option>
-                                    <option value="20%">20%</option>
-                                </select>
-                            </div>
-
-                            <!-- Descuento en Dólar -->
-                            <div class="col-sm-6">
-                                <label for="descuento_en_dolar" class="form-label">Descuento en dólar</label>
-                                <input type="text" name="descuento_en_dolar" id="descuento_en_dolar" class="form-control"
-                                    placeholder="En dólar">
                             </div>
 
                             <!-- Efectivo -->
