@@ -51,6 +51,33 @@
                                 </div>
                             </div>
 
+                            {{-- aca definimos el bien o servicio --}}
+                            <div class="col-6 form-control-validation">
+                                <label class="form-label w-100" for="item_id">Elegir el bien o servicio</label>
+                                <div class="input-group input-group-merge">
+                                    <select name="item_id" id="item_id" class="form-select">
+                                        <option value="">Selecciona</option>
+                                        @foreach ($items as $i)
+                                            <option value="{{ $i->id }}">{{ $i->codigo }} | {{ $i->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- aca definimos la unidad de medida --}}
+                            <div class="col-6 form-control-validation">
+                                <label class="form-label w-100" for="unidad_medida_id">Elegir la unidad de medida</label>
+                                <div class="input-group input-group-merge">
+                                    <select name="unidad_medida_id" id="unidad_medida_id" class="select2 w-100 form-control">
+                                        <option value="">Selecciona</option>
+                                        @foreach ($unidades as $u)
+                                            <option value="{{ $u->id }}">{{ $u->codigo }} | {{ $u->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+
                             <div class="col-12 form-control-validation">
                                 <label class="form-label w-100" for="categoria_id">Categoria</label>
                                 <div class="input-group input-group-merge">

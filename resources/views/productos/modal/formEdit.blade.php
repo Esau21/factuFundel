@@ -64,12 +64,44 @@
                          </div>
                      </div>
 
+                     {{-- aca definimos el bien o servicio --}}
+                     <div class="col-6 form-control-validation">
+                         <label class="form-label w-100" for="item_id">Elegir el bien o servicio</label>
+                         <div class="input-group input-group-merge">
+                             <select name="item_id" id="item_id" class="form-select"
+                                 data-dropdown-parent="#editProducto">
+                                 <option value="">Selecciona</option>
+                                 @foreach ($items as $i)
+                                     <option value="{{ $i->id }}">{{ $i->codigo }} | {{ $i->nombre }}
+                                     </option>
+                                 @endforeach
+                             </select>
+                         </div>
+                     </div>
+
+                     {{-- aca definimos la unidad de medida --}}
+                     <div class="col-6 form-control-validation">
+                         <label class="form-label w-100" for="unidad_medida_id">Elegir la unidad de medida</label>
+                         <div class="input-group input-group-merge">
+                             <select name="unidad_medida_id" id="unidad_medida_id" class="select2 w-100 form-control"
+                                 data-dropdown-parent="#editProducto">
+                                 <option value="">Selecciona</option>
+                                 @foreach ($unidades as $u)
+                                     <option value="{{ $u->id }}">{{ $u->codigo }} | {{ $u->nombre }}
+                                     </option>
+                                 @endforeach
+                             </select>
+                         </div>
+                     </div>
+
+
                      <div class="col-12 form-control-validation">
                          <label class="form-label w-100" for="descripcion">Descripcion</label>
                          <div class="input-group input-group-merge">
                              <textarea name="descripcion" id="descripcion" cols="30" rows="1" class="form-control"
                                  placeholder="Ingresa tu descripcion"></textarea>
-                             <span class="input-group-text cursor-pointer"><span class="card-type me-n2"></span></span>
+                             <span class="input-group-text cursor-pointer"><span
+                                     class="card-type me-n2"></span></span>
                          </div>
                      </div>
 
@@ -79,7 +111,8 @@
                          <div class="input-group input-group-merge">
                              <input id="precio_compra" name="precio_compra" class="form-control" type="text"
                                  placeholder="ejemplo" />
-                             <span class="input-group-text cursor-pointer"><span class="card-type me-n2"></span></span>
+                             <span class="input-group-text cursor-pointer"><span
+                                     class="card-type me-n2"></span></span>
                          </div>
                      </div>
 
@@ -160,6 +193,8 @@
          let codigo = $(this).data('codigo');
          let nombre = $(this).data('nombre');
          let categoria_id = $(this).data('categoria_id');
+         let item_id = $(this).data('item_id');
+         let unidad_medida_id = $(this).data('unidad_medida_id');
          let descripcion = $(this).data('descripcion');
          let precio_compra = $(this).data('precio_compra');
          let precio_venta = $(this).data('precio_venta');
@@ -172,6 +207,8 @@
          $('#editProducto #codigo').val(codigo);
          $('#editProducto #nombre').val(nombre);
          $('#editProducto #categoria_id').val(categoria_id);
+         $('#editProducto #item_id').val(item_id);
+         $('#editProducto #unidad_medida_id').val(unidad_medida_id);
          $('#editProducto #descripcion').val(descripcion);
          $('#editProducto #precio_compra').val(precio_compra);
          $('#editProducto #precio_venta').val(precio_venta);

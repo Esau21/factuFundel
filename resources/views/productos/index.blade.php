@@ -31,7 +31,8 @@
                                         <th class="text-left">Codigo</th>
                                         <th class="text-left">Nombre</th>
                                         <th class="text-left">Categoria</th>
-                                        <th class="text-left">Descripcion</th>
+                                        <th class="text-left">Tipo de producto</th>
+                                        <th class="text-left">U.medida</th>
                                         <th class="text-left">Precio_compra</th>
                                         <th class="text-left">Precio_venta</th>
                                         <th class="text-left">Stock</th>
@@ -43,6 +44,7 @@
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -99,8 +101,12 @@
                     name: 'categoria'
                 },
                 {
-                    data: 'descripcion',
-                    name: 'descripcion'
+                    data: 'item',
+                    name: 'item'
+                },
+                {
+                    data: 'uMedida',
+                    name: 'uMedida'
                 },
                 {
                     data: 'precio_compra',

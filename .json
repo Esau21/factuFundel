@@ -3,14 +3,14 @@
         "version": 1,
         "ambiente": "00",
         "tipoDte": "03",
-        "numeroControl": "DTE-03-00000001-000000000000002",
-        "codigoGeneracion": "CF0EFA54-D32D-4643-B16C-3E04F15DD3C7",
+        "numeroControl": "DTE-03-00000001-000000000000003",
+        "codigoGeneracion": "626BA162-F5AA-4128-8113-0B1F1EB29F9E",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
         "motivoConti": null,
         "fechaEmi": "2025-05-29",
-        "horaEmi": "18:32:39",
+        "horaEmi": "19:55:06",
         "moneda": "USD"
     },
     "documentoRelacionado": null,
@@ -19,11 +19,11 @@
         "nit": "00000998",
         "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
         "nombreComercial": "FUNDEL",
-        "codActividad": "86909",
-        "descActividad": "Otros Servicio relacionados con la salud ncp",
+        "codActividad": "01112",
+        "descActividad": "Cultivo de legumbres",
         "direccion": {
-            "departamento": "06",
-            "municipio": "23",
+            "departamento": "00",
+            "municipio": "00",
             "complemento": "CALLE AL MIRADOR COLONIA ESCALON"
         },
         "telefono": "77665545",
@@ -40,21 +40,21 @@
         "direccion": {
             "departamento": "06",
             "municipio": "23",
-            "complemento": "Fardel COLONIA ESCALON PARROQUIA EL DIVINO NIÑO"
+            "complemento": "COLONIA ESCALON CALLE AL MIRADOR"
         },
-        "telefono": "77667788",
-        "correo": "fardelempresa@gmail.com"
+        "telefono": "76123344",
+        "correo": "fardel@gmail.com"
     },
     "otrosDocumentos": null,
     "ventaTercero": null,
     "cuerpoDocumento": [
         {
             "numItem": 1,
-            "tipoItem": "B",
+            "tipoItem": 1,
             "cantidad": 1,
             "codigo": "1",
             "codTributo": null,
-            "uniMedida": "59",
+            "uniMedida": 99,
             "descripcion": "Convenio con alcaldía municipal santa ana norte",
             "precioUni": 100,
             "montoDescu": 0,
@@ -70,30 +70,53 @@
             ],
             "psv": 0,
             "noGravado": 0
+        },
+        {
+            "numItem": 2,
+            "tipoItem": 2,
+            "cantidad": 1,
+            "codigo": "2",
+            "codTributo": null,
+            "uniMedida": 99,
+            "descripcion": "acetaminofen",
+            "precioUni": 3,
+            "montoDescu": 0,
+            "ventaNoSuj": 0,
+            "ventaExenta": 0,
+            "ventaGravada": 3,
+            "tributos": [
+                {
+                    "codigo": "IVA",
+                    "descripcion": "Impuesto al Valor Agregado 13%",
+                    "valor": 0.39
+                }
+            ],
+            "psv": 0,
+            "noGravado": 0
         }
     ],
     "resumen": {
         "totalNoSuj": 0,
         "totalExenta": 0,
-        "totalGravada": 100,
+        "totalGravada": 103,
         "descuNoSuj": 0,
         "descuExenta": 0,
         "descuGravada": 0,
         "porcentajeDescuento": 0,
-        "subTotal": 100,
+        "subTotal": 103,
         "ivaRete1": 0,
         "ivaPercibido": 0,
-        "iva": 13,
+        "iva": 13.39,
         "fovial": 0,
         "cotrans": 0,
-        "subTotalVentas": 100,
-        "totalPagar": 113,
+        "subTotalVentas": 103,
+        "totalPagar": 116.39,
         "saldoFavor": 0,
         "condicionOperacion": "01",
         "pagos": [
             {
                 "codigo": "01",
-                "montoPago": 113
+                "montoPago": 116.39
             }
         ]
     },

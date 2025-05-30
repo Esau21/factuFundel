@@ -267,11 +267,11 @@ class SalesController extends Controller
 
             $productos[] = [
                 "numItem" => $index + 1,
-                "tipoItem" => "B", // Bien
+                "tipoItem" => (integer)Producto::find($productoId)->items->codigo, // Bien
                 "cantidad" => $cantidad,
                 "codigo" => (string)$productoId,
                 "codTributo" => null,
-                "uniMedida" => "59", // Unidad
+                "uniMedida" => (integer)Producto::find($productoId)->unidad->codigo, // Unidad
                 "descripcion" => Producto::find($productoId)->nombre,
                 "precioUni" => round($precioUnitario, 2),
                 "montoDescu" => round($descuento, 2),

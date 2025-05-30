@@ -7,7 +7,9 @@ use App\Exports\ProductosPlantillaExport;
 use App\Http\Controllers\Controller;
 use App\Imports\ProductosImport;
 use App\Models\Categoria\Categoria;
+use App\Models\Item;
 use App\Models\Producto\Producto;
+use App\Models\UnidadMedida;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -20,7 +22,9 @@ class ProductoController extends Controller
     public function index()
     {
         $categorias = Categoria::all();
-        return view('productos.index', compact('categorias'));
+        $unidades = UnidadMedida::all();
+        $items = Item::all();
+        return view('productos.index', compact('categorias', 'unidades', 'items'));
     }
 
     public function getIndexDataProductos(Request $request)
@@ -37,8 +41,11 @@ class ProductoController extends Controller
                 ->addColumn('nombre', function ($data) {
                     return $data->nombre ?? 'no data';
                 })
-                ->addColumn('descripcion', function ($data) {
-                    return $data->descripcion ?? 'no data';
+                ->addColumn('item', function ($data) {
+                    return $data?->items?->nombre ?? 'no data';
+                })
+                ->addColumn('uMedida', function ($data) {
+                    return $data?->unidad?->nombre ?? 'no data';
                 })
                 ->addColumn('precio_compra', function ($data) {
                     return '$' . number_format($data->precio_compra, 2) ?? '';
@@ -54,7 +61,7 @@ class ProductoController extends Controller
                     }
                 })
                 ->addColumn('stock_minimo', function ($data) {
-                     if ($data->stock_minimo >= 20) {
+                    if ($data->stock_minimo >= 20) {
                         return '<span class="badge rounded-pill bg-success text-white px-3 py-1">' . $data->stock_minimo . '</span>';
                     } else {
                         return '<span class="badge rounded-pill bg-warning text-white px-3 py-1">' . $data->stock_minimo . '</span>';
@@ -83,6 +90,8 @@ class ProductoController extends Controller
                                     data-codigo="' . e($data->codigo) . '"
                                     data-nombre="' . e($data->nombre) . '"
                                     data-categoria_id="' . e($data->categoria_id) . '"
+                                    data-item_id="' . e($data->item_id) . '"
+                                    data-unidad_medida_id="' . e($data->unidad_medida_id) . '"
                                     data-descripcion="' . e($data->descripcion) . '"
                                     data-precio_compra="' . e($data->precio_compra) . '"
                                     data-precio_venta="' . e($data->precio_venta) . '"
@@ -178,8 +187,10 @@ class ProductoController extends Controller
     public function addProduct()
     {
         $categorias = Categoria::all();
+        $unidades = UnidadMedida::all();
+        $items = Item::all();
 
-        return view('productos.add', compact('categorias'));
+        return view('productos.add', compact('categorias', 'unidades', 'items'));
     }
 
     public function storeProduct(Request $request)
@@ -187,6 +198,8 @@ class ProductoController extends Controller
         $request->validate([
             'codigo' => 'required|string|max:255',
             'nombre' => 'required|string|max:255',
+            'item_id' => 'required',
+            'unidad_medida_id' => 'required',
             'descripcion' => 'nullable|string',
             'precio_compra' => 'required|numeric',
             'precio_venta' => 'required|numeric',
@@ -250,6 +263,8 @@ class ProductoController extends Controller
         $request->validate([
             'codigo' => 'required|string|max:255',
             'nombre' => 'required|string|max:255',
+            'item_id' => 'required',
+            'unidad_medida_id' => 'required',
             'descripcion' => 'nullable|string',
             'precio_compra' => 'required|numeric',
             'precio_venta' => 'required|numeric',
