@@ -18,9 +18,13 @@ class DocumentosDte extends Model
         'cliente_id',
         'empresa_id',
         'estado',
-        'xml_firmado',
-        'xml_respuesta_dgii',
+        'json_dte',
     ];
+
+    public function documentoReferenciado()
+    {
+        return $this->hasOne(DocumentosDte::class, 'numero_control', 'referencia_numero_control');
+    }
 
 
     public function detallesdte()

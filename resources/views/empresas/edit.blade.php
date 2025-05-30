@@ -43,6 +43,16 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nombreCo">Nombre Comercial</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nombreComercial" name="nombreComercial" class="form-control"
+                                            type="text" placeholder="ejemplo" value="{{ $empresa->nombreComercial }}" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
                                 <!-- Nrc -->
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="nrc">Nrc</label>
@@ -65,27 +75,64 @@
                                     </div>
                                 </div>
 
-                                <!-- Giro -->
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
-                                    <label class="form-label w-100" for="giro">Giro</label>
+                                    <label class="form-label w-100" for="departamento_id">Departamento</label>
                                     <div class="input-group input-group-merge">
-                                        <input id="giro" name="giro" class="form-control" type="text"
-                                            placeholder="ejemplo" value="{{ $empresa->giro }}" />
+                                        <select name="departamento_id" id="departamento_id"
+                                            class="form-select select2 w-100">
+                                            <option value="">Seleccionar</option>
+                                            @foreach ($departamento as $d)
+                                                <option value="{{ $d->id }}"
+                                                    {{ old('departamento_id', $empresa->departamento_id ?? '') == $d->id ? 'selected' : '' }}>
+                                                    {{ $d->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="municipio_id">Municipio</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="municipio_id" id="municipio_id" class="form-select select2 w-100">
+                                            <option value="">Seleccionar</option>
+                                            @foreach ($municipio as $d)
+                                                <option value="{{ $d->id }}"
+                                                    {{ old('municipio_id', $empresa->municipio_id ?? '') == $d->id ? 'selected' : '' }}>
+                                                    {{ $d->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="actividad_economica_id">Actividad economica</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="actividad_economica_id" id="actividad_economica_id" class="form-select select2 w-100">
+                                            <option value="">Seleccionar</option>
+                                            @foreach ($actividad as $a)
+                                                <option value="{{ $a->id }}"
+                                                    {{ old('actividad_economica_id', $empresa->actividad_economica_id ?? '') == $a->id ? 'selected' : '' }}>
+                                                    {{ $a->codActividad }} | {{ $a->descActividad }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!-- Direccion -->
+                                <div class="col-12 col-md-12 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="complemento">Complemento</label>
+                                    <div class="input-group input-group-merge">
+                                        <textarea name="complemento" id="complemento" cols="30" rows="1" class="form-control"
+                                            placeholder="Ingresa tu direccion">{{ $empresa->complemento }}</textarea>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
                                 </div>
 
-                                <!-- Direccion -->
-                                <div class="col-12 col-md-12 form-control-validation mb-3">
-                                    <label class="form-label w-100" for="direccion">Direccion</label>
-                                    <div class="input-group input-group-merge">
-                                        <textarea name="direccion" id="direccion" cols="30" rows="1" class="form-control"
-                                            placeholder="Ingresa tu direccion">{{ $empresa->direccion }}</textarea>
-                                        <span class="input-group-text cursor-pointer"><span
-                                                class="card-type me-n2"></span></span>
-                                    </div>
-                                </div>
 
 
                                 <!-- Telefono -->

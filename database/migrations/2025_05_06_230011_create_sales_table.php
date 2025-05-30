@@ -19,7 +19,12 @@ return new class extends Migration
             $table->decimal('total', 10, 2);
             $table->decimal('cambio', 10, 2);
             $table->enum('status', ['PAID', 'PENDING', 'CANCEL'])->default('PENDING');
-            $table->string('tipo_pago');
+            $table->string('tipo_pago')->nullable();
+            $table->string('tipo_venta', 20);
+            $table->string('plazos')->nullable();
+            $table->string('tipo_plazo')->nullable();
+            $table->decimal('abono', 10,2)->nullable();
+            $table->decimal('saldo_pendiente', 10,2)->nullable();
             $table->text('observaciones');
             $table->decimal('monto_efectivo', 12, 2)->nullable();
             $table->decimal('monto_transferencia', 12, 2)->nullable();

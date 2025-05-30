@@ -1,0 +1,177 @@
+{
+    "identificacion": {
+        "version": 3,
+        "ambiente": "00",
+        "tipoDte": "03",
+        "numeroControl": "DTE-03-01000000-000000000000057",
+        "codigoGeneracion": "AAA68920-EE84-40C5-BE30-4063EE723F30",
+        "tipoModelo": 1,
+        "tipoOperacion": 1,
+        "tipoContingencia": null,
+        "motivoContin": null,
+        "fecEmi": "2025-04-14",
+        "horEmi": "09:24:03",
+        "tipoMoneda": "USD"
+    },
+    "documentoRelacionado": null,
+    "emisor": {
+        "nit": "06141512211121",
+        "nrc": "3113376",
+        "nombre": "LENTI S.A DE C.V",
+        "codActividad": "86909",
+        "descActividad": "OTROS SERVICIO RELACIONADOS CON LA SALUD NCP",
+        "nombreComercial": "LENTI S.A DE C.V",
+        "tipoEstablecimiento": "02",
+        "direccion": {
+            "departamento": "06",
+            "municipio": "23",
+            "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
+        },
+        "telefono": "7447-4442",
+        "correo": "factura@opticaavplussv.com",
+        "codEstableMH": null,
+        "codEstable": null,
+        "codPuntoVentaMH": null,
+        "codPuntoVenta": null
+    },
+    "receptor": {
+        "nit": "06141910181011",
+        "nrc": "2739721",
+        "nombre": "OPTICA AV PLUS S.A DE C.V",
+        "codActividad": "46495",
+        "descActividad": "VENTA AL POR MAYOR DE ART\u00cdCULOS DE \u00d3PTICA",
+        "nombreComercial": "OPTICA AV PLUS S.A DE C.V",
+        "direccion": {
+            "departamento": "06",
+            "municipio": "23",
+            "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
+        },
+        "telefono": "79621725",
+        "correo": "josedeodanes99@gmail.com"
+    },
+    "otrosDocumentos": null,
+    "ventaTercero": null,
+    "cuerpoDocumento": [
+        {
+            "numItem": 1,
+            "tipoItem": 3,
+            "codigo": "49057",
+            "codTributo": null,
+            "numeroDocumento": null,
+            "descripcion": "AND VAS Mod.94903 - 50-19-145 Col.C3",
+            "cantidad": 1,
+            "uniMedida": 99,
+            "precioUni": 66.37,
+            "montoDescu": 39.82,
+            "ventaNoSuj": 0,
+            "ventaExenta": 0,
+            "ventaGravada": 26.55,
+            "tributos": [
+                "20"
+            ],
+            "psv": 0,
+            "noGravado": 0
+        },
+        {
+            "numItem": 2,
+            "tipoItem": 3,
+            "codigo": "49057",
+            "codTributo": null,
+            "numeroDocumento": null,
+            "descripcion": "Multifocal Gemini",
+            "cantidad": 1,
+            "uniMedida": 99,
+            "precioUni": 110.62,
+            "montoDescu": 22.12,
+            "ventaNoSuj": 0,
+            "ventaExenta": 0,
+            "ventaGravada": 88.5,
+            "tributos": [
+                "20"
+            ],
+            "psv": 0,
+            "noGravado": 0
+        },
+        {
+            "numItem": 3,
+            "tipoItem": 3,
+            "codigo": "49057",
+            "codTributo": null,
+            "numeroDocumento": null,
+            "descripcion": "Blue UV",
+            "cantidad": 1,
+            "uniMedida": 99,
+            "precioUni": 44.25,
+            "montoDescu": 0,
+            "ventaNoSuj": 0,
+            "ventaExenta": 0,
+            "ventaGravada": 44.25,
+            "tributos": [
+                "20"
+            ],
+            "psv": 0,
+            "noGravado": 0
+        },
+        {
+            "numItem": 4,
+            "tipoItem": 3,
+            "codigo": "49057",
+            "codTributo": null,
+            "numeroDocumento": null,
+            "descripcion": "ADELGAZADO 1.67",
+            "cantidad": 1,
+            "uniMedida": 99,
+            "precioUni": 39.82,
+            "montoDescu": 0,
+            "ventaNoSuj": 0,
+            "ventaExenta": 0,
+            "ventaGravada": 39.82,
+            "tributos": [
+                "20"
+            ],
+            "psv": 0,
+            "noGravado": 0
+        }
+    ],
+    "resumen": {
+        "totalNoSuj": 0,
+        "totalExenta": 0,
+        "totalGravada": 199.12,
+        "subTotalVentas": 199.12,
+        "descuNoSuj": 0,
+        "descuExenta": 0,
+        "descuGravada": 0,
+        "porcentajeDescuento": 0,
+        "totalDescu": 61.94,
+        "tributos": [
+            {
+                "codigo": "20",
+                "descripcion": "Impuesto al Valor Agregado 13%",
+                "valor": 25.88
+            }
+        ],
+        "subTotal": 199.12,
+        "ivaPerci1": 0,
+        "ivaRete1": 0,
+        "reteRenta": 0,
+        "montoTotalOperacion": 225,
+        "totalNoGravado": 0,
+        "totalPagar": 225,
+        "totalLetras": "DOSCIENTOS VEINTICINCO D\u00d3LARES",
+        "saldoFavor": 0,
+        "condicionOperacion": 2,
+        "pagos": null,
+        "numPagoElectronico": null
+    },
+    "extension": {
+        "nombEntrega": null,
+        "docuEntrega": null,
+        "nombRecibe": null,
+        "docuRecibe": null,
+        "observaciones": null,
+        "placaVehiculo": null
+    },
+    "apendice": null,
+    "selloRecibido": "2025F61982DA04804905B20B76A4FE9B58661V1K",
+    "firmaElectronica": "eyJhbGciOiJSUzUxMiJ9.ewogICJpZGVudGlmaWNhY2lvbiIgOiB7CiAgICAidmVyc2lvbiIgOiAzLAogICAgImFtYmllbnRlIiA6ICIwMCIsCiAgICAidGlwb0R0ZSIgOiAiMDMiLAogICAgIm51bWVyb0NvbnRyb2wiIDogIkRURS0wMy0wMTAwMDAwMC0wMDAwMDAwMDAwMDAwNTciLAogICAgImNvZGlnb0dlbmVyYWNpb24iIDogIkFBQTY4OTIwLUVFODQtNDBDNS1CRTMwLTQwNjNFRTcyM0YzMCIsCiAgICAidGlwb01vZGVsbyIgOiAxLAogICAgInRpcG9PcGVyYWNpb24iIDogMSwKICAgICJ0aXBvQ29udGluZ2VuY2lhIiA6IG51bGwsCiAgICAibW90aXZvQ29udGluIiA6IG51bGwsCiAgICAiZmVjRW1pIiA6ICIyMDI1LTA0LTE0IiwKICAgICJob3JFbWkiIDogIjA5OjI0OjAzIiwKICAgICJ0aXBvTW9uZWRhIiA6ICJVU0QiCiAgfSwKICAiZG9jdW1lbnRvUmVsYWNpb25hZG8iIDogbnVsbCwKICAiZW1pc29yIiA6IHsKICAgICJuaXQiIDogIjA2MTQxNTEyMjExMTIxIiwKICAgICJucmMiIDogIjMxMTMzNzYiLAogICAgIm5vbWJyZSIgOiAiTEVOVEkgUy5BIERFIEMuViIsCiAgICAiY29kQWN0aXZpZGFkIiA6ICI4NjkwOSIsCiAgICAiZGVzY0FjdGl2aWRhZCIgOiAiT1RST1MgU0VSVklDSU8gUkVMQUNJT05BRE9TIENPTiBMQSBTQUxVRCBOQ1AiLAogICAgIm5vbWJyZUNvbWVyY2lhbCIgOiAiTEVOVEkgUy5BIERFIEMuViIsCiAgICAidGlwb0VzdGFibGVjaW1pZW50byIgOiAiMDIiLAogICAgImRpcmVjY2lvbiIgOiB7CiAgICAgICJkZXBhcnRhbWVudG8iIDogIjA2IiwKICAgICAgIm11bmljaXBpbyIgOiAiMjMiLAogICAgICAiY29tcGxlbWVudG8iIDogIkNBTExFIEdVQURBTFVQRSwgQk8uIFNBTlRBIExVQ0lBLCAjMTMyNCwgU0FOIFNBTFZBRE9SLCBTQU4gU0FMVkFET1IiCiAgICB9LAogICAgInRlbGVmb25vIiA6ICI3NDQ3LTQ0NDIiLAogICAgImNvcnJlbyIgOiAiZmFjdHVyYUBvcHRpY2FhdnBsdXNzdi5jb20iLAogICAgImNvZEVzdGFibGVNSCIgOiBudWxsLAogICAgImNvZEVzdGFibGUiIDogbnVsbCwKICAgICJjb2RQdW50b1ZlbnRhTUgiIDogbnVsbCwKICAgICJjb2RQdW50b1ZlbnRhIiA6IG51bGwKICB9LAogICJyZWNlcHRvciIgOiB7CiAgICAibml0IiA6ICIwNjE0MTkxMDE4MTAxMSIsCiAgICAibnJjIiA6ICIyNzM5NzIxIiwKICAgICJub21icmUiIDogIk9QVElDQSBBViBQTFVTIFMuQSBERSBDLlYiLAogICAgImNvZEFjdGl2aWRhZCIgOiAiNDY0OTUiLAogICAgImRlc2NBY3RpdmlkYWQiIDogIlZFTlRBIEFMIFBPUiBNQVlPUiBERSBBUlTDjUNVTE9TIERFIMOTUFRJQ0EiLAogICAgIm5vbWJyZUNvbWVyY2lhbCIgOiAiT1BUSUNBIEFWIFBMVVMgUy5BIERFIEMuViIsCiAgICAiZGlyZWNjaW9uIiA6IHsKICAgICAgImRlcGFydGFtZW50byIgOiAiMDYiLAogICAgICAibXVuaWNpcGlvIiA6ICIyMyIsCiAgICAgICJjb21wbGVtZW50byIgOiAiQ0FMTEUgR1VBREFMVVBFLCBCTy4gU0FOVEEgTFVDSUEsICMxMzI0LCBTQU4gU0FMVkFET1IsIFNBTiBTQUxWQURPUiIKICAgIH0sCiAgICAidGVsZWZvbm8iIDogIjc5NjIxNzI1IiwKICAgICJjb3JyZW8iIDogImpvc2VkZW9kYW5lczk5QGdtYWlsLmNvbSIKICB9LAogICJvdHJvc0RvY3VtZW50b3MiIDogbnVsbCwKICAidmVudGFUZXJjZXJvIiA6IG51bGwsCiAgImN1ZXJwb0RvY3VtZW50byIgOiBbIHsKICAgICJudW1JdGVtIiA6IDEsCiAgICAidGlwb0l0ZW0iIDogMywKICAgICJjb2RpZ28iIDogIjQ5MDU3IiwKICAgICJjb2RUcmlidXRvIiA6IG51bGwsCiAgICAibnVtZXJvRG9jdW1lbnRvIiA6IG51bGwsCiAgICAiZGVzY3JpcGNpb24iIDogIkFORCBWQVMgTW9kLjk0OTAzIC0gNTAtMTktMTQ1IENvbC5DMyIsCiAgICAiY2FudGlkYWQiIDogMSwKICAgICJ1bmlNZWRpZGEiIDogOTksCiAgICAicHJlY2lvVW5pIiA6IDY2LjM3LAogICAgIm1vbnRvRGVzY3UiIDogMzkuODIsCiAgICAidmVudGFOb1N1aiIgOiAwLAogICAgInZlbnRhRXhlbnRhIiA6IDAsCiAgICAidmVudGFHcmF2YWRhIiA6IDI2LjU1LAogICAgInRyaWJ1dG9zIiA6IFsgIjIwIiBdLAogICAgInBzdiIgOiAwLAogICAgIm5vR3JhdmFkbyIgOiAwCiAgfSwgewogICAgIm51bUl0ZW0iIDogMiwKICAgICJ0aXBvSXRlbSIgOiAzLAogICAgImNvZGlnbyIgOiAiNDkwNTciLAogICAgImNvZFRyaWJ1dG8iIDogbnVsbCwKICAgICJudW1lcm9Eb2N1bWVudG8iIDogbnVsbCwKICAgICJkZXNjcmlwY2lvbiIgOiAiTXVsdGlmb2NhbCBHZW1pbmkiLAogICAgImNhbnRpZGFkIiA6IDEsCiAgICAidW5pTWVkaWRhIiA6IDk5LAogICAgInByZWNpb1VuaSIgOiAxMTAuNjIsCiAgICAibW9udG9EZXNjdSIgOiAyMi4xMiwKICAgICJ2ZW50YU5vU3VqIiA6IDAsCiAgICAidmVudGFFeGVudGEiIDogMCwKICAgICJ2ZW50YUdyYXZhZGEiIDogODguNSwKICAgICJ0cmlidXRvcyIgOiBbICIyMCIgXSwKICAgICJwc3YiIDogMCwKICAgICJub0dyYXZhZG8iIDogMAogIH0sIHsKICAgICJudW1JdGVtIiA6IDMsCiAgICAidGlwb0l0ZW0iIDogMywKICAgICJjb2RpZ28iIDogIjQ5MDU3IiwKICAgICJjb2RUcmlidXRvIiA6IG51bGwsCiAgICAibnVtZXJvRG9jdW1lbnRvIiA6IG51bGwsCiAgICAiZGVzY3JpcGNpb24iIDogIkJsdWUgVVYiLAogICAgImNhbnRpZGFkIiA6IDEsCiAgICAidW5pTWVkaWRhIiA6IDk5LAogICAgInByZWNpb1VuaSIgOiA0NC4yNSwKICAgICJtb250b0Rlc2N1IiA6IDAsCiAgICAidmVudGFOb1N1aiIgOiAwLAogICAgInZlbnRhRXhlbnRhIiA6IDAsCiAgICAidmVudGFHcmF2YWRhIiA6IDQ0LjI1LAogICAgInRyaWJ1dG9zIiA6IFsgIjIwIiBdLAogICAgInBzdiIgOiAwLAogICAgIm5vR3JhdmFkbyIgOiAwCiAgfSwgewogICAgIm51bUl0ZW0iIDogNCwKICAgICJ0aXBvSXRlbSIgOiAzLAogICAgImNvZGlnbyIgOiAiNDkwNTciLAogICAgImNvZFRyaWJ1dG8iIDogbnVsbCwKICAgICJudW1lcm9Eb2N1bWVudG8iIDogbnVsbCwKICAgICJkZXNjcmlwY2lvbiIgOiAiQURFTEdBWkFETyAxLjY3IiwKICAgICJjYW50aWRhZCIgOiAxLAogICAgInVuaU1lZGlkYSIgOiA5OSwKICAgICJwcmVjaW9VbmkiIDogMzkuODIsCiAgICAibW9udG9EZXNjdSIgOiAwLAogICAgInZlbnRhTm9TdWoiIDogMCwKICAgICJ2ZW50YUV4ZW50YSIgOiAwLAogICAgInZlbnRhR3JhdmFkYSIgOiAzOS44MiwKICAgICJ0cmlidXRvcyIgOiBbICIyMCIgXSwKICAgICJwc3YiIDogMCwKICAgICJub0dyYXZhZG8iIDogMAogIH0gXSwKICAicmVzdW1lbiIgOiB7CiAgICAidG90YWxOb1N1aiIgOiAwLAogICAgInRvdGFsRXhlbnRhIiA6IDAsCiAgICAidG90YWxHcmF2YWRhIiA6IDE5OS4xMiwKICAgICJzdWJUb3RhbFZlbnRhcyIgOiAxOTkuMTIsCiAgICAiZGVzY3VOb1N1aiIgOiAwLAogICAgImRlc2N1RXhlbnRhIiA6IDAsCiAgICAiZGVzY3VHcmF2YWRhIiA6IDAsCiAgICAicG9yY2VudGFqZURlc2N1ZW50byIgOiAwLAogICAgInRvdGFsRGVzY3UiIDogNjEuOTQsCiAgICAidHJpYnV0b3MiIDogWyB7CiAgICAgICJjb2RpZ28iIDogIjIwIiwKICAgICAgImRlc2NyaXBjaW9uIiA6ICJJbXB1ZXN0byBhbCBWYWxvciBBZ3JlZ2FkbyAxMyUiLAogICAgICAidmFsb3IiIDogMjUuODgKICAgIH0gXSwKICAgICJzdWJUb3RhbCIgOiAxOTkuMTIsCiAgICAiaXZhUGVyY2kxIiA6IDAsCiAgICAiaXZhUmV0ZTEiIDogMCwKICAgICJyZXRlUmVudGEiIDogMCwKICAgICJtb250b1RvdGFsT3BlcmFjaW9uIiA6IDIyNSwKICAgICJ0b3RhbE5vR3JhdmFkbyIgOiAwLAogICAgInRvdGFsUGFnYXIiIDogMjI1LAogICAgInRvdGFsTGV0cmFzIiA6ICJET1NDSUVOVE9TIFZFSU5USUNJTkNPIETDk0xBUkVTIiwKICAgICJzYWxkb0Zhdm9yIiA6IDAsCiAgICAiY29uZGljaW9uT3BlcmFjaW9uIiA6IDIsCiAgICAicGFnb3MiIDogbnVsbCwKICAgICJudW1QYWdvRWxlY3Ryb25pY28iIDogbnVsbAogIH0sCiAgImV4dGVuc2lvbiIgOiB7CiAgICAibm9tYkVudHJlZ2EiIDogbnVsbCwKICAgICJkb2N1RW50cmVnYSIgOiBudWxsLAogICAgIm5vbWJSZWNpYmUiIDogbnVsbCwKICAgICJkb2N1UmVjaWJlIiA6IG51bGwsCiAgICAib2JzZXJ2YWNpb25lcyIgOiBudWxsLAogICAgInBsYWNhVmVoaWN1bG8iIDogbnVsbAogIH0sCiAgImFwZW5kaWNlIiA6IG51bGwKfQ.ZTZCQpZ4dO-2AlJknmiCvG4tXYYTLLTpwk9EgRImw-X4MNv7Obt2NXR-2j_6nZMmNxpc3BczIQn53Mg0KKN4GNLeOYuqXIMFbTOgd99I9-HRsvAeFymbSO3aD4cPJa0QqR9wpjju2C3qNOqc8baxr85I0Dhuz7Uq_BfhaTwcEtw5eCKUFM0JSiEYRW1J8cvjQZkKqMLnhp8do5_QExAWweDSxw8l6EIJEzmBPFuXUO2Wf4uHZ7cLiikuUzNiyyu1ImqWG6OZjoujYY9DCOshcGQ1zLQdnPs5JDfM8eVbBNWEoQeniXPlCP6dTqhr_pxWtR2pSPZB6YsA-YZV26YAyA"
+}

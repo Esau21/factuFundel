@@ -1,0 +1,93 @@
+{
+    "emisor": {
+        "nit": "00000998",
+        "nrc": "090999",
+        "correo": "fundelong@gmail.com",
+        "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
+        "telefono": "77665545",
+        "direccion": {
+            "municipio": "01",
+            "complemento": "CALLE AL MIRADOR COLONIA ESCALON",
+            "departamento": "01"
+        },
+        "codEstable": "F001",
+        "codActividad": "00000",
+        "codEstableMH": "0001",
+        "codPuntoVenta": "P001",
+        "descActividad": "Comercio general",
+        "codPuntoVentaMH": "0001",
+        "nombreComercial": "FUNDACION DE DESARROLLO LATINO AMERICANO",
+        "tipoEstablecimiento": "01"
+    },
+    "resumen": {
+        "pagos": [
+            {
+                "codigo": "01",
+                "montoPago": 27.52
+            }
+        ],
+        "ivaRete1": 0,
+        "subTotal": "24.35",
+        "totalIva": 3.17,
+        "reteRenta": 0,
+        "descuNoSuj": 0,
+        "totalDescu": 0,
+        "totalNoSuj": 0,
+        "totalPagar": "27.52",
+        "descuExenta": 0,
+        "totalExenta": 0,
+        "totalLetras": "VEINTISIETE CON CINCUENTA Y DOS dólares",
+        "descuGravada": 0,
+        "totalGravada": "24.35",
+        "subTotalVentas": 24.35,
+        "totalNoGravado": 0,
+        "porcentajeDescu": 0,
+        "condicionOperacion": 1,
+        "numPagoElectronico": null,
+        "montoTotalOperacion": "27.52"
+    },
+    "apendice": [],
+    "receptor": {
+        "nit": "00034555",
+        "nrc": "sin datos",
+        "correo": "esaumoran1999@gmail.com",
+        "nombre": "Edgar Esau Moran",
+        "telefono": "77788999",
+        "direccion": {
+            "municipio": "01",
+            "complemento": "san luis san marcos",
+            "departamento": "01"
+        },
+        "codActividad": "00000",
+        "descActividad": "Comercio",
+        "nombreComercial": "Edgar Esau Moran"
+    },
+    "extension": [],
+    "identificacion": {
+        "fecEmi": "2025-05-27",
+        "horEmi": "23:43:17",
+        "tipoDte": "03",
+        "version": "1",
+        "ambiente": "00",
+        "tipoModelo": 1,
+        "tipoMoneda": "USD",
+        "motivoContin": null,
+        "numeroControl": "DTE-03-F001P001-708311726100181",
+        "tipoOperacion": 1,
+        "codigoGeneracion": "B25B7CCF-D371-47FD-A03D-70BFED3FBF50",
+        "tipoContingencia": null
+    },
+    "cuerpoDocumento": [
+        {
+            "codigo": "P00001",
+            "numItem": 1,
+            "cantidad": "1.00",
+            "tipoItem": 1,
+            "precioUni": "27.52",
+            "uniMedida": 59,
+            "montoDescu": 0,
+            "descripcion": "Convenio con alcaldía municipal santa ana norte",
+            "ventaGravada": "27.52"
+        }
+    ]
+}

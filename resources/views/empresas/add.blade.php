@@ -2,124 +2,170 @@
 @section('title', 'Nueva empresa')
 @section('content')
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card h-100 d-flex flex-column">
-                <div class="card-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom mb-3">
-                    <h5 class="card-title mb-0">Agregar nueva empresa.</h5>
-                </div>
-                <div class="card-body mt-5">
-                    <form id="addFormEmpresa" class="row g-6" onsubmit="return false" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card h-100 d-flex flex-column">
+                    <div class="card-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom mb-3">
+                        <h5 class="card-title mb-0">Agregar nueva empresa.</h5>
+                    </div>
+                    <div class="card-body mt-5">
+                        <form id="addFormEmpresa" class="row g-6" onsubmit="return false" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
 
-                            <!-- Imagen -->
-                            <div class="col-12 form-control-validation">
-                                <label class="form-label w-100" for="imagen">Imagen</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="logo" name="logo" class="form-control" type="file"
-                                        onchange="previewLogo(event)" />
-                                    <span class="input-group-text cursor-pointer">
-                                        <span class="card-type me-n2"></span>
-                                    </span>
+                                <!-- Imagen -->
+                                <div class="col-12 form-control-validation">
+                                    <label class="form-label w-100" for="imagen">Imagen</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="logo" name="logo" class="form-control" type="file"
+                                            onchange="previewLogo(event)" />
+                                        <span class="input-group-text cursor-pointer">
+                                            <span class="card-type me-n2"></span>
+                                        </span>
+                                    </div>
+                                    <div id="logoPreviewContainer" class="mt-2">
+                                        <img id="logoPreview" src="" alt="Vista previa de la imagen"
+                                            style="max-width: 100%; max-height: 300px; display: none;" />
+                                    </div>
                                 </div>
-                                <div id="logoPreviewContainer" class="mt-2">
-                                    <img id="logoPreview" src="" alt="Vista previa de la imagen"
-                                        style="max-width: 100%; max-height: 300px; display: none;" />
+
+
+                                <!-- Nombre empresa -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nombre">Nombre empresa</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nombre" name="nombre" class="form-control" type="text"
+                                            placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                 <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nombreCo">Nombre Comercial</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nombreComercial" name="nombreComercial" class="form-control"
+                                            type="text" placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Nrc -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nrc">Nrc</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nrc" name="nrc" class="form-control" type="text"
+                                            placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Nit -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nit">Nit</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nit" name="nit" class="form-control" type="text"
+                                            placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="departamento_id">Departamento</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="departamento_id" id="departamento_id"
+                                            class="form-select select2 w-100">
+                                            <option value="">Seleccionar</option>
+                                            @foreach ($departamento as $d)
+                                                <option value="{{ $d->id }}">
+                                                    {{ $d->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="municipio_id">Municipio</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="municipio_id" id="municipio_id" class="form-select select2 w-100">
+                                            <option value="">Seleccionar</option>
+                                            @foreach ($municipio as $d)
+                                                <option value="{{ $d->id }}">
+                                                    {{ $d->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="actividad_economica_id">Actividad economica</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="actividad_economica_id" id="actividad_economica_id"
+                                            class="form-select select2 w-100">
+                                            <option value="">Seleccionar</option>
+                                            @foreach ($actividad as $a)
+                                                <option value="{{ $a->id }}"
+                                                    {{ old('actividad_economica_id', $empresa->actividad_economica_id ?? '') == $a->id ? 'selected' : '' }}>
+                                                    {{ $a->codActividad }} | {{ $a->descActividad }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Direccion -->
+                                <div class="col-12 col-md-12 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="complemento">Complemento</label>
+                                    <div class="input-group input-group-merge">
+                                        <textarea name="complemento" id="complemento" cols="30" rows="1" class="form-control"
+                                            placeholder="Ingresa tu direccion"></textarea>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+
+                                <!-- Telefono -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="telefono">Telefono</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="telefono" name="telefono" class="form-control" type="text"
+                                            placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Correo electronico -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="correo_electronico">Correo electronico</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="correo" name="correo" class="form-control" type="text"
+                                            placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Botones de acción -->
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary me-sm-3 me-1">Guardar</button>
+                                    <a href="{{ route('empresas.index') }}"
+                                        class="btn btn-label-secondary btn-reset">Regresar</a>
                                 </div>
                             </div>
-
-
-                            <!-- Nombre empresa -->
-                            <div class="col-12 col-md-6 form-control-validation mb-3">
-                                <label class="form-label w-100" for="nombre">Nombre empresa</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="nombre" name="nombre" class="form-control" type="text"
-                                        placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-                            <!-- Nrc -->
-                            <div class="col-12 col-md-6 form-control-validation mb-3">
-                                <label class="form-label w-100" for="nrc">Nrc</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="nrc" name="nrc" class="form-control" type="text" placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-                            <!-- Nit -->
-                            <div class="col-12 col-md-6 form-control-validation mb-3">
-                                <label class="form-label w-100" for="nit">Nit</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="nit" name="nit" class="form-control" type="text" placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-                            <!-- Giro -->
-                            <div class="col-12 col-md-6 form-control-validation mb-3">
-                                <label class="form-label w-100" for="giro">Giro</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="giro" name="giro" class="form-control" type="text"
-                                        placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-                            <!-- Direccion -->
-                            <div class="col-12 col-md-12 form-control-validation mb-3">
-                                <label class="form-label w-100" for="direccion">Direccion</label>
-                                <div class="input-group input-group-merge">
-                                    <textarea name="direccion" id="direccion" cols="30" rows="1" class="form-control"
-                                        placeholder="Ingresa tu direccion"></textarea>
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-
-                            <!-- Telefono -->
-                            <div class="col-12 col-md-6 form-control-validation mb-3">
-                                <label class="form-label w-100" for="telefono">Telefono</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="telefono" name="telefono" class="form-control" type="text"
-                                        placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-                            <!-- Correo electronico -->
-                            <div class="col-12 col-md-6 form-control-validation mb-3">
-                                <label class="form-label w-100" for="correo_electronico">Correo electronico</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="correo" name="correo" class="form-control" type="text"
-                                        placeholder="ejemplo" />
-                                    <span class="input-group-text cursor-pointer"><span
-                                            class="card-type me-n2"></span></span>
-                                </div>
-                            </div>
-
-                            <!-- Botones de acción -->
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Guardar</button>
-                                <a href="{{ route('empresas.index') }}"
-                                    class="btn btn-label-secondary btn-reset">Regresar</a>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
@@ -127,7 +173,7 @@
         const file = event.target.files[0];
         const reader = new FileReader();
 
-        reader.onload = function (e) {
+        reader.onload = function(e) {
             const logoPreview = document.getElementById('logoPreview');
             logoPreview.src = e.target.result;
             logoPreview.style.display = 'block';
@@ -140,8 +186,8 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $("#addFormEmpresa").on('submit', function (e) {
+    $(document).ready(function() {
+        $("#addFormEmpresa").on('submit', function(e) {
             e.preventDefault();
             let url = "{{ route('empresas.store') }}";
             const form = this;
@@ -157,7 +203,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('input[name="_token"]').val(),
                 },
-                success: function () {
+                success: function() {
                     Toastify({
                         text: "La empresa se agregó correctamente.",
                         className: "info",
@@ -169,11 +215,11 @@
                         window.location.href = "{{ route('empresas.index') }}";
                     }, 2000);
                 },
-                error: function (e) {
+                error: function(e) {
                     if (e.status === 422) {
                         let errors = e.responseJSON.errors;
                         let errorMessage = '';
-                        $.each(errors, function (key, value) {
+                        $.each(errors, function(key, value) {
                             errorMessage += value.join('<br>');
                         });
                         Swal.fire({

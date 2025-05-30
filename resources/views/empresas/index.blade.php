@@ -23,16 +23,20 @@
                                         <th class="text-left">Nombre</th>
                                         <th class="text-left">Nrc</th>
                                         <th class="text-left">Nit</th>
-                                        <th class="text-left">Giro</th>
+                                        <th class="text-left">Actividad</th>
+                                        <th class="text-left">Departamento</th>
+                                        <th class="text-left">Municipio</th>
                                         <th class="text-left">Tel</th>
                                         <th class="text-left">Correo</th>
-                                        <th class="text-left">Direccion</th>
+                                        <th class="text-left">Complemento</th>
                                         <th class="text-left">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
+                                        <th></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -85,8 +89,16 @@
                     name: 'nit'
                 },
                 {
-                    data: 'giro',
-                    name: 'giro'
+                    data: 'actividad',
+                    name: 'actividad'
+                },
+                {
+                    data: 'departamento',
+                    name: 'departamento'
+                },
+                {
+                    data: 'municipio',
+                    name: 'municipio'
                 },
                 {
                     data: 'telefono',
@@ -97,8 +109,8 @@
                     name: 'correo'
                 },
                 {
-                    data: 'direccion',
-                    name: 'direccion'
+                    data: 'complemento',
+                    name: 'complemento'
                 },
                 {
                     data: 'acciones',

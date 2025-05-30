@@ -27,6 +27,7 @@
                                     <tr>
                                         <th class="text-left">ID</th>
                                         <th class="text-left">Nombre</th>
+                                        <th class="text-left">Nombre Comercial</th>
                                         <th class="text-left">Tipo documento</th>
                                         <th class="text-left">Numero documento</th>
                                         <th class="text-left">Nit</th>
@@ -38,7 +39,6 @@
                                         <th class="text-left">Telefono</th>
                                         <th class="text-left">Correo</th>
                                         <th class="text-left">Tipo Contribuyente</th>
-                                        <th class="text-left">Codigo actividad</th>
                                         <th class="text-left">Tipo persona</th>
                                         <th class="text-left">Es extranjero</th>
                                         <th class="text-left">Pais</th>
@@ -103,6 +103,10 @@
                     name: 'nombre'
                 },
                 {
+                    data: 'nombreComercial',
+                    name: 'nombreComercial'
+                },
+                {
                     data: 'tipo_documento',
                     name: 'tipo_documento'
                 },
@@ -119,8 +123,8 @@
                     name: 'nrc'
                 },
                 {
-                    data: 'giro',
-                    name: 'giro'
+                    data: 'actividad',
+                    name: 'actividad'
                 },
                 {
                     data: 'direccion',
@@ -145,10 +149,6 @@
                 {
                     data: 'tipo_contribuyente',
                     name: 'tipo_contribuyente'
-                },
-                {
-                    data: 'codigo_actividad',
-                    name: 'codigo_actividad'
                 },
                 {
                     data: 'tipo_persona',

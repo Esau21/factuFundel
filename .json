@@ -1,0 +1,109 @@
+{
+    "identificacion": {
+        "version": 1,
+        "ambiente": "00",
+        "tipoDte": "03",
+        "numeroControl": "DTE-03-00000001-000000000000002",
+        "codigoGeneracion": "CF0EFA54-D32D-4643-B16C-3E04F15DD3C7",
+        "tipoModelo": 1,
+        "tipoOperacion": 1,
+        "tipoContingencia": null,
+        "motivoConti": null,
+        "fechaEmi": "2025-05-29",
+        "horaEmi": "18:32:39",
+        "moneda": "USD"
+    },
+    "documentoRelacionado": null,
+    "emisor": {
+        "nrc": "090999",
+        "nit": "00000998",
+        "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
+        "nombreComercial": "FUNDEL",
+        "codActividad": "86909",
+        "descActividad": "Otros Servicio relacionados con la salud ncp",
+        "direccion": {
+            "departamento": "06",
+            "municipio": "23",
+            "complemento": "CALLE AL MIRADOR COLONIA ESCALON"
+        },
+        "telefono": "77665545",
+        "correo": "fundelong@gmail.com",
+        "tipoEstablecimiento": "01"
+    },
+    "receptor": {
+        "nit": "00034555",
+        "nrc": "90000990",
+        "nombre": "FARDEL S.A DE C.V",
+        "codActividad": "86909",
+        "descActividad": "Otros Servicio relacionados con la salud ncp",
+        "nombreComercial": "FARDEL S.A DE C.V",
+        "direccion": {
+            "departamento": "06",
+            "municipio": "23",
+            "complemento": "Fardel COLONIA ESCALON PARROQUIA EL DIVINO NIÑO"
+        },
+        "telefono": "77667788",
+        "correo": "fardelempresa@gmail.com"
+    },
+    "otrosDocumentos": null,
+    "ventaTercero": null,
+    "cuerpoDocumento": [
+        {
+            "numItem": 1,
+            "tipoItem": "B",
+            "cantidad": 1,
+            "codigo": "1",
+            "codTributo": null,
+            "uniMedida": "59",
+            "descripcion": "Convenio con alcaldía municipal santa ana norte",
+            "precioUni": 100,
+            "montoDescu": 0,
+            "ventaNoSuj": 0,
+            "ventaExenta": 0,
+            "ventaGravada": 100,
+            "tributos": [
+                {
+                    "codigo": "IVA",
+                    "descripcion": "Impuesto al Valor Agregado 13%",
+                    "valor": 13
+                }
+            ],
+            "psv": 0,
+            "noGravado": 0
+        }
+    ],
+    "resumen": {
+        "totalNoSuj": 0,
+        "totalExenta": 0,
+        "totalGravada": 100,
+        "descuNoSuj": 0,
+        "descuExenta": 0,
+        "descuGravada": 0,
+        "porcentajeDescuento": 0,
+        "subTotal": 100,
+        "ivaRete1": 0,
+        "ivaPercibido": 0,
+        "iva": 13,
+        "fovial": 0,
+        "cotrans": 0,
+        "subTotalVentas": 100,
+        "totalPagar": 113,
+        "saldoFavor": 0,
+        "condicionOperacion": "01",
+        "pagos": [
+            {
+                "codigo": "01",
+                "montoPago": 113
+            }
+        ]
+    },
+    "extension": {
+        "nombEntrega": null,
+        "docuEntrega": null,
+        "nombRecibe": null,
+        "docuRecibe": null,
+        "observaciones": null,
+        "placaVehiculo": null
+    },
+    "apendice": null
+}

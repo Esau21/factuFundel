@@ -60,13 +60,54 @@
                     <div class="card-body">
                         <!-- Selección de Cliente y Pago -->
                         <div class="row g-4">
+
+                            <!-- tipo de venta -->
+                            <div class="col-sm-6 mt-3">
+                                <label for="tipo_venta" class="form-label">Tipo de venta</label>
+                                <select name="tipo_venta" id="tipo_venta" class="form-select w-100">
+                                    <option value="">Seleccione</option>
+                                    <option value="1">Contado</option>
+                                    <option value="2">Crédito</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-3 mt-3">
+                                <label for="plazos" class="form-label">Número de plazos</label>
+                                <input type="number" name="plazos" id="plazos" class="form-control"
+                                    placeholder="Ej. 6">
+                            </div>
+
+
+                            <div class="col-sm-3 mt-3">
+                                <label for="tipo_plazo" class="form-label">Tipo de plazo</label>
+                                <select name="tipo_plazo" id="tipo_plazo" class="form-select">
+                                    <option value="">Seleccionar</option>
+                                    <option value="dias">Días</option>
+                                    <option value="meses">Meses</option>
+                                    <option value="años">Años</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-3 mt-3">
+                                <label for="abono" class="form-label">Abono</label>
+                                <input type="number" name="abono" id="abono" class="form-control" placeholder="0.00">
+                            </div>
+
+                            <div class="col-sm-3 mt-3">
+                                <label for="saldo_pendiente" class="form-label">Saldo pendiente</label>
+                                <input type="number" name="saldo_pendiente" id="saldo_pendiente" class="form-control"
+                                    placeholder="0.00" readonly>
+                            </div>
+
+
                             <!-- Cliente -->
-                            <div class="col-sm-6">
+                            <div class="col-sm-6 mt-3">
                                 <label for="cliente_id" class="form-label">Cliente</label>
                                 <select name="cliente_id" id="cliente_id" class="form-select select2 w-100">
                                     <option value="">Seleccione</option>
                                     @foreach ($clientes as $c)
-                                        <option value="{{ $c->id }}">{{ $c->nombre }}</option>
+                                        <option value="{{ $c->id }}">{{ $c->tipo_persona }} | {{ $c->nombre }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -76,11 +117,9 @@
                                 <label for="tipo_pago" class="form-label">Tipo de pago</label>
                                 <select name="tipo_pago" id="tipo_pago" class="form-select">
                                     <option value="">Seleccione</option>
-                                    <option value="efectivo">EFECTIVO</option>
-                                    <option value="transferencia">TRANSFERENCIA</option>
-                                    <option value="cheque">CHEQUE</option>
-                                    <option value="mixto_cheque_efectivo">MIXTO CHEQUE EFECTIVO</option>
-                                    <option value="mixto_transferencia_efectivo">MIXTO TRANSFERENCIA EFECTIVO</option>
+                                    <option value="01">BILLETES Y MONEDAS</option>
+                                    <option value="04">CHEQUE</option>
+                                    <option value="05">TRANSFERENCIA-DEPÓSITO BANCARIO</option>
                                 </select>
                             </div>
 
@@ -89,9 +128,12 @@
                                 <label for="tipo_documento" class="form-label">Tipo de comprobante</label>
                                 <select name="tipo_documento" id="tipo_documento" class="form-select">
                                     <option value="">Seleccione</option>
-                                    <option value="factura">Factura Electrónica</option>
-                                    <option value="ccf">Crédito Fiscal</option>
-                                    <option value="ticket">Consumidor Final</option>
+                                    <option value="factura">Factura</option>
+                                    {{-- <option value="nota_credito">Nota de Crédito</option> --}}
+                                    {{-- <option value="nota_debito">Nota de Débito</option> --}}
+                                    <option value="ccf">Comprobante de Crédito Fiscal</option>
+                                    <option value="factura_sujeto_excluido">Factura de Sujeto Excluido</option>
+                                    <option value="comprobante_donacion">Comprobante de Donación</option>
                                 </select>
                             </div>
 
@@ -99,9 +141,9 @@
                             <!-- Efectivo -->
                             <div id="efectivo_fields" class="col-12 mt-3" style="display: none;">
                                 <div class="col-sm-6 mt-3">
-                                    <label class="form-label">Efectivo</label>
+                                    <label class="form-label">Monto</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-dark text-white">EFECTIVO</span>
+                                        <span class="input-group-text bg-dark text-white">MONTO</span>
                                         <input type="number" id="cash" class="form-control text-center"
                                             value="0.00">
                                     </div>
@@ -113,7 +155,8 @@
                                 <div class="row g-3">
                                     <div class="col-sm-6">
                                         <label for="numero_cheque" class="form-label">Número de cheque</label>
-                                        <input type="text" class="form-control" id="numero_cheque" name="numero_cheque">
+                                        <input type="text" class="form-control" id="numero_cheque"
+                                            name="numero_cheque">
                                     </div>
 
                                     <div class="col-sm-6">
@@ -212,6 +255,12 @@
                                 <h3 class="text-success text-uppercase">
                                     Total: $<span id="totalAmount">0.00</span>
                                 </h3>
+                                <h6 class="text-dark text-uppercase">
+                                    IVA: $<span id="Iva">0.00</span>
+                                </h6>
+                                <h6 class="text-dark text-uppercase">
+                                    IVA RETENCIÓN: $<span id="IvaRetencion">0.00</span>
+                                </h6>
                                 <h4 class="mt-3">Artículos: <span id="totalItems">0</span></h4>
                             </div>
                         </div>

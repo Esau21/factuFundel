@@ -3,6 +3,8 @@
 namespace App\Models\Producto;
 
 use App\Models\Categoria\Categoria;
+use App\Models\Item;
+use App\Models\UnidadMedida;
 use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
@@ -20,12 +22,24 @@ class Producto extends Model
         'stock_minimo',
         'imagen',
         'estado',
-        'categoria_id'
+        'categoria_id',
+        'unidad_medida_id',
+        'item_id'
     ];
 
     public function categorias()
     {
         return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
+
+    public function items()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
+
+    public function unidad()
+    {
+        return $this->belongsTo(UnidadMedida::class, 'unidad_medida_id');
     }
 
     public static function getProductosData()

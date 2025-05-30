@@ -39,6 +39,16 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nombreCo">Nombre Comercial</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nombreComercial" name="nombreComercial" class="form-control"
+                                            type="text" placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
                                 <!-- Tipo de documento -->
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="tipo_documento">Tipo de documento</label>
@@ -56,7 +66,7 @@
                                 </div>
 
                                 <!-- Numero de documento -->
-                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="numero_documento">Numero de documento</label>
                                     <div class="input-group input-group-merge">
                                         <input id="numero_documento" name="numero_documento" class="form-control"
@@ -67,7 +77,7 @@
                                 </div>
 
                                 <!-- Nrc -->
-                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="nrc">Nrc</label>
                                     <div class="input-group input-group-merge">
                                         <input id="nrc" name="nrc" class="form-control" type="text"
@@ -78,7 +88,7 @@
                                 </div>
 
                                 <!-- Nit -->
-                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="nit">Nit</label>
                                     <div class="input-group input-group-merge">
                                         <input id="nit" name="nit" class="form-control" type="text"
@@ -88,19 +98,23 @@
                                     </div>
                                 </div>
 
-                                <!-- Giro -->
-                                <div class="col-12 col-md-3 form-control-validation mb-3">
-                                    <label class="form-label w-100" for="giro">Giro</label>
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="actividad_economica_id">Actividad economica</label>
                                     <div class="input-group input-group-merge">
-                                        <input id="giro" name="giro" class="form-control" type="text"
-                                            placeholder="ejemplo" />
-                                        <span class="input-group-text cursor-pointer"><span
-                                                class="card-type me-n2"></span></span>
+                                        <select name="actividad_economica_id" id="actividad_economica_id"
+                                            class="form-select select2 w-100">
+                                            <option value="">Seleccionar</option>
+                                            @foreach ($actividad as $a)
+                                                <option value="{{ $a->id }}">
+                                                    {{ $a->codActividad }} | {{ $a->descActividad }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
                                 <!-- Direccion -->
-                                <div class="col-12 col-md-9 form-control-validation mb-3">
+                                <div class="col-12 col-md-12 form-control-validation mb-3">
                                     <label class="form-label w-100" for="direccion">Direccion</label>
                                     <div class="input-group input-group-merge">
                                         <textarea name="direccion" id="direccion" cols="30" rows="1" class="form-control"
@@ -114,9 +128,13 @@
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="departamento">Departamento</label>
                                     <div class="input-group input-group-merge">
-                                        <select name="departamento" id="departamento" class="form-control select2"
+                                        <select name="departamento_id" id="departamento_id" class="form-control select2"
                                             required>
-
+                                            <option value="">Elegir</option>
+                                            @foreach ($departamentos as $d)
+                                                <option value="{{ $d->id }}">{{ $d->codigo }} |
+                                                    {{ $d->nombre }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -125,8 +143,13 @@
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="municipio">Municipio</label>
                                     <div class="input-group input-group-merge">
-                                        <select name="municipio" id="municipio" class="form-control select2" required>
-
+                                        <select name="municipio_id" id="municipio_id" class="form-control select2"
+                                            required>
+                                            <option value="">Elegir</option>
+                                            @foreach ($municipios as $m)
+                                                <option value="{{ $m->id }}">{{ $m->codigo }} |
+                                                    {{ $m->nombre }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -170,17 +193,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Codigo de actividad -->
-                                <div class="col-12 col-md-6 form-control-validation mb-3">
-                                    <label class="form-label w-100" for="codigo_actividad">Codigo de actividad</label>
-                                    <div class="input-group input-group-merge">
-                                        <input id="codigo_actividad" name="codigo_actividad" class="form-control"
-                                            type="text" placeholder="ejemplo" />
-                                        <span class="input-group-text cursor-pointer"><span
-                                                class="card-type me-n2"></span></span>
-                                    </div>
-                                </div>
-
 
                                 <!-- Botones de acción -->
                                 <div class="col-12 text-center">
@@ -199,28 +211,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
     $(document).ready(function() {
-
-        const $departamento = $("#departamento");
-        const $municipio = $("#municipio");
-
-        /* limipiamos y llenamos los departamentos y municipios */
-        $departamento.empty().append('<option value="">Elegir</option>');
-        Object.keys(departamentosMunicipios).forEach(dep => {
-            $departamento.append(`<option value="${dep}">${dep}</option>`);
-        });
-
-        /* cuando cambiemos de departamento cambiamos de municipio */
-        $departamento.on("change", function() {
-            const selectedDep = $(this).val();
-            const municipios = departamentosMunicipios[selectedDep] || [];
-
-            $municipio.empty().append('<option value="">Elegir</option>');
-            municipios.forEach(muni => {
-                $municipio.append(`<option value="${muni}">${muni}</option>`);
-            });
-        });
-
-
 
         function toggleFields(tipo) {
             if (tipo === 'natural' || tipo === 'juridica') {
@@ -321,73 +311,4 @@
 
         });
     });
-</script>
-
-<script>
-    const departamentosMunicipios = {
-        "Ahuachapán": ["Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio", "Guaymango",
-            "Jujutla", "San Francisco Menéndez", "San Lorenzo", "San Pedro Puxtla", "Tacuba", "Turín"
-        ],
-        "Santa Ana": ["Candelaria de la Frontera", "Chalchuapa", "Coatepeque", "El Congo", "El Porvenir",
-            "Masahuat", "Metapán", "San Antonio Pajonal", "San Sebastián Salitrillo", "Santa Ana",
-            "Santa Rosa Guachipilín", "Santiago de la Frontera", "Texistepeque"
-        ],
-        "Sonsonate": ["Acajutla", "Armenia", "Caluco", "Cuisnahuat", "Izalco", "Juayúa", "Nahuizalco", "Nahulingo",
-            "Salcoatitán", "San Antonio del Monte", "San Julián", "Santa Catarina Masahuat",
-            "Santa Isabel Ishuatán", "Santo Domingo de Guzmán", "Sonsonate"
-        ],
-        "La Libertad": ["Antiguo Cuscatlán", "Chiltiupán", "Ciudad Arce", "Colón", "Comasagua", "Huizúcar",
-            "Jayaque", "Jicalapa", "La Libertad", "Nuevo Cuscatlán", "Opico", "Quezaltepeque", "Sacacoyo",
-            "San Juan Opico", "San Matías", "San Pablo Tacachico", "Santa Tecla", "Talnique", "Tamanique",
-            "Teotepeque", "Tepecoyo", "Zaragoza"
-        ],
-        "Chalatenango": ["Agua Caliente", "Arcatao", "Azacualpa", "Cancasque", "Chalatenango", "Citalá", "Comalapa",
-            "Concepción Quezaltepeque", "Dulce Nombre de María", "El Carrizal", "El Paraíso", "La Laguna",
-            "La Palma", "La Reina", "Las Vueltas", "Nombre de Jesús", "Nueva Concepción", "Nueva Trinidad",
-            "Ojos de Agua", "Potonico", "San Antonio de la Cruz", "San Antonio Los Ranchos", "San Fernando",
-            "San Francisco Lempa", "San Francisco Morazán", "San Ignacio", "San Isidro Labrador",
-            "San Luis del Carmen", "San Miguel de Mercedes", "San Rafael", "Santa Rita", "Tejutla"
-        ],
-        "Cuscatlán": ["Candelaria", "Cojutepeque", "El Carmen", "El Rosario", "Monte San Juan",
-            "Oratorio de Concepción", "San Bartolomé Perulapía", "San Cristóbal", "San José Guayabal",
-            "San Pedro Perulapán", "San Rafael Cedros", "San Ramón", "Santa Cruz Analquito",
-            "Santa Cruz Michapa", "Suchitoto", "Tenancingo"
-        ],
-        "San Vicente": ["Apastepeque", "Guadalupe", "San Cayetano Istepeque", "San Esteban Catarina",
-            "San Ildefonso", "San Lorenzo", "San Sebastián", "San Vicente", "Santa Clara", "Santo Domingo",
-            "Tecoluca", "Tepetitán", "Verapaz"
-        ],
-        "Cabañas": ["Cinquera", "Dolores", "Guacotecti", "Ilobasco", "Jutiapa", "San Isidro", "Sensuntepeque",
-            "Tejutepeque", "Victoria"
-        ],
-        "La Paz": ["Cuyultitán", "El Rosario", "Jerusalén", "Mercedes La Ceiba", "Olocuilta", "Paraíso de Osorio",
-            "San Antonio Masahuat", "San Emigdio", "San Francisco Chinameca", "San Juan Nonualco",
-            "San Juan Talpa", "San Juan Tepezontes", "San Luis La Herradura", "San Luis Talpa",
-            "San Miguel Tepezontes", "San Pedro Masahuat", "San Pedro Nonualco", "San Rafael Obrajuelo",
-            "Santa María Ostuma", "Santiago Nonualco", "Tapalhuaca", "Zacatecoluca"
-        ],
-        "San Salvador": ["Aguilares", "Apopa", "Ayutuxtepeque", "Cuscatancingo", "Delgado", "El Paisnal", "Guazapa",
-            "Ilopango", "Mejicanos", "Nejapa", "Panchimalco", "Rosario de Mora", "San Marcos", "San Martín",
-            "San Salvador", "Santiago Texacuangos", "Santo Tomás", "Soyapango", "Tonacatepeque"
-        ],
-        "La Unión": ["Anamorós", "Bolívar", "Concepción de Oriente", "Conchagua", "El Carmen", "El Sauce",
-            "Intipucá", "La Unión", "Lislique", "Meanguera del Golfo", "Nueva Esparta", "Pasaquina", "Polorós",
-            "San Alejo", "San José", "Santa Rosa de Lima", "Yayantique", "Yucuaiquín"
-        ],
-        "San Miguel": ["Carolina", "Chapeltique", "Chinameca", "Chirilagua", "Ciudad Barrios", "Comacarán",
-            "El Tránsito", "Lolotique", "Moncagua", "Nueva Guadalupe", "Nuevo Edén de San Juan", "Quelepa",
-            "San Antonio", "San Gerardo", "San Jorge", "San Luis de la Reina", "San Miguel",
-            "San Rafael Oriente", "Sesori", "Uluazapa"
-        ],
-        "Morazán": ["Arambala", "Cacaopera", "Chilanga", "Corinto", "Delicias de Concepción", "El Divisadero",
-            "El Rosario", "Gualococti", "Guatajiagua", "Joateca", "Jocoaitique", "Jocoro", "Lolotiquillo",
-            "Meanguera", "Osicala", "Perquín", "San Carlos", "San Fernando", "San Francisco Gotera",
-            "San Isidro", "San Simón", "Sensembra", "Sociedad", "Torola", "Yamabal", "Yoloaiquín"
-        ],
-        "Usulután": ["Alegría", "Berlín", "California", "Concepción Batres", "El Triunfo", "Ereguayquín",
-            "Estanzuelas", "Jiquilisco", "Jucuapa", "Jucuarán", "Mercedes Umaña", "Nueva Granada", "Ozatlán",
-            "Puerto El Triunfo", "San Agustín", "San Buenaventura", "San Dionisio", "San Francisco Javier",
-            "Santa Elena", "Santa María", "Santiago de María", "Tecapán", "Usulután"
-        ]
-    }
 </script>

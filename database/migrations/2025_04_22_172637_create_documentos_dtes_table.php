@@ -20,8 +20,7 @@ return new class extends Migration
             $table->integer('cliente_id')->unsigned();
             $table->integer('empresa_id')->unsigned();
             $table->enum('estado', ['pendiente', 'firmado', 'enviado', 'rechazado'])->default('pendiente');
-            $table->text('xml_firmado')->nullable();
-            $table->text('xml_respuesta_dgii')->nullable();
+            $table->text('json_dte');
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes');

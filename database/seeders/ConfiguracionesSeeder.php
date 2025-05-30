@@ -17,24 +17,30 @@ class ConfiguracionesSeeder extends Seeder
 
         Empresa::create([
             'nombre' => 'FUNDACION DE DESARROLLO LATINO AMERICANO',
+            'nombreComercial' => 'FUNDEL',
+            'departamento_id' => 1,
+            'municipio_id' => 1,
+            'complemento' => 'CALLE AL MIRADOR COLONIA ESCALON',
             'nit' => '00000998',
             'nrc' => '090999',
-            'giro' => 'Empresa de desarrollo',
             'telefono' => '77665545',
             'correo' => 'fundelong@gmail.com',
-            'direccion' => 'CALLE AL MIRADOR COLONIA ESCALON',
             'logo' => asset('img/camara1.png'),
+            'actividad_economica_id' => 1,
         ]);
 
         Empresa::create([
             'nombre' => 'SI INGIENERIA',
+            'nombreComercial' => 'SI',
+            'departamento_id' => 1,
+            'municipio_id' => 1,
+            'complemento' => 'CALLE AL MIRADOR COLONIA ESCALON',
             'nit' => '000090998',
             'nrc' => '090233999',
-            'giro' => 'Empresa de ingineria',
             'telefono' => '76123344',
             'correo' => 'siinge@gmail.com',
-            'direccion' => 'CALLE AL MIRADOR COLONIA ESCALON',
             'logo' => asset('img/camara1.png'),
+            'actividad_economica_id' => 2,
         ]);
 
         User::create([

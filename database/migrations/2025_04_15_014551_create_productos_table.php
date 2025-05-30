@@ -23,10 +23,14 @@ return new class extends Migration
             $table->string('imagen')->nullable();
             $table->enum('estado', ['activo', 'deshabilitado'])->default('activo');
             $table->integer('categoria_id')->unsigned()->nullable();
+            $table->integer('unidad_medida_id')->unsigned()->nullable();
+            $table->integer('item_id')->unsigned()->nullable();
             $table->timestamps();
 
 
             $table->foreign('categoria_id')->references('id')->on('categorias');
+            $table->foreign('unidad_medida_id')->references('id')->on('unidad_medidas');
+            $table->foreign('item_id')->references('id')->on('items');
         });
     }
 

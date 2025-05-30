@@ -14,22 +14,26 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
+            $table->string('nombreComercial')->nullable();
             $table->string('tipo_documento');
             $table->string('numero_documento');
             $table->string('nit')->nullable();
             $table->string('nrc')->nullable();
-            $table->string('giro')->nullable();
             $table->string('direccion');
-            $table->string('departamento');
-            $table->string('municipio');
+            $table->integer('departamento_id')->unsigned();
+            $table->integer('municipio_id')->unsigned();
+            $table->integer('actividad_economica_id')->unsigned()->nullable();
             $table->string('telefono')->nullable();
-            $table->string('correo_electronico')->nullable();
+            $table->string('correo_electronico');
             $table->string('tipo_contribuyente');
-            $table->string('codigo_actividad')->nullable();
             $table->enum('tipo_persona', ['natural', 'juridica']);
             $table->boolean('es_extranjero')->default(false);
             $table->string('pais')->nullable();
             $table->timestamps();
+
+            $table->foreign('departamento_id')->references('id')->on('departamentos');
+            $table->foreign('municipio_id')->references('id')->on('municipios');
+            $table->foreign('actividad_economica_id')->references('id')->on('actividades_economicas');
         });
     }
 

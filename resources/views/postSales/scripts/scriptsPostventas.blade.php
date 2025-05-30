@@ -7,51 +7,100 @@
             //Ocultamos todos los campos
             $('#cheque_fields, #transferencia_fields, #efectivo_fields').hide();
 
-            if (tipoPago === 'cheque') {
+            if (tipoPago === '04') {
                 $('#cheque_fields').show();
-            } else if (tipoPago === 'transferencia') {
+            } else if (tipoPago === '05') {
                 $('#transferencia_fields').show();
-            } else if (tipoPago === 'efectivo') {
-                $('#efectivo_fields').show();
-            } else if (tipoPago === 'mixto_cheque_efectivo') {
-                $('#cheque_fields').show();
-                $('#efectivo_fields').show();
-            } else if (tipoPago === 'mixto_transferencia_efectivo') {
-                $('#transferencia_fields').show();
+            } else if (tipoPago === '01') {
                 $('#efectivo_fields').show();
             }
         });
 
-        function actualizarTotalPago() {
-            let totalVenta = parseFloat($('#totalAmount').text()) || 0;
+        function toggleCamposPago() {
+            const tipoVenta = $('#tipo_venta').val();
 
-            let montoCheque = parseFloat($('#monto').val()) || 0;
-            let montoTransferencia = parseFloat($('#monto_transferencia').val()) || 0;
-            let montoEfectivo = parseFloat($('#cash').val()) || 0;
+            if (tipoVenta == '1') { // Contado
+                $('#tipo_pago_container').show();
+                $('#tipo_pago').prop('disabled', false);
 
-            // Total pagado (suma de todos)
-            let totalPagado = montoCheque + montoTransferencia + montoEfectivo;
+                $('#plazos').prop('disabled', true).val('');
+                $('#tipo_plazo').prop('disabled', true).val('');
+                $('#abono').prop('disabled', true).val('');
+                $('#saldo_pendiente').prop('disabled', true).val('');
 
-            // Monto a cubrir con efectivo = totalVenta - (cheque + transferencia)
-            let efectivoNecesario = totalVenta - (montoCheque + montoTransferencia);
+            } else if (tipoVenta == '2') { // Crédito
+                $('#tipo_pago_container').hide();
+                $('#tipo_pago').prop('disabled', true).val('credito'); // puedes enviar este valor
 
-            // Cambio solo si efectivo entregado > efectivo necesario, sino 0
-            let cambio = montoEfectivo > efectivoNecesario ? montoEfectivo - efectivoNecesario : 0;
-
-            // Mostrar el cambio
-            $('#changeAmount').text(cambio.toFixed(2));
-            $('#cambioInput').val(cambio);
-
-            // Mensaje y habilitar botón según si el pago cubre total
-            if (totalPagado < totalVenta) {
-                $('#mensajePago').text('El pago total es menor al total de la venta.');
-                $('#guardarVenta').prop('disabled', true);
+                $('#plazos').prop('disabled', false);
+                $('#tipo_plazo').prop('disabled', false);
+                $('#abono').prop('disabled', false);
+                $('#saldo_pendiente').prop('disabled', false);
             } else {
-                $('#mensajePago').text('');
-                $('#guardarVenta').prop('disabled', false);
+                // Si no ha seleccionado nada, desactiva todo
+                $('#tipo_pago_container').hide();
+                $('#tipo_pago').prop('disabled', true).val('');
+
+                $('#plazos').prop('disabled', true).val('');
+                $('#tipo_plazo').prop('disabled', true).val('');
+                $('#abono').prop('disabled', true).val('');
+                $('#saldo_pendiente').prop('disabled', true).val('');
             }
         }
 
+        // Ejecuta al cargar la página
+        toggleCamposPago();
+
+        // Ejecuta cuando cambie la selección
+        $('#tipo_venta').on('change', function() {
+            toggleCamposPago();
+        });
+
+
+        function actualizarTotalPago() {
+            let totalVenta = parseFloat($('#totalAmount').text()) || 0;
+            let tipoVenta = $('#tipo_venta').val(); // <--- Aquí obtenemos si es contado o crédito
+
+            if (tipoVenta == 1) {
+                // Venta de contado
+                let montoCheque = parseFloat($('#monto').val()) || 0;
+                let montoTransferencia = parseFloat($('#monto_transferencia').val()) || 0;
+                let montoEfectivo = parseFloat($('#cash').val()) || 0;
+
+                let totalPagado = montoCheque + montoTransferencia + montoEfectivo;
+                let efectivoNecesario = totalVenta - (montoCheque + montoTransferencia);
+                let cambio = montoEfectivo > efectivoNecesario ? montoEfectivo - efectivoNecesario : 0;
+
+                $('#changeAmount').text(cambio.toFixed(2));
+                $('#cambioInput').val(cambio);
+
+                if (totalPagado < totalVenta) {
+                    $('#mensajePago').text('El pago total es menor al total de la venta.');
+                    $('#guardarVenta').prop('disabled', true);
+                } else {
+                    $('#mensajePago').text('');
+                    $('#guardarVenta').prop('disabled', false);
+                }
+
+            } else if (tipoVenta == 2) {
+                // Venta a crédito
+                let abono = parseFloat($('#abono').val()) || 0;
+
+                if (abono > totalVenta) {
+                    $('#mensajePago').text('El abono no puede ser mayor que el total.');
+                    $('#guardarVenta').prop('disabled', true);
+                } else {
+                    $('#mensajePago').text('');
+                    $('#guardarVenta').prop('disabled', false);
+                }
+
+                // Calcular y mostrar saldo pendiente
+                let saldo = totalVenta - abono;
+                $('#saldo_pendiente').val(saldo.toFixed(2));
+            }
+        }
+
+        $('#abono, #tipo_venta').on('input change', actualizarTotalPago);
         $('#monto, #monto_transferencia, #cash').on('input', actualizarTotalPago);
 
         // Busqueda de productos
@@ -291,6 +340,7 @@
             const efectivo = parseFloat($('#cash').val()) || 0;
             const total = parseFloat($('#totalAmount').text()) || 0;
             const tipo_pago = $('#tipo_pago').val();
+            const tipo_venta = $('#tipo_venta').val();
             const cambio = parseFloat($('#cambioInput').val()) || 0;
             const tipo_documento = $('#tipo_documento').val();
 
@@ -305,6 +355,7 @@
                     efectivo,
                     total,
                     tipo_pago,
+                    tipo_venta,
                     cambio,
                     producto_id,
                     cantidad,
@@ -314,8 +365,16 @@
                     descuento_en_dolar,
                     tipo_documento,
 
-                    // Si es cheque o mixto con cheque
-                    ...(tipo_pago === 'cheque' || tipo_pago === 'mixto_cheque_efectivo' ? {
+
+                    ...(tipo_venta === '2' ? {
+                        plazos: $('#plazos').val(),
+                        tipo_plazo: $('#tipo_plazo').val(),
+                        abono: $('#abono').val(),
+                        saldo_pendiente: $('#saldo_pendiente').val()
+                    } : {}),
+
+                    // cheque
+                    ...(tipo_pago === '04' ? {
                         numero_cheque: $('#numero_cheque').val(),
                         cuenta_bancaria_id: $('#cuenta_id').val(),
                         fecha_emision: $('#fecha_emision').val(),
@@ -325,12 +384,12 @@
                         correlativo: $('#correlativo').val(),
                     } : {}),
 
-                    // Si es transferencia o mixto con transferencia
-                    ...(tipo_pago === 'transferencia' || tipo_pago ===
-                        'mixto_transferencia_efectivo' ? {
-                            cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
-                            monto_transferencia: $('#monto_transferencia').val(),
-                        } : {})
+                    //transferencia
+                    ...(tipo_pago === '05' ? {
+                        cuenta_bancaria_id: $('#cuenta_bancaria_id').val(),
+                        monto_transferencia: $('#monto_transferencia').val(),
+                    } : {})
+
                 },
                 success: function(response) {
                     if (response.error) {

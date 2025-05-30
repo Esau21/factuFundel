@@ -2,6 +2,9 @@
 
 namespace App\Models\SociosNegocios;
 
+use App\Models\ActividadEconomica;
+use App\Models\Ubicaciones\Departamento;
+use App\Models\Ubicaciones\Municipio;
 use Illuminate\Database\Eloquent\Model;
 
 class Clientes extends Model
@@ -10,18 +13,18 @@ class Clientes extends Model
 
     protected $fillable = [
         'nombre',
+        'nombreComercial',
         'tipo_documento',
         'numero_documento',
         'nit',
         'nrc',
-        'giro',
         'direccion',
-        'departamento',
-        'municipio',
+        'departamento_id',
+        'municipio_id',
         'telefono',
         'correo_electronico',
         'tipo_contribuyente',
-        'codigo_actividad',
+        'actividad_economica_id',
         'tipo_persona',
         'es_extranjero',
         'pais',
@@ -34,9 +37,26 @@ class Clientes extends Model
         return $this->belongsTo(Empresa::class, 'empresa_id');
     }
 
+    public function departamento()
+    {
+        return $this->belongsTo(Departamento::class);
+    }
+
+    public function actividad()
+    {
+        return $this->belongsTo(ActividadEconomica::class, 'actividad_economica_id');
+    }
+
+    public function municipio()
+    {
+        return $this->belongsTo(Municipio::class);
+    }
+
     public static function getDtaClientes($tipo = null)
     {
-        $query = Clientes::select('clientes.*')->orderBy('clientes.id', 'desc');
+        $query = Clientes::select('clientes.*')
+            ->with('departamento', 'municipio', 'actividad')
+            ->orderBy('clientes.id', 'desc');
 
         if ($tipo) {
             $query->where('tipo_persona', $tipo);
