@@ -14,7 +14,7 @@ class CuentasBancarias extends Model
         'banco_id',
         'numero_cuenta',
         'tipo_cuenta',
-        'cliente_id',
+        'titular',
         'moneda',
         'estado'
     ];

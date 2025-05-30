@@ -166,7 +166,7 @@
                                             @foreach ($cuentas_bancarias as $cuenta)
                                                 <option value="{{ $cuenta->id }}">
                                                     {{ $cuenta->numero_cuenta }} - {{ $cuenta->moneda }} -
-                                                    {{ $cuenta?->banco?->nombre }}
+                                                    {{ $cuenta?->banco?->nombre }} | {{ $cuenta->titular }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -219,7 +219,7 @@
                                             @foreach ($cuentas_bancarias as $cuenta)
                                                 <option value="{{ $cuenta->id }}">
                                                     {{ $cuenta->numero_cuenta }} - {{ $cuenta->moneda }} -
-                                                    {{ $cuenta?->banco?->nombre }}
+                                                    {{ $cuenta?->banco?->nombre }} | {{ $cuenta->titular }}
                                                 </option>
                                             @endforeach
                                         </select>

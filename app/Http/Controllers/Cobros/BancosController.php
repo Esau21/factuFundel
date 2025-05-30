@@ -7,6 +7,7 @@ use App\Models\Bancos\Bancos;
 use App\Models\Bancos\CuentasBancarias;
 use App\Models\SociosNegocios\Clientes;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class BancosController extends Controller
@@ -52,7 +53,7 @@ class BancosController extends Controller
                     $agregarCuentasBancarias = '<a href="' . route('cuentas.indexCuentasBancarias', $data->id) . '" 
                                     class="btn btn-dark mt-mobile w-90 mx-2"
                                     title="Agregar cuentas bancarias">
-                                    <i class="bx bx-plus"></i>
+                                    <i class="bx bxs-bank"></i>
                              </a>';
 
                     return $editar . $agregarCuentasBancarias;
@@ -69,15 +70,15 @@ class BancosController extends Controller
          */
 
         $request->validate([
-            'nombre' => 'required',
+            'nombre' => 'required|unique:bancos,nombre',
             'codigo' => 'required',
             'estado' => 'required'
         ], [
             'nombre.required' => 'El nombre del banco es requerido',
-            'codigo.required' => 'El codigo del banco es requerido',
+            'nombre.unique' => 'Ya existe un banco con este nombre',
+            'codigo.required' => 'El código del banco es requerido',
             'estado.required' => 'El estado del banco es requerido',
         ]);
-
 
         $banco = Bancos::create([
             'nombre' => $request->nombre,
@@ -126,7 +127,7 @@ class BancosController extends Controller
                 }
             })
             ->addColumn('titular', function ($data) {
-                return $data?->clientes?->nombre ?? '';
+                return $data?->titular ?? '';
             })
             ->addColumn('moneda', function ($data) {
                 if ($data->moneda) {
@@ -152,21 +153,46 @@ class BancosController extends Controller
                                     data-id="' . $data->id . '"
                                     data-numero_cuenta="' . e($data->numero_cuenta) . '"
                                     data-tipo_cuenta="' . e($data->tipo_cuenta) . '"
-                                    data-cliente_id="' . e($data->cliente_id) . '"
+                                    data-titular="' . e($data->titular) . '"
                                     data-estado="' . e($data->estado) . '"
                                     title="Editar cuenta bancaria">
                                     <i class="bx bx-edit"></i>
                              </a>';
 
-                $agregarCuentasBancarias = '';
-
-                return $editar . $agregarCuentasBancarias;
+                return $editar;
             })
             ->rawColumns(['acciones', 'tipo_cuenta', 'moneda', 'estado'])->make(true);
     }
 
     public function storeCuentasBancarias(Request $request, $bancoId)
     {
+        /**
+         * Validaciones personalizadas
+         */
+        $request->validate([
+            'numero_cuenta' => 'required|unique:cuentas_bancarias,numero_cuenta',
+
+            'tipo_cuenta' => [
+                'required',
+                Rule::unique('cuentas_bancarias')->where(function ($query) use ($request, $bancoId) {
+                    return $query->where('titular', $request->titular)
+                        ->where('tipo_cuenta', $request->tipo_cuenta)
+                        ->where('banco_id', $bancoId);
+                }),
+            ],
+
+            'titular' => 'required',
+            'estado' => 'required'
+        ], [
+            'numero_cuenta.required' => 'El número de cuenta es requerido',
+            'numero_cuenta.unique' => 'Este número de cuenta ya está registrado',
+
+            'tipo_cuenta.required' => 'El tipo de cuenta es requerido',
+            'tipo_cuenta.unique' => 'Este titular ya tiene una cuenta de este tipo',
+
+            'titular.required' => 'El titular es requerido',
+            'estado.required' => 'El estado es requerido'
+        ]);
         /**
          * Logica para guardar cuentas bancarias
          */
@@ -175,7 +201,7 @@ class BancosController extends Controller
                 'banco_id' => $bancoId,
                 'numero_cuenta' => $request->numero_cuenta,
                 'tipo_cuenta' => $request->tipo_cuenta,
-                'cliente_id' => $request->cliente_id,
+                'titular' => $request->titular,
                 'moneda' => 'USD',
                 'estado' => $request->estado
             ]);
@@ -193,32 +219,49 @@ class BancosController extends Controller
 
     public function updateCuentaBancaria(Request $request, $cuentaId)
     {
-        /**
-         * 
-         * Logica para actualizar las cuentas bancarias
-         */
-        try {
-            $cuentasbancarias = CuentasBancarias::find($cuentaId);
-            if (!$cuentasbancarias) {
-                return response()->json(['error' => 'No se encontro la cuenta que quieres actualizar'], 405);
-            }
-
-            $cuentasbancarias->update([
-                'numero_cuenta' => $request->numero_cuenta,
-                'tipo_cuenta' => $request->tipo_cuenta,
-                'cliente_id' => $request->cliente_id,
-                'moneda' => 'USD',
-                'estado' => $request->estado
-            ]);
-
-            if ($cuentasbancarias) {
-                return response()->json(['success' => 'Se actualizo correctamente la cuenta bancaria'], 200);
-            }
-
-            return response()->json(['error' => 'Algo salio mal al querer actualizar la cuenta bancaria'], 422);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 422);
+        $cuentasbancarias = CuentasBancarias::find($cuentaId);
+        if (!$cuentasbancarias) {
+            return response()->json(['error' => 'No se encontró la cuenta que quieres actualizar'], 405);
         }
+
+        $bancoId = $cuentasbancarias->banco_id;
+
+        $request->validate([
+            'numero_cuenta' => [
+                'required',
+                Rule::unique('cuentas_bancarias', 'numero_cuenta')->ignore($cuentaId),
+            ],
+            'tipo_cuenta' => [
+                'required',
+                Rule::unique('cuentas_bancarias')->where(function ($query) use ($request, $cuentaId, $bancoId) {
+                    return $query->where('titular', $request->titular)
+                        ->where('tipo_cuenta', $request->tipo_cuenta)
+                        ->where('banco_id', $bancoId)
+                        ->where('id', '!=', $cuentaId);
+                }),
+            ],
+            'titular' => 'required',
+            'estado' => 'required'
+        ], [
+            'numero_cuenta.required' => 'El número de cuenta es requerido',
+            'numero_cuenta.unique' => 'Este número de cuenta ya está en uso por otra cuenta',
+
+            'tipo_cuenta.required' => 'El tipo de cuenta es requerido',
+            'tipo_cuenta.unique' => 'Este titular ya tiene una cuenta de este tipo en este banco',
+
+            'titular.required' => 'El titular es requerido',
+            'estado.required' => 'El estado es requerido'
+        ]);
+
+        $cuentasbancarias->update([
+            'numero_cuenta' => $request->numero_cuenta,
+            'tipo_cuenta' => $request->tipo_cuenta,
+            'titular' => $request->titular,
+            'moneda' => 'USD',
+            'estado' => $request->estado
+        ]);
+
+        return response()->json(['success' => 'Se actualizó correctamente la cuenta bancaria'], 200);
     }
 
 
@@ -231,12 +274,14 @@ class BancosController extends Controller
          */
 
         $request->validate([
-            'nombre' => 'required',
-            'codigo' => 'required',
+            'nombre' => 'required|unique:bancos,nombre,' . $id,
+            'codigo' => 'required|unique:bancos,codigo,' . $id,
             'estado' => 'required'
         ], [
             'nombre.required' => 'El nombre del banco es requerido',
-            'codigo.required' => 'El codigo del banco es requerido',
+            'nombre.unique' => 'Ya existe un banco con este nombre',
+            'codigo.required' => 'El código del banco es requerido',
+            'codigo.unique' => 'Ya existe un banco con este código',
             'estado.required' => 'El estado del banco es requerido',
         ]);
 

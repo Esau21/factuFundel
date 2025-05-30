@@ -3,14 +3,14 @@
         "version": 1,
         "ambiente": "00",
         "tipoDte": "03",
-        "numeroControl": "DTE-03-00000001-000000000000003",
-        "codigoGeneracion": "626BA162-F5AA-4128-8113-0B1F1EB29F9E",
+        "numeroControl": "DTE-03-00000001-000000000000006",
+        "codigoGeneracion": "F7836F99-FC8B-4065-A083-D0FC6C292A68",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
         "motivoConti": null,
-        "fechaEmi": "2025-05-29",
-        "horaEmi": "19:55:06",
+        "fechaEmi": "2025-05-30",
+        "horaEmi": "11:36:07",
         "moneda": "USD"
     },
     "documentoRelacionado": null,
@@ -19,11 +19,11 @@
         "nit": "00000998",
         "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
         "nombreComercial": "FUNDEL",
-        "codActividad": "01112",
-        "descActividad": "Cultivo de legumbres",
+        "codActividad": "86909",
+        "descActividad": "Otros Servicio relacionados con la salud ncp",
         "direccion": {
-            "departamento": "00",
-            "municipio": "00",
+            "departamento": "06",
+            "municipio": "23",
             "complemento": "CALLE AL MIRADOR COLONIA ESCALON"
         },
         "telefono": "77665545",
@@ -32,18 +32,18 @@
     },
     "receptor": {
         "nit": "00034555",
-        "nrc": "90000990",
-        "nombre": "FARDEL S.A DE C.V",
-        "codActividad": "86909",
-        "descActividad": "Otros Servicio relacionados con la salud ncp",
-        "nombreComercial": "FARDEL S.A DE C.V",
+        "nrc": null,
+        "nombre": "Edgar Esau Moran",
+        "codActividad": "62090",
+        "descActividad": "Otras actividades de tecnología de información y servicios de computadora",
+        "nombreComercial": "Edgar Esau Moran",
         "direccion": {
             "departamento": "06",
-            "municipio": "23",
-            "complemento": "COLONIA ESCALON CALLE AL MIRADOR"
+            "municipio": "24",
+            "complemento": "san luis calle principal"
         },
-        "telefono": "76123344",
-        "correo": "fardel@gmail.com"
+        "telefono": "76458987",
+        "correo": "esaumoran1999@gmail.com"
     },
     "otrosDocumentos": null,
     "ventaTercero": null,
@@ -70,53 +70,30 @@
             ],
             "psv": 0,
             "noGravado": 0
-        },
-        {
-            "numItem": 2,
-            "tipoItem": 2,
-            "cantidad": 1,
-            "codigo": "2",
-            "codTributo": null,
-            "uniMedida": 99,
-            "descripcion": "acetaminofen",
-            "precioUni": 3,
-            "montoDescu": 0,
-            "ventaNoSuj": 0,
-            "ventaExenta": 0,
-            "ventaGravada": 3,
-            "tributos": [
-                {
-                    "codigo": "IVA",
-                    "descripcion": "Impuesto al Valor Agregado 13%",
-                    "valor": 0.39
-                }
-            ],
-            "psv": 0,
-            "noGravado": 0
         }
     ],
     "resumen": {
         "totalNoSuj": 0,
         "totalExenta": 0,
-        "totalGravada": 103,
+        "totalGravada": 100,
         "descuNoSuj": 0,
         "descuExenta": 0,
         "descuGravada": 0,
         "porcentajeDescuento": 0,
-        "subTotal": 103,
+        "subTotal": 100,
         "ivaRete1": 0,
         "ivaPercibido": 0,
-        "iva": 13.39,
+        "iva": 13,
         "fovial": 0,
         "cotrans": 0,
-        "subTotalVentas": 103,
-        "totalPagar": 116.39,
+        "subTotalVentas": 100,
+        "totalPagar": 113,
         "saldoFavor": 0,
-        "condicionOperacion": "01",
+        "condicionOperacion": "02",
         "pagos": [
             {
                 "codigo": "01",
-                "montoPago": 116.39
+                "montoPago": 113
             }
         ]
     },

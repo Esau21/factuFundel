@@ -39,15 +39,11 @@
 
 
                      <div class="col-6 form-control-validation">
-                         <label class="form-label w-100" for="tipo_cuenta">Selecciona el Cliente</label>
+                         <label class="form-label w-100" for="titular">Titular</label>
                          <div class="input-group input-group-merge">
-                             <select name="cliente_id" id="cliente_id" class="form-control select2"
-                                 data-dropdown-parent="#addCuentaBancaria">
-                                 <option value="">Elegir</option>
-                                 @foreach ($clientes as $c)
-                                     <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                                 @endforeach
-                             </select>
+                             <input id="titular" name="titular" class="form-control" type="text"
+                                 placeholder="Ingresa el nombre del titular" />
+                             <span class="input-group-text cursor-pointer"><span class="card-type me-n2"></span></span>
                          </div>
                      </div>
 

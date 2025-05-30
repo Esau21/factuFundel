@@ -16,13 +16,12 @@ return new class extends Migration
             $table->integer('banco_id')->unsigned();
             $table->string('numero_cuenta');
             $table->enum('tipo_cuenta', ['ahorro', 'corriente', 'credito'])->default('corriente');
-            $table->integer('cliente_id')->unsigned();
+            $table->string('titular', 255);
             $table->string('moneda')->default('USD');
             $table->boolean('estado')->default(true);
             $table->timestamps();
 
             $table->foreign('banco_id')->references('id')->on('bancos');
-            $table->foreign('cliente_id')->references('id')->on('clientes');
         });
     }
 
