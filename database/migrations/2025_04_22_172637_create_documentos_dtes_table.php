@@ -19,8 +19,10 @@ return new class extends Migration
             $table->date('fecha_emision');
             $table->integer('cliente_id')->unsigned();
             $table->integer('empresa_id')->unsigned();
-            $table->enum('estado', ['pendiente', 'firmado', 'enviado', 'rechazado'])->default('pendiente');
+            $table->enum('estado', ['PROCESADO', 'NO VALIDADO', 'FIRMADO', 'ANULADO'])->default('FIRMADO');
+            $table->string('tipo_transmision');
             $table->text('json_dte');
+            $table->text('mh_response');
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes');

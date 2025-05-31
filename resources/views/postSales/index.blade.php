@@ -68,37 +68,9 @@
                                     <option value="">Seleccione</option>
                                     <option value="1">Contado</option>
                                     <option value="2">Crédito</option>
+                                    <option value="3">Otro</option>
                                 </select>
                             </div>
-
-                            <div class="col-sm-3 mt-3">
-                                <label for="plazos" class="form-label">Número de plazos</label>
-                                <input type="number" name="plazos" id="plazos" class="form-control"
-                                    placeholder="Ej. 6">
-                            </div>
-
-
-                            <div class="col-sm-3 mt-3">
-                                <label for="tipo_plazo" class="form-label">Tipo de plazo</label>
-                                <select name="tipo_plazo" id="tipo_plazo" class="form-select">
-                                    <option value="">Seleccionar</option>
-                                    <option value="dias">Días</option>
-                                    <option value="meses">Meses</option>
-                                    <option value="años">Años</option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-3 mt-3">
-                                <label for="abono" class="form-label">Abono</label>
-                                <input type="number" name="abono" id="abono" class="form-control" placeholder="0.00">
-                            </div>
-
-                            <div class="col-sm-3 mt-3">
-                                <label for="saldo_pendiente" class="form-label">Saldo pendiente</label>
-                                <input type="number" name="saldo_pendiente" id="saldo_pendiente" class="form-control"
-                                    placeholder="0.00" readonly>
-                            </div>
-
 
                             <!-- Cliente -->
                             <div class="col-sm-6 mt-3">

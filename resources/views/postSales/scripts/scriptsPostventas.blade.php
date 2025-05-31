@@ -19,39 +19,20 @@
         function toggleCamposPago() {
             const tipoVenta = $('#tipo_venta').val();
 
-            if (tipoVenta == '1') { // Contado
+            if (tipoVenta === '1' || tipoVenta === '2') {
                 $('#tipo_pago_container').show();
                 $('#tipo_pago').prop('disabled', false);
-
-                $('#plazos').prop('disabled', true).val('');
-                $('#tipo_plazo').prop('disabled', true).val('');
-                $('#abono').prop('disabled', true).val('');
-                $('#saldo_pendiente').prop('disabled', true).val('');
-
-            } else if (tipoVenta == '2') { // Crédito
-                $('#tipo_pago_container').hide();
-                $('#tipo_pago').prop('disabled', true).val('credito'); // puedes enviar este valor
-
-                $('#plazos').prop('disabled', false);
-                $('#tipo_plazo').prop('disabled', false);
-                $('#abono').prop('disabled', false);
-                $('#saldo_pendiente').prop('disabled', false);
             } else {
-                // Si no ha seleccionado nada, desactiva todo
                 $('#tipo_pago_container').hide();
                 $('#tipo_pago').prop('disabled', true).val('');
-
-                $('#plazos').prop('disabled', true).val('');
-                $('#tipo_plazo').prop('disabled', true).val('');
-                $('#abono').prop('disabled', true).val('');
-                $('#saldo_pendiente').prop('disabled', true).val('');
             }
+
         }
 
-        // Ejecuta al cargar la página
+        // Ejecutar al cargar la página
         toggleCamposPago();
 
-        // Ejecuta cuando cambie la selección
+        // Ejecutar cuando cambie la selección
         $('#tipo_venta').on('change', function() {
             toggleCamposPago();
         });
@@ -59,10 +40,10 @@
 
         function actualizarTotalPago() {
             let totalVenta = parseFloat($('#totalAmount').text()) || 0;
-            let tipoVenta = $('#tipo_venta').val(); // <--- Aquí obtenemos si es contado o crédito
+            let tipoVenta = $('#tipo_venta').val(); // contado o crédito
 
-            if (tipoVenta == 1) {
-                // Venta de contado
+            if (tipoVenta == 1 || tipoVenta == 2) {
+                // Venta de contado o crédito (se comportan igual ahora)
                 let montoCheque = parseFloat($('#monto').val()) || 0;
                 let montoTransferencia = parseFloat($('#monto_transferencia').val()) || 0;
                 let montoEfectivo = parseFloat($('#cash').val()) || 0;
@@ -81,22 +62,9 @@
                     $('#mensajePago').text('');
                     $('#guardarVenta').prop('disabled', false);
                 }
-
-            } else if (tipoVenta == 2) {
-                // Venta a crédito
-                let abono = parseFloat($('#abono').val()) || 0;
-
-                if (abono > totalVenta) {
-                    $('#mensajePago').text('El abono no puede ser mayor que el total.');
-                    $('#guardarVenta').prop('disabled', true);
-                } else {
-                    $('#mensajePago').text('');
-                    $('#guardarVenta').prop('disabled', false);
-                }
-
-                // Calcular y mostrar saldo pendiente
-                let saldo = totalVenta - abono;
-                $('#saldo_pendiente').val(saldo.toFixed(2));
+            } else {
+                $('#mensajePago').text('Seleccione un tipo de venta válido.');
+                $('#guardarVenta').prop('disabled', true);
             }
         }
 
@@ -364,14 +332,6 @@
                     descuento_porcentaje,
                     descuento_en_dolar,
                     tipo_documento,
-
-
-                    ...(tipo_venta === '2' ? {
-                        plazos: $('#plazos').val(),
-                        tipo_plazo: $('#tipo_plazo').val(),
-                        abono: $('#abono').val(),
-                        saldo_pendiente: $('#saldo_pendiente').val()
-                    } : {}),
 
                     // cheque
                     ...(tipo_pago === '04' ? {

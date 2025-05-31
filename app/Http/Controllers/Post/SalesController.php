@@ -123,7 +123,9 @@ class SalesController extends Controller
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
         } elseif ($tipo_dte == "14") {
-            // No agregas nombreComercial ni tipoEstablecimiento para tipo 14
+            $emisor['nombreComercial'] = (string)$nombreComercial;
+        } elseif ($tipo_dte  == '15') {
+            $emisor['nombreComercial'] = (string)$nombreComercial;
         } else {
             return []; // Retorna vacío si el tipo no coincide
         }
@@ -135,6 +137,7 @@ class SalesController extends Controller
     public static function getReceptor($tipo_dte, $receptor)
     {
         $nombre = trim($receptor['nombre']);
+        $nombreComercial = isset($receptor['nombreComercial']) ? trim($receptor['nombreComercial']) : '';
         $tipo_documento = isset($receptor['tipo_documento']) ? (string)$receptor['tipo_documento'] : null;
         $nrc = isset($receptor['nrc']) ? (string)str_replace('-', '', $receptor['nrc']) : null;
         $numDocumento = isset($receptor['numDocumento']) ? (string)$receptor['numDocumento'] : null;
@@ -156,8 +159,9 @@ class SalesController extends Controller
                     "numDocumento" => $numDocumento,
                     "nrc" => null,
                     "nombre" => $nombre,
-                    "codActividad" => null,
-                    "descActividad" => null,
+                    "codActividad" => $codActividad,
+                    "descActividad" => $descActividad,
+                    "nombreComercial" => $nombreComercial,
                     "direccion" => [
                         "departamento" => $departamento,
                         "municipio" => $municipio,
@@ -175,7 +179,44 @@ class SalesController extends Controller
                     "nombre" => $nombre,
                     "codActividad" => $codActividad,
                     "descActividad" => $descActividad,
-                    "nombreComercial" => $nombre,
+                    "nombreComercial" => $nombreComercial,
+                    "direccion" => [
+                        "departamento" => $departamento,
+                        "municipio" => $municipio,
+                        "complemento" => $complemento
+                    ],
+                    "telefono" => (string)$telefono,
+                    "correo" => (string)$correo
+                ];
+                break;
+
+            case "14":
+                $dataReceptorDte = [
+                    "tipoDocumento" => (string)$tipo_documento,
+                    "numDocumento" => $numDocumento,
+                    "nombre" => $nombre,
+                    "codActividad" => $codActividad,
+                    "descActividad" => $descActividad,
+                    "nombreComercial" => $nombreComercial,
+                    "direccion" => [
+                        "departamento" => $departamento,
+                        "municipio" => $municipio,
+                        "complemento" => $complemento
+                    ],
+                    "telefono" => (string)$telefono,
+                    "correo" => (string)$correo
+                ];
+                break;
+
+            case "15":
+                $dataReceptorDte = [
+                    "tipoDocumento" => (string)$tipo_documento,
+                    "numDocumento" => $numDocumento,
+                    "nrc" => $nrc,
+                    "nombre" => $nombre,
+                    "codActividad" => $codActividad,
+                    "descActividad" => $descActividad,
+                    "nombreComercial" => $nombreComercial,
                     "direccion" => [
                         "departamento" => $departamento,
                         "municipio" => $municipio,
@@ -252,46 +293,63 @@ class SalesController extends Controller
         $sumas = 0.00;
         $descuentoTotal = 0.00;
 
+        $tipoDocumento = $request->tipo_documento;
+
+        // Determinar si aplica IVA y su porcentaje
+        $aplicaIVA = false;
+        $porcentajeIVA = 0.13;
+        $ivaRete1 = 0.00;
+
+        if ($tipoDocumento === 'ccf') {
+            $aplicaIVA = true;
+        } elseif ($tipoDocumento === 'factura_sujeto_excluido') {
+            $ivaRete1 = 0.01;
+        }
+
         foreach ($request->producto_id as $index => $productoId) {
             $cantidad = (int) $request->cantidad[$index];
             $precioUnitario = (float) $request->precio_unitario[$index];
             $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.00;
 
-            $ventaNoGravada = 0.00; // Para DTE tipo 03 será 0
             $ventaGravada = round(($cantidad * $precioUnitario) - $descuento, 2);
-            $iva = round($ventaGravada * 0.13, 2);
-            $ventaConIVA = round($ventaGravada + $iva, 2);
+            $iva = $aplicaIVA ? round($ventaGravada * $porcentajeIVA, 2) : 0.00;
 
             $sumas += $ventaGravada;
             $descuentoTotal += $descuento;
 
-            $productos[] = [
+            $producto = Producto::find($productoId);
+
+            $productoItem = [
                 "numItem" => $index + 1,
-                "tipoItem" => (integer)Producto::find($productoId)->items->codigo, // Bien
+                "tipoItem" => (int) $producto->items->codigo,
                 "cantidad" => $cantidad,
-                "codigo" => (string)$productoId,
+                "codigo" => (string) $producto->codigo,
                 "codTributo" => null,
-                "uniMedida" => (integer)Producto::find($productoId)->unidad->codigo, // Unidad
-                "descripcion" => Producto::find($productoId)->nombre,
+                "uniMedida" => (int) $producto->unidad->codigo,
+                "descripcion" => $producto->nombre,
                 "precioUni" => round($precioUnitario, 2),
                 "montoDescu" => round($descuento, 2),
                 "ventaNoSuj" => 0.00,
                 "ventaExenta" => 0.00,
                 "ventaGravada" => $ventaGravada,
-                "tributos" => [ // IVA
-                    [
-                        "codigo" => "IVA",
-                        "descripcion" => "Impuesto al Valor Agregado 13%",
-                        "valor" => $iva
-                    ]
-                ],
-                "psv" => 0.00, // Precio de venta sugerido
+                "psv" => 0.00,
                 "noGravado" => 0.00
             ];
+
+            if ($aplicaIVA) {
+                $productoItem['tributos'] = [[
+                    "codigo" => "20",
+                    "descripcion" => "Impuesto al Valor Agregado 13%",
+                    "valor" => $iva
+                ]];
+            }
+
+            $productos[] = $productoItem;
         }
 
-        $iva = round($sumas * 0.13, 2);
-        $total = round($sumas + $iva - $descuentoTotal, 2);
+        $ivaTotal = $aplicaIVA ? round($sumas * $porcentajeIVA, 2) : 0.00;
+        $ivaRetenido = $ivaRete1 > 0 ? round($sumas * $ivaRete1, 2) : 0.00;
+        $total = round($sumas + $ivaTotal - $ivaRetenido - $descuentoTotal, 2);
 
         $resumen = [
             "totalNoSuj" => 0.00,
@@ -302,18 +360,18 @@ class SalesController extends Controller
             "descuGravada" => round($descuentoTotal, 2),
             "porcentajeDescuento" => 0.00,
             "subTotal" => round($sumas, 2),
-            "ivaRete1" => 0.00,
+            "ivaRete1" => $ivaRetenido,
             "ivaPercibido" => 0.00,
-            "iva" => round($iva, 2),
+            "iva" => $ivaTotal,
             "fovial" => 0.00,
             "cotrans" => 0.00,
             "subTotalVentas" => round($sumas, 2),
             "totalPagar" => $total,
             "saldoFavor" => 0.00,
-            "condicionOperacion" => $request->tipo_venta == 1 ? '01' : '02',
+            "condicionOperacion" => (int)$request->tipo_venta,
             "pagos" => [
                 [
-                    "codigo" => $request->tipo_pago == 'cheque' ? '02' : '01',
+                    "codigo" => $request->tipo_pago,
                     "montoPago" => $total
                 ]
             ]
@@ -324,7 +382,6 @@ class SalesController extends Controller
             "resumen" => $resumen
         ];
     }
-
 
 
 
@@ -344,17 +401,12 @@ class SalesController extends Controller
             'sub_total.*' => 'required|numeric|min:0',
             'descuento_porcentaje.*' => 'nullable|numeric|min:0|max:100',
             'descuento_en_dolar.*' => 'nullable|numeric|min:0',
-            'plazos' => 'required_if:tipo_venta,2|nullable|integer|min:1',
-            'tipo_plazo' => 'required_if:tipo_venta,2|string',
-            'abono' => 'required_if:tipo_venta,2|nullable|numeric|min:0',
-            'saldo_pendiente' => 'required_if:tipo_venta,2|numeric|min:0',
             'cuenta_bancaria_id' => 'required_if:tipo_pago,cheque,transferencia|exists:cuentas_bancarias,id',
             'numero_cheque' => 'required_if:tipo_pago,cheque|string',
             'fecha_emision' => 'required_if:tipo_pago,cheque|date',
             'cambio' => 'required_if:tipo_venta,1|numeric|min:0',
             'estado' => 'nullable|string',
             'observaciones' => 'nullable|string',
-            // Validar venta relacionada si es nota de crédito o débito
             'venta_relacionada_id' => 'required_if:tipo_documento,nota_credito,nota_debito|nullable|exists:sales,id',
         ]);
 
@@ -393,6 +445,7 @@ class SalesController extends Controller
             $cliente = Clientes::findOrFail($request->cliente_id);
             $receptor = self::getReceptor($tipo_dte, [
                 'nombre' => $cliente->nombre,
+                'nombreComercial' => $cliente->nombreComercial,
                 'tipo_documento' => $cliente->tipo_documento,
                 'numDocumento' => $cliente->numero_documento,
                 'nrc' => $cliente->nrc,
@@ -445,7 +498,16 @@ class SalesController extends Controller
                 $jsonDTE['dteJson'] = [
                     "identificacion" => $identificacion,
                     "emisor" => $emisorData['emisor'],
-                    "sujetoExcluido" => $receptor,
+                    "sujetoExcluido" => isset($receptor['sujetoExcluido']) ? $receptor['sujetoExcluido'] : $receptor,
+                    "cuerpoDocumento" => $cuerpoDocumento,
+                    "resumen" => $bodyDocumento['resumen'],
+                    "apendice" => null,
+                ];
+            } elseif ($tipo_dte === '15') {
+                $jsonDTE['dteJson'] = [
+                    "identificacion" => $identificacion,
+                    "emisor" => $emisorData['emisor'],
+                    "receptor" => isset($receptor['receptor']) ? $receptor['receptor'] : $receptor,
                     "cuerpoDocumento" => $cuerpoDocumento,
                     "resumen" => $bodyDocumento['resumen'],
                     "apendice" => null,
@@ -472,10 +534,6 @@ class SalesController extends Controller
                 'status' => 'PAID',
                 'tipo_pago' => $tipo_pago,
                 'tipo_venta' => $request->tipo_venta,
-                'plazos' => $request->plazos,
-                'tipo_plazo' => $request->tipo_plazo,
-                'abono' => $request->abono,
-                'saldo_pendiente' => $request->saldo_pendiente,
                 'observaciones' => $request->observaciones ?? '',
                 'monto_efectivo' => $request->monto_efectivo ?? 0,
                 'monto_transferencia' => $request->monto_transferencia ?? 0,
