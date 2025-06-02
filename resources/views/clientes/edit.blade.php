@@ -56,15 +56,15 @@
                                     <div class="input-group input-group-merge">
                                         <select name="tipo_documento" id="tipo_documento" class="form-control" required>
                                             <option value="">Elegir</option>
-                                            <option value="DUI"
-                                                {{ $cliente->tipo_documento == 'DUI' ? 'selected' : '' }}>DUI</option>
-                                            <option value="NIT"
-                                                {{ $cliente->tipo_documento == 'NIT' ? 'selected' : '' }}>NIT</option>
-                                            <option value="PASAPORTE"
-                                                {{ $cliente->tipo_documento == 'PASAPORTE' ? 'selected' : '' }}>Pasaporte
+                                            <option value="13"
+                                                {{ $cliente->tipo_documento == '13' ? 'selected' : '' }}>DUI</option>
+                                            <option value="36"
+                                                {{ $cliente->tipo_documento == '36' ? 'selected' : '' }}>NIT</option>
+                                            <option value="37"
+                                                {{ $cliente->tipo_documento == '37' ? 'selected' : '' }}>Pasaporte
                                             </option>
-                                            <option value="CEDULA"
-                                                {{ $cliente->tipo_documento == 'CEDULA' ? 'selected' : '' }}>Cédula</option>
+                                            <option value="39"
+                                                {{ $cliente->tipo_documento == '39' ? 'selected' : '' }}>Cédula</option>
                                         </select>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>

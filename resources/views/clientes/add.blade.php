@@ -55,10 +55,10 @@
                                     <div class="input-group input-group-merge">
                                         <select name="tipo_documento" id="tipo_documento" class="form-control" required>
                                             <option value="">Elegir</option>
-                                            <option value="DUI">DUI</option>
-                                            <option value="NIT">NIT</option>
-                                            <option value="PASAPORTE">Pasaporte</option>
-                                            <option value="CEDULA">Cédula</option>
+                                            <option value="13">DUI</option>
+                                            <option value="36">NIT</option>
+                                            <option value="37">Pasaporte</option>
+                                            <option value="39">Cédula</option>
                                         </select>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>

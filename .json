@@ -3,14 +3,14 @@
         "version": 3,
         "ambiente": "00",
         "tipoDte": "03",
-        "numeroControl": "DTE-03-00000001-000000000000011",
-        "codigoGeneracion": "EE419228-B04E-4CAF-B152-79BBBF702395",
+        "numeroControl": "DTE-03-00000001-000000000000001",
+        "codigoGeneracion": "3986C901-3F68-4416-8132-252AA5865521",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
         "motivoContin": null,
         "fecEmi": "2025-06-02",
-        "horEmi": "10:30:38",
+        "horEmi": "13:04:05",
         "tipoMoneda": "USD"
     },
     "documentoRelacionado": null,
@@ -85,7 +85,6 @@
         "porcentajeDescuento": 0,
         "subTotal": 162.09,
         "ivaRete1": 0,
-        "ivaPerci1": 0,
         "reteRenta": 0,
         "subTotalVentas": 162.09,
         "tributos": [
@@ -101,7 +100,8 @@
         "totalLetras": "CIENTO OCHENTA Y TRES CON 16\/100 DÓLARES",
         "condicionOperacion": 1,
         "numPagoElectronico": "",
-        "pagos": null
+        "pagos": null,
+        "ivaPerci1": 0
     },
     "extension": {
         "nombEntrega": null,

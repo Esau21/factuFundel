@@ -52,7 +52,8 @@ class SalesController extends Controller
         return response()->json($productos);
     }
 
-    //armamos el DTE
+    /* procedemos a armar el dte */
+
     public static function identificacionGet($version, $tipoDte, $ambiente, $codigoGeneracion, $fecha, $hora, $numeroControl, $tipoContingencia = null)
     {
         if ($tipoContingencia != null) {
@@ -96,7 +97,6 @@ class SalesController extends Controller
         string $telefono,
         string $correo
     ): array {
-        // No sobrescribas $empresa aquí, úsalo directamente
         $departamento = $empresa['departamento']['codigo'] ?? 'No definido';
         $municipio = $empresa['municipio']['codigo'] ?? 'No definido';
 
@@ -166,7 +166,6 @@ class SalesController extends Controller
                     "nombre" => $nombre,
                     "codActividad" => $codActividad,
                     "descActividad" => $descActividad,
-                    "nombreComercial" => $nombreComercial,
                     "direccion" => [
                         "departamento" => $departamento,
                         "municipio" => $municipio,
@@ -238,6 +237,8 @@ class SalesController extends Controller
         return $dataReceptorDte;
     }
 
+
+    /* generamos el numero de control */
     private function generarNumeroControl(string $tipoDte, string $codigoEstablecimiento, int $correlativo): string
     {
         return sprintf(
@@ -248,8 +249,7 @@ class SalesController extends Controller
         );
     }
 
-
-
+    /* resumen de ventas */
     public function getResumen(Sales $sale): array
     {
         $sumas = $sale->details->sum(function ($detalle) {
@@ -289,6 +289,7 @@ class SalesController extends Controller
         ];
     }
 
+    /* generamos el body del documento */
     public function generarBodyDocumento(Request $request): array
     {
         $productos = [];
@@ -297,7 +298,7 @@ class SalesController extends Controller
 
         $tipoDocumento = $request->tipo_documento;
 
-        // Determinar si aplica IVA y su porcentaje
+        /* Determinamos si aplica IVA y su porcentaje */
         $aplicaIVA = false;
         $porcentajeIVA = 0.13;
         $ivaRete1 = 0.00;
@@ -386,6 +387,35 @@ class SalesController extends Controller
             "pagos" => null
         ];
 
+        $resumen = [
+            "totalNoSuj" => 0.00,
+            "totalExenta" => 0.00,
+            "totalGravada" => round($sumas, 2),
+            "totalNoGravado" => 0.00,
+            "descuNoSuj" => 0.00,
+            "descuExenta" => 0.00,
+            "descuGravada" => round($descuentoTotal, 2),
+            "totalDescu" => round($descuentoTotal, 2),
+            "porcentajeDescuento" => 0.00,
+            "subTotal" => round($sumas, 2),
+            "ivaRete1" => $ivaRetenido,
+            "reteRenta" => 0.00,
+            "subTotalVentas" => round($sumas, 2),
+            "tributos" => $tributos,
+            "montoTotalOperacion" => round($sumas + $ivaTotal - $ivaRetenido, 2),
+            "totalPagar" => $total,
+            "saldoFavor" => 0.00,
+            "totalLetras" => HelpersNumeroALetras::convertir($total, 'DÓLARES'),
+            "condicionOperacion" => (int)$request->tipo_venta,
+            "numPagoElectronico" => "",
+            "pagos" => null
+        ];
+
+        if ($tipoDocumento === 'ccf') {
+            $resumen["ivaPerci1"] = 0.00;
+        }
+
+
 
         return [
             "productos" => $productos,
@@ -394,8 +424,7 @@ class SalesController extends Controller
     }
 
 
-
-
+    /* funcion para guardar la venta y emitir el dte */
     public function generarSale(Request $request)
     {
         $request->validate([
@@ -442,15 +471,26 @@ class SalesController extends Controller
             $correlativo = $ultimoDTE ? $ultimoDTE + 1 : 1;
             $codigoEstablecimiento = $empresa->codigo_establecimiento ?? '1'; // o '00000001' si ya viene con ceros
             $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
+            switch ($tipo_dte) {
+                case '03': // CCF
+                    $version = 3;
+                    break;
+                case '01': // Factura
+                case '15': // Sujeto Excluido
+                case '14': // Comprobante de Donación
+                default:
+                    $version = 1;
+                    break;
+            }
             $identificacion = self::identificacionGet(
-                3,
+                $version,
                 $tipo_dte,
                 '00',
                 $codigoGeneracion,
                 $fecha,
                 $hora,
                 $numeroControl,
-                null // tipoContingencia
+                null
             );
             $cliente = Clientes::findOrFail($request->cliente_id);
             $receptor = self::getReceptor($tipo_dte, [
