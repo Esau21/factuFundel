@@ -106,6 +106,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/empresa/store', [EmpresaController::class, 'storeEmpresa'])->name('empresas.store');
     Route::get('/empresas/edit/{id}', [EmpresaController::class, 'editarEmpresa'])->name('empresas.edit');
     Route::post('/update/empresa/{id}', [EmpresaController::class, 'updateEmpresa'])->name('empresas.update');
+    Route::post('/generar/nuevo/token', [EmpresaController::class, 'generarNuevoToken'])->name('empresas.generarNuevoToken');
 
     //bancos
     Route::get('/bancos', [BancosController::class, 'index'])->name('bancos.index');

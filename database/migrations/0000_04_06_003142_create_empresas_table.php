@@ -23,10 +23,9 @@ return new class extends Migration
             $table->string('nrc')->nullable();
             $table->string('nit')->nullable();
             $table->string('telefono')->nullable();
-            $table->json('token');
-            $table->json('token_expire');
+            $table->text('token');
+            $table->text('token_expire');
             $table->string('correo')->nullable();
-            $table->string('direccion')->nullable();
             $table->enum('ambiente', ['01', '00'])->default('00');
             $table->string('codPuntoVentaMH', 15);
             $table->string('codEstablecimientoMH'); //si es casa matriz M0001

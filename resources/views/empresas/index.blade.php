@@ -6,10 +6,29 @@
         <div class="row">
             <div class="col-12">
                 <div class="card h-100 d-flex flex-column">
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                        </div>
+                    @endif
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Empresas del sistema.</h5>
-                        <div>
+                        <div class="d-flex gap-2">
                             <a href="{{ route('empresas.add') }}" class="btn btn-primary">Agregar empresa</a>
+                            <form action="{{ route('empresas.generarNuevoToken') }}" method="POST" class="m-0">
+                                @csrf
+                                <button type="submit" class="btn btn-success" {{ !$habilitarBoton ? 'disabled' : '' }}>
+                                    Actualizar token
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <div class="card-body">

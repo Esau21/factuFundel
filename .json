@@ -1,49 +1,53 @@
 {
     "identificacion": {
-        "version": 1,
+        "version": 3,
         "ambiente": "00",
         "tipoDte": "03",
-        "numeroControl": "DTE-03-00000001-000000000000037",
-        "codigoGeneracion": "FB3403A8-0533-48E0-8D7E-3A23D7A1C516",
+        "numeroControl": "DTE-03-00000001-000000000000011",
+        "codigoGeneracion": "EE419228-B04E-4CAF-B152-79BBBF702395",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
-        "motivoConti": null,
-        "fechaEmi": "2025-05-30",
-        "horaEmi": "21:23:01",
-        "moneda": "USD"
+        "motivoContin": null,
+        "fecEmi": "2025-06-02",
+        "horEmi": "10:30:38",
+        "tipoMoneda": "USD"
     },
     "documentoRelacionado": null,
     "emisor": {
-        "nrc": "090999",
-        "nit": "00000998",
+        "nrc": "2760965",
+        "nit": "06140607181088",
         "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
         "nombreComercial": "FUNDEL",
         "codActividad": "86909",
         "descActividad": "Otros Servicio relacionados con la salud ncp",
         "direccion": {
-            "departamento": "06",
-            "municipio": "23",
+            "departamento": "00",
+            "municipio": "00",
             "complemento": "CALLE AL MIRADOR COLONIA ESCALON"
         },
         "telefono": "77665545",
         "correo": "fundelong@gmail.com",
-        "tipoEstablecimiento": "01"
+        "tipoEstablecimiento": "01",
+        "codEstableMH": null,
+        "codEstable": null,
+        "codPuntoVentaMH": null,
+        "codPuntoVenta": null
     },
     "receptor": {
-        "nit": "00034555",
-        "nrc": "90000990",
-        "nombre": "FARDEL S.A DE C.V",
-        "codActividad": "86909",
-        "descActividad": "Otros Servicio relacionados con la salud ncp",
-        "nombreComercial": "FARDEL",
+        "nit": "06141512211121",
+        "nrc": "3113376",
+        "nombre": "LENTI S.A DE C.V",
+        "codActividad": "96091",
+        "descActividad": "Servicios de sauna y otros servicios para la estética corporal n.c.p.",
+        "nombreComercial": "LENTI S.A DE C.V",
         "direccion": {
             "departamento": "06",
             "municipio": "23",
-            "complemento": "COLONIA ESCALON CALLE AL MIRADOR"
+            "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
         },
-        "telefono": "76123344",
-        "correo": "fardel@gmail.com"
+        "telefono": "74474442",
+        "correo": "factura@opticaavplussv.com"
     },
     "otrosDocumentos": null,
     "ventaTercero": null,
@@ -52,50 +56,52 @@
             "numItem": 1,
             "tipoItem": 2,
             "cantidad": 1,
-            "codigo": "P0001",
+            "codigo": "P00001",
             "codTributo": null,
-            "uniMedida": 59,
+            "numeroDocumento": null,
+            "uniMedida": 99,
             "descripcion": "Convenio con alcaldía municipal santa ana norte",
-            "precioUni": 100,
+            "precioUni": 162.09,
             "montoDescu": 0,
             "ventaNoSuj": 0,
             "ventaExenta": 0,
-            "ventaGravada": 100,
+            "ventaGravada": 162.09,
             "psv": 0,
             "noGravado": 0,
             "tributos": [
-                {
-                    "codigo": "20",
-                    "descripcion": "Impuesto al Valor Agregado 13%",
-                    "valor": 13
-                }
+                "20"
             ]
         }
     ],
     "resumen": {
         "totalNoSuj": 0,
         "totalExenta": 0,
-        "totalGravada": 100,
+        "totalGravada": 162.09,
+        "totalNoGravado": 0,
         "descuNoSuj": 0,
         "descuExenta": 0,
         "descuGravada": 0,
+        "totalDescu": 0,
         "porcentajeDescuento": 0,
-        "subTotal": 100,
+        "subTotal": 162.09,
         "ivaRete1": 0,
-        "ivaPercibido": 0,
-        "iva": 13,
-        "fovial": 0,
-        "cotrans": 0,
-        "subTotalVentas": 100,
-        "totalPagar": 113,
-        "saldoFavor": 0,
-        "condicionOperacion": 1,
-        "pagos": [
+        "ivaPerci1": 0,
+        "reteRenta": 0,
+        "subTotalVentas": 162.09,
+        "tributos": [
             {
-                "codigo": "01",
-                "montoPago": 113
+                "codigo": "20",
+                "descripcion": "Impuesto al Valor Agregado 13%",
+                "valor": 21.07
             }
-        ]
+        ],
+        "montoTotalOperacion": 183.16,
+        "totalPagar": 183.16,
+        "saldoFavor": 0,
+        "totalLetras": "CIENTO OCHENTA Y TRES CON 16\/100 DÓLARES",
+        "condicionOperacion": 1,
+        "numPagoElectronico": "",
+        "pagos": null
     },
     "extension": {
         "nombEntrega": null,

@@ -25,6 +25,13 @@ class Empresa extends Model
         'telefono',
         'correo',
         'logo',
+        'token',
+        'token_expire',
+        'ambiente',
+        'codPuntoVentaMH',
+        'codEstablecimientoMH',
+        'claveAPI',
+        'claveCert'
     ];
 
     public static function getDataEmpresa()

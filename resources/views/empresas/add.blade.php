@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
 
-                                 <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="nombreCo">Nombre Comercial</label>
                                     <div class="input-group input-group-merge">
                                         <input id="nombreComercial" name="nombreComercial" class="form-control"
@@ -118,6 +118,75 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <!-- Tipo de establecimiento  -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="tipoEstablecimiento">Establecimiento</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="tipoEstablecimiento" name="tipoEstablecimiento" class="form-control"
+                                            type="text" placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Tipo de establecimiento  -->
+                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="ambiente">Ambiente</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="ambiente" id="ambiente" class="form-select">
+                                            <option value="00">Modo prueba</option>
+                                            <option value="01">Modo producción</option>
+                                        </select>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Casa matriz codigo  -->
+                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codEstablecimientoMH">Codigo casa matriz</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="codEstablecimientoMH" name="codEstablecimientoMH" class="form-control"
+                                            type="text" placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Punto venta MH  -->
+                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codPuntoVentaMH">Punto venta</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="codPuntoVentaMH" name="codPuntoVentaMH" class="form-control"
+                                            type="text" placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="claveAPI">API pwd</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="claveAPI" name="claveAPI" class="form-control"
+                                            type="password" placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                 <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="claveCert">pwd Certificado</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="claveCert" name="claveCert" class="form-control"
+                                            type="password" placeholder="ejemplo" />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
 
                                 <!-- Direccion -->
                                 <div class="col-12 col-md-12 form-control-validation mb-3">

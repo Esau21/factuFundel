@@ -8,13 +8,27 @@ use App\Models\SociosNegocios\Empresa;
 use App\Models\Ubicaciones\Departamento;
 use App\Models\Ubicaciones\Municipio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmpresaController extends Controller
 {
     public function index()
     {
-        return view('empresas.index');
+        $empresa = Auth::user()->empresa;
+        $now = now();
+        $habilitarBoton = true;
+
+        if ($empresa && $empresa->token_expire) {
+            $horasRestantes = $now->diffInHours($empresa->token_expire, false);
+            if ($horasRestantes > 4) {
+                $habilitarBoton = false;
+            }
+        }
+
+        return view('empresas.index', compact('habilitarBoton'));
     }
 
     public function indexGetDataEmpresa(Request $request)
@@ -85,7 +99,12 @@ class EmpresaController extends Controller
             'actividad_economica_id' => 'required',
             'telefono' => 'required',
             'correo' => 'required|email',
-            'complemento' => 'required'
+            'complemento' => 'required',
+            'ambiente' => 'required',
+            'codPuntoVentaMH' => 'required',
+            'codEstablecimientoMH' => 'required',
+            'claveAPI' => 'required',
+            'claveCert' => 'required'
         ], [
             'nombre.required' => 'El nombre de la empresa es obligatorio.',
             'nombre.unique' => 'Este nombre de empresa ya está registrado.',
@@ -104,7 +123,11 @@ class EmpresaController extends Controller
         /**
          * trabajaremos la funcion para crear la empresa con su logo
          */
-        $empresas = new Empresa($request->except('logo'));
+        $empresas = new Empresa($request->except('logo', 'claveAPI', 'claveCert'));
+        $empresas->token = 'Sin token';
+        $empresas->token_expire = now()->subDay();
+        $empresas->claveAPI = Crypt::encryptString($request->input('claveAPI'));
+        $empresas->claveCert = Crypt::encryptString($request->input('claveCert'));
 
         if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
             $path = 'empresas';
@@ -151,7 +174,10 @@ class EmpresaController extends Controller
             'actividad_economica_id' => 'required',
             'telefono' => 'required',
             'correo' => 'required|email',
-            'complemento' => 'required'
+            'complemento' => 'required',
+            'ambiente' => 'required',
+            'codPuntoVentaMH' => 'required',
+            'codEstablecimientoMH' => 'required',
         ], [
             'nombre.required' => 'El nombre de la empresa es obligatorio.',
             'nombre.unique' => 'Este nombre de empresa ya está registrado.',
@@ -198,5 +224,37 @@ class EmpresaController extends Controller
         $empresas->save();
 
         return response()->json(['success' => 'La empresa se modificó con éxito'], 200);
+    }
+
+    public function generarNuevoToken()
+    {
+        $empresa = Auth::user()->empresa;
+
+        if (!$empresa) {
+            return back()->with('error', 'No se encontró la empresa.');
+        }
+
+        $response = Http::asMultipart()->post('https://apitest.dtes.mh.gob.sv/seguridad/auth', [
+            [
+                'name' => 'user',
+                'contents' => $empresa->nit,
+            ],
+            [
+                'name' => 'pwd',
+                'contents' => Crypt::decryptString($empresa->claveAPI),
+            ],
+        ]);
+
+        if ($response->successful() && isset($response['body']['token'])) {
+            $token = $response['body']['token'];
+
+            $empresa->token = 'Bearer ' . $token;
+            $empresa->token_expire = now()->addDay();
+            $empresa->save();
+
+            return back()->with('success', 'Token actualizado correctamente.');
+        }
+
+        return back()->with('error', 'Error al actualizar el token.');
     }
 }

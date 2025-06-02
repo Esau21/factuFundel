@@ -109,7 +109,8 @@
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="actividad_economica_id">Actividad economica</label>
                                     <div class="input-group input-group-merge">
-                                        <select name="actividad_economica_id" id="actividad_economica_id" class="form-select select2 w-100">
+                                        <select name="actividad_economica_id" id="actividad_economica_id"
+                                            class="form-select select2 w-100">
                                             <option value="">Seleccionar</option>
                                             @foreach ($actividad as $a)
                                                 <option value="{{ $a->id }}"
@@ -120,6 +121,58 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <!-- Tipo de establecimiento  -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="tipoEstablecimiento">Establecimiento</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="tipoEstablecimiento" name="tipoEstablecimiento" class="form-control"
+                                            type="text" placeholder="ejemplo"
+                                            value="{{ $empresa->tipoEstablecimiento }}" readonly />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Tipo de establecimiento  -->
+                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="ambiente">Ambiente</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="ambiente" id="ambiente" class="form-select">
+                                            <option value="00">Modo prueba</option>
+                                            <option value="01">Modo producción</option>
+                                        </select>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Casa matriz codigo  -->
+                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codEstablecimientoMH">Codigo casa matriz</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="codEstablecimientoMH" name="codEstablecimientoMH" class="form-control"
+                                            type="text" placeholder="ejemplo"
+                                            value="{{ $empresa->codEstablecimientoMH }}" readonly />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Punto venta MH  -->
+                                <div class="col-12 col-md-4 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codPuntoVentaMH">Punto venta</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="codPuntoVentaMH" name="codPuntoVentaMH" class="form-control"
+                                            type="text" placeholder="ejemplo"
+                                            value="{{ $empresa->codPuntoVentaMH }}" readonly />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
 
 
                                 <!-- Direccion -->

@@ -227,12 +227,6 @@
                                 <h3 class="text-success text-uppercase">
                                     Total: $<span id="totalAmount">0.00</span>
                                 </h3>
-                                <h6 class="text-dark text-uppercase">
-                                    IVA: $<span id="Iva">0.00</span>
-                                </h6>
-                                <h6 class="text-dark text-uppercase">
-                                    IVA RETENCIÓN: $<span id="IvaRetencion">0.00</span>
-                                </h6>
                                 <h4 class="mt-3">Artículos: <span id="totalItems">0</span></h4>
                             </div>
                         </div>

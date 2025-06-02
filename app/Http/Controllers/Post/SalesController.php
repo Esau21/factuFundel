@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Post;
 
+use App\Helpers\NumeroALetras as HelpersNumeroALetras;
 use App\Http\Controllers\Controller;
 use App\Models\Bancos\Bancos;
 use App\Models\Bancos\ChequeRecibido;
@@ -19,7 +20,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Luecano\NumeroALetras\NumeroALetras;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 
@@ -74,10 +74,10 @@ class SalesController extends Controller
             "tipoModelo" => $tipoModelo,
             "tipoOperacion" => $tipoOperacion,
             "tipoContingencia" => $tipoContingencia,
-            "motivoConti" => null,
-            "fechaEmi" => (string)$fecha,
-            "horaEmi" => (string)$hora,
-            "moneda" => "USD"
+            "motivoContin" => null,
+            "fecEmi" => (string)$fecha,
+            "horEmi" => (string)$hora,
+            "tipoMoneda" => "USD"
         ];
 
         return $identificacion;
@@ -119,6 +119,10 @@ class SalesController extends Controller
         if ($tipo_dte == "01" || $tipo_dte == "03") {
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
+            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? '';
+            $emisor['codEstable'] = $empresa['codEstable'] ?? '';
+            $emisor['codPuntoVentaMH'] = $empresa['codPuntoVentaMH'] ?? '';
+            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? '';
         } elseif ($tipo_dte == "05" || $tipo_dte == "06") {
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
@@ -140,6 +144,7 @@ class SalesController extends Controller
         $nombreComercial = isset($receptor['nombreComercial']) ? trim($receptor['nombreComercial']) : '';
         $tipo_documento = isset($receptor['tipo_documento']) ? (string)$receptor['tipo_documento'] : null;
         $nrc = isset($receptor['nrc']) ? (string)str_replace('-', '', $receptor['nrc']) : null;
+        $nit = isset($receptor['nit']) ? (string)str_replace('-', '', $receptor['nit']) : null;
         $numDocumento = isset($receptor['numDocumento']) ? (string)$receptor['numDocumento'] : null;
         $codActividad = isset($receptor['codActividad']) ? (string)$receptor['codActividad'] : null;
         $descActividad = isset($receptor['descActividad']) ? (string)$receptor['descActividad'] : null;
@@ -174,7 +179,7 @@ class SalesController extends Controller
 
             case "03":
                 $dataReceptorDte = [
-                    "nit" => $numDocumento,
+                    "nit" => $nit,
                     "nrc" => $nrc,
                     "nombre" => $nombre,
                     "codActividad" => $codActividad,
@@ -270,10 +275,7 @@ class SalesController extends Controller
             "porcentajeDescuento" => 0.00,        // Porcentaje descuento global si aplica
             "subTotal" => round($sumas, 2),       // Sumas antes de IVA
             "ivaRete1" => 0.00,                   // Retención 1% si es sujeto excluido (tipo 14)
-            "ivaPercibido" => 0.00,               // Percepción de IVA si aplica
             "iva" => $iva,                        // IVA 13%
-            "fovial" => 0.00,                     // FOVIAL si aplica (normalmente solo combustible)
-            "cotrans" => 0.00,                    // COTRANS si aplica
             "subTotalVentas" => round($sumas, 2), // Igual que sumas antes de IVA
             "totalPagar" => $total,               // Total a pagar final
             "saldoFavor" => 0.00,                 // No aplica en DTE tipo 03
@@ -321,10 +323,11 @@ class SalesController extends Controller
 
             $productoItem = [
                 "numItem" => $index + 1,
-                "tipoItem" => (int) $producto->items->codigo,
+                "tipoItem" => (int)$producto->items->codigo,
                 "cantidad" => $cantidad,
                 "codigo" => (string) $producto->codigo,
                 "codTributo" => null,
+                "numeroDocumento" =>  null,
                 "uniMedida" => (int) $producto->unidad->codigo,
                 "descripcion" => $producto->nombre,
                 "precioUni" => round($precioUnitario, 2),
@@ -337,11 +340,9 @@ class SalesController extends Controller
             ];
 
             if ($aplicaIVA) {
-                $productoItem['tributos'] = [[
-                    "codigo" => "20",
-                    "descripcion" => "Impuesto al Valor Agregado 13%",
-                    "valor" => $iva
-                ]];
+                $productoItem['tributos'] = [
+                    "20"
+                ];
             }
 
             $productos[] = $productoItem;
@@ -350,32 +351,41 @@ class SalesController extends Controller
         $ivaTotal = $aplicaIVA ? round($sumas * $porcentajeIVA, 2) : 0.00;
         $ivaRetenido = $ivaRete1 > 0 ? round($sumas * $ivaRete1, 2) : 0.00;
         $total = round($sumas + $ivaTotal - $ivaRetenido - $descuentoTotal, 2);
+        $tributos = [];
+
+        if ($iva > 0) {
+            $tributos[] = [
+                "codigo" => "20",
+                "descripcion" => "Impuesto al Valor Agregado 13%",
+                "valor" => round($iva, 2)
+            ];
+        }
 
         $resumen = [
             "totalNoSuj" => 0.00,
             "totalExenta" => 0.00,
             "totalGravada" => round($sumas, 2),
+            "totalNoGravado" => 0.00,
             "descuNoSuj" => 0.00,
             "descuExenta" => 0.00,
             "descuGravada" => round($descuentoTotal, 2),
+            "totalDescu" => round($descuentoTotal, 2),
             "porcentajeDescuento" => 0.00,
             "subTotal" => round($sumas, 2),
             "ivaRete1" => $ivaRetenido,
-            "ivaPercibido" => 0.00,
-            "iva" => $ivaTotal,
-            "fovial" => 0.00,
-            "cotrans" => 0.00,
+            "ivaPerci1" => 0.00,
+            "reteRenta" => 0.00,
             "subTotalVentas" => round($sumas, 2),
+            "tributos" => $tributos,
+            "montoTotalOperacion" => round($sumas + $ivaTotal - $ivaRetenido, 2),
             "totalPagar" => $total,
             "saldoFavor" => 0.00,
+            "totalLetras" => HelpersNumeroALetras::convertir($total, 'DÓLARES'),
             "condicionOperacion" => (int)$request->tipo_venta,
-            "pagos" => [
-                [
-                    "codigo" => $request->tipo_pago,
-                    "montoPago" => $total
-                ]
-            ]
+            "numPagoElectronico" => "",
+            "pagos" => null
         ];
+
 
         return [
             "productos" => $productos,
@@ -433,7 +443,7 @@ class SalesController extends Controller
             $codigoEstablecimiento = $empresa->codigo_establecimiento ?? '1'; // o '00000001' si ya viene con ceros
             $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
             $identificacion = self::identificacionGet(
-                1,
+                3,
                 $tipo_dte,
                 '00',
                 $codigoGeneracion,
@@ -448,6 +458,7 @@ class SalesController extends Controller
                 'nombreComercial' => $cliente->nombreComercial,
                 'tipo_documento' => $cliente->tipo_documento,
                 'numDocumento' => $cliente->numero_documento,
+                'nit' => $cliente->nit,
                 'nrc' => $cliente->nrc,
                 'codActividad' => $cliente->actividad->codActividad,
                 'descActividad' => $cliente->actividad->descActividad,

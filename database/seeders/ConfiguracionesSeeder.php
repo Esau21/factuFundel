@@ -6,6 +6,7 @@ use App\Models\SociosNegocios\Empresa;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Crypt;
 
 class ConfiguracionesSeeder extends Seeder
 {
@@ -27,21 +28,17 @@ class ConfiguracionesSeeder extends Seeder
             'correo' => 'fundelong@gmail.com',
             'logo' => asset('img/camara1.png'),
             'actividad_economica_id' => 1,
+            'tipoEstablecimiento' => '02',
+            'token' => 'tokentokentokentoken',
+            'token_expire' => 'token_expiredffrrffvrfvfv',
+            'ambiente' => '00',
+            'codPuntoVentaMH' => '01',
+            'codEstablecimientoMH' => 'MP0001',
+            'claveAPI' => Crypt::encryptString('Fundel@2025**'),
+            'claveCert' => Crypt::encryptString('FundelOng@2025##')
         ]);
+        
 
-        Empresa::create([
-            'nombre' => 'SI INGIENERIA',
-            'nombreComercial' => 'SI',
-            'departamento_id' => 1,
-            'municipio_id' => 1,
-            'complemento' => 'CALLE AL MIRADOR COLONIA ESCALON',
-            'nit' => '000090998',
-            'nrc' => '090233999',
-            'telefono' => '76123344',
-            'correo' => 'siinge@gmail.com',
-            'logo' => asset('img/camara1.png'),
-            'actividad_economica_id' => 2,
-        ]);
 
         User::create([
             'name' => 'Edgar',
@@ -60,7 +57,7 @@ class ConfiguracionesSeeder extends Seeder
             'profile' => 'ADMINISTRADOR',
             'status' => 'Active',
             'password' => bcrypt('12345678'),
-            'empresa_id' => 2
+            'empresa_id' => 1
         ]);
     }
 }
