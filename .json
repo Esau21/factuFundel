@@ -1,16 +1,16 @@
 {
     "identificacion": {
-        "version": 3,
+        "version": 1,
         "ambiente": "00",
-        "tipoDte": "03",
-        "numeroControl": "DTE-03-00000001-000000000000001",
-        "codigoGeneracion": "3986C901-3F68-4416-8132-252AA5865521",
+        "tipoDte": "01",
+        "numeroControl": "DTE-01-00000001-000000000000023",
+        "codigoGeneracion": "7C0015BC-E278-4B2F-A5B4-306A5FF5FAD6",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
         "motivoContin": null,
-        "fecEmi": "2025-06-02",
-        "horEmi": "13:04:05",
+        "fecEmi": "2025-06-03",
+        "horEmi": "11:53:57",
         "tipoMoneda": "USD"
     },
     "documentoRelacionado": null,
@@ -35,73 +35,74 @@
         "codPuntoVenta": null
     },
     "receptor": {
-        "nit": "06141512211121",
-        "nrc": "3113376",
-        "nombre": "LENTI S.A DE C.V",
-        "codActividad": "96091",
-        "descActividad": "Servicios de sauna y otros servicios para la estética corporal n.c.p.",
-        "nombreComercial": "LENTI S.A DE C.V",
+        "tipoDocumento": "13",
+        "numDocumento": "06184644-3",
+        "nrc": null,
+        "nombre": "Edgar Esau Moran",
+        "codActividad": "71102",
+        "descActividad": "Servicios de ingeniería",
         "direccion": {
             "departamento": "06",
-            "municipio": "23",
-            "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
+            "municipio": "24",
+            "complemento": "Colonia San Luis calle principal"
         },
-        "telefono": "74474442",
-        "correo": "factura@opticaavplussv.com"
+        "telefono": "76458987",
+        "correo": "esaumoran1999@gmail.com"
     },
     "otrosDocumentos": null,
     "ventaTercero": null,
     "cuerpoDocumento": [
         {
             "numItem": 1,
-            "tipoItem": 2,
-            "cantidad": 1,
-            "codigo": "P00001",
-            "codTributo": null,
+            "tipoItem": 1,
             "numeroDocumento": null,
-            "uniMedida": 99,
-            "descripcion": "Convenio con alcaldía municipal santa ana norte",
-            "precioUni": 162.09,
+            "cantidad": 1,
+            "codigo": "P00002",
+            "codTributo": null,
+            "uniMedida": 59,
+            "descripcion": "Elite Ice Bath",
+            "precioUni": 154.99,
             "montoDescu": 0,
             "ventaNoSuj": 0,
             "ventaExenta": 0,
-            "ventaGravada": 162.09,
+            "ventaGravada": 154.99,
+            "tributos": null,
             "psv": 0,
             "noGravado": 0,
-            "tributos": [
-                "20"
-            ]
+            "ivaItem": 17.83
         }
     ],
     "resumen": {
         "totalNoSuj": 0,
         "totalExenta": 0,
-        "totalGravada": 162.09,
-        "totalNoGravado": 0,
+        "totalGravada": 154.99,
+        "subTotalVentas": 154.99,
         "descuNoSuj": 0,
         "descuExenta": 0,
         "descuGravada": 0,
-        "totalDescu": 0,
         "porcentajeDescuento": 0,
-        "subTotal": 162.09,
+        "totalDescu": 0,
+        "tributos": [],
+        "subTotal": 154.99,
         "ivaRete1": 0,
         "reteRenta": 0,
-        "subTotalVentas": 162.09,
-        "tributos": [
+        "montoTotalOperacion": 154.99,
+        "totalNoGravado": 0,
+        "totalPagar": 154.99,
+        "totalLetras": "CIENTO CINCUENTA Y CUATRO CON 99\/100 DÓLARES",
+        "totalIva": 17.83,
+        "saldoFavor": 0,
+        "condicionOperacion": 2,
+        "pagos": [
             {
-                "codigo": "20",
-                "descripcion": "Impuesto al Valor Agregado 13%",
-                "valor": 21.07
+                "codigo": "01",
+                "montoPago": 154.99,
+                "plazo": "01",
+                "referencia": "aqui me haran un pago de estos productos",
+                "periodo": 12
             }
         ],
-        "montoTotalOperacion": 183.16,
-        "totalPagar": 183.16,
-        "saldoFavor": 0,
-        "totalLetras": "CIENTO OCHENTA Y TRES CON 16\/100 DÓLARES",
-        "condicionOperacion": 1,
-        "numPagoElectronico": "",
-        "pagos": null,
-        "ivaPerci1": 0
+        "numPagoElectronico": null
     },
     "extension": {
         "nombEntrega": null,

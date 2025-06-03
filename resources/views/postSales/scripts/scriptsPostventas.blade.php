@@ -27,6 +27,16 @@
                 $('#tipo_pago').prop('disabled', true).val('');
             }
 
+            // Habilitar o deshabilitar campos adicionales para crédito
+            if (tipoVenta === '2') {
+                $('#plazo').prop('disabled', false);
+                $('#referencia').prop('disabled', false);
+                $('#periodo').prop('disabled', false);
+            } else {
+                $('#plazo').prop('disabled', true).val('');
+                $('#referencia').prop('disabled', true).val('');
+                $('#periodo').prop('disabled', true).val('');
+            }
         }
 
         // Ejecutar al cargar la página
@@ -250,21 +260,32 @@
         function actualizarTotal() {
             let total = 0;
             let totalItems = 0;
+
             $('.sub_total').each(function() {
                 total += parseFloat($(this).val()) || 0;
             });
+
             $('.cantidad').each(function() {
                 totalItems += parseInt($(this).val()) || 0;
             });
 
+            // Calcular y mostrar IVA y Subtotal (precio sin IVA)
+            let iva = total - (total / 1.13);
+            let subTotal = total / 1.13;
+
+            $('#IvaAmount').text(iva.toFixed(2));
+            $('#subTotalAmount').text(subTotal.toFixed(2));
             $('#totalAmount').text(total.toFixed(2));
             $('#totalItems').text(totalItems);
 
+            // Calcular cambio
             let efectivo = parseFloat($('#cash').val()) || 0;
             let cambio = efectivo - total;
             $('#changeAmount').text(cambio >= 0 ? cambio.toFixed(2) : "0.00");
             $('#cambioInput').val(cambio >= 0 ? cambio.toFixed(2) : 0);
         }
+
+
 
         //escuchamos el evento de la tecla F5
         $(document).on('keydown', function(e) {
@@ -312,6 +333,27 @@
             const cambio = parseFloat($('#cambioInput').val()) || 0;
             const tipo_documento = $('#tipo_documento').val();
 
+            let iva = 0;
+            let totalSinIVA = 0;
+
+            $("#productRows tr").each(function() {
+                const subtotal = parseFloat($(this).find('.sub_total').val()) || 0;
+                totalSinIVA += subtotal;
+            });
+
+            iva = +(totalSinIVA - (totalSinIVA / 1.13)).toFixed(2);
+            const totalConIVA = +(totalSinIVA).toFixed(
+                2); // Ya está con IVA absorbido si así lo manejás
+
+            // Actualizar el DOM si querés verlos también antes de enviar
+            $('#IvaAmount').text(iva.toFixed(2));
+            $('#totalAmount').text(totalConIVA.toFixed(2));
+
+
+            const plazo = $('#plazo').val();
+            const referencia = $('#referencia').val();
+            const periodo = $('#periodo').val();
+
             $("#guardarVenta").prop('disabled', true);
 
             $.ajax({
@@ -322,6 +364,7 @@
                     cliente_id,
                     efectivo,
                     total,
+                    iva,
                     tipo_pago,
                     tipo_venta,
                     cambio,
@@ -332,6 +375,9 @@
                     descuento_porcentaje,
                     descuento_en_dolar,
                     tipo_documento,
+                    plazo,
+                    referencia,
+                    periodo,
 
                     // cheque
                     ...(tipo_pago === '04' ? {

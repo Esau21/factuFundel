@@ -72,6 +72,29 @@
                                 </select>
                             </div>
 
+                            <!-- Plazo -->
+                            <div class="col-sm-6">
+                                <label for="plazo">Plazo</label>
+                                <select name="plazo" id="plazo" class="form-select w-100">
+                                    <option value="">Selecciona</option>
+                                    <option value="01">Días</option>
+                                    <option value="02">Meses</option>
+                                    <option value="03">Años</option>
+                                </select>
+                            </div>
+
+                            <!-- referencia -->
+                            <div class="col-sm-6">
+                                <label for="plazo">Referencia (Opcional)</label>
+                                <input type="text" name="referencia" id="referencia" class="form-control text-center">
+                            </div>
+
+                            <!-- Periodo -->
+                            <div class="col-sm-6">
+                                <label for="plazo">Periodo</label>
+                                <input type="text" name="periodo" id="periodo" class="form-control text-center">
+                            </div>
+
                             <!-- Cliente -->
                             <div class="col-sm-6 mt-3">
                                 <label for="cliente_id" class="form-label">Cliente</label>
@@ -224,6 +247,12 @@
 
                         <div class="card mb-4">
                             <div class="card-body">
+                                <h3 class="text-primary text-uppercase">
+                                    Subtotal: $<span id="subTotalAmount">0.00</span>
+                                </h3>
+                                <h3 class="text-dark text-uppercase">
+                                    Iva: $<span id="IvaAmount">0.00</span>
+                                </h3>
                                 <h3 class="text-success text-uppercase">
                                     Total: $<span id="totalAmount">0.00</span>
                                 </h3>

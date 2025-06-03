@@ -290,24 +290,13 @@ class SalesController extends Controller
     }
 
     /* generamos el body del documento */
-    public function generarBodyDocumento(Request $request): array
+    protected function generarBodyCCF(Request $request): array
     {
         $productos = [];
         $sumas = 0.00;
         $descuentoTotal = 0.00;
-
-        $tipoDocumento = $request->tipo_documento;
-
-        /* Determinamos si aplica IVA y su porcentaje */
-        $aplicaIVA = false;
         $porcentajeIVA = 0.13;
-        $ivaRete1 = 0.00;
-
-        if ($tipoDocumento === 'ccf') {
-            $aplicaIVA = true;
-        } elseif ($tipoDocumento === 'factura_sujeto_excluido') {
-            $ivaRete1 = 0.01;
-        }
+        $aplicaIVA = true;
 
         foreach ($request->producto_id as $index => $productoId) {
             $cantidad = (int) $request->cantidad[$index];
@@ -315,7 +304,7 @@ class SalesController extends Controller
             $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.00;
 
             $ventaGravada = round(($cantidad * $precioUnitario) - $descuento, 2);
-            $iva = $aplicaIVA ? round($ventaGravada * $porcentajeIVA, 2) : 0.00;
+            $iva = round($ventaGravada * $porcentajeIVA, 2);
 
             $sumas += $ventaGravada;
             $descuentoTotal += $descuento;
@@ -337,30 +326,24 @@ class SalesController extends Controller
                 "ventaExenta" => 0.00,
                 "ventaGravada" => $ventaGravada,
                 "psv" => 0.00,
-                "noGravado" => 0.00
+                "noGravado" => 0.00,
+                "tributos" => ["20"]
             ];
-
-            if ($aplicaIVA) {
-                $productoItem['tributos'] = [
-                    "20"
-                ];
-            }
 
             $productos[] = $productoItem;
         }
 
-        $ivaTotal = $aplicaIVA ? round($sumas * $porcentajeIVA, 2) : 0.00;
-        $ivaRetenido = $ivaRete1 > 0 ? round($sumas * $ivaRete1, 2) : 0.00;
+        $ivaTotal = round($sumas * $porcentajeIVA, 2);
+        $ivaRetenido = 0.00; // No aplica retención en CCF
         $total = round($sumas + $ivaTotal - $ivaRetenido - $descuentoTotal, 2);
-        $tributos = [];
 
-        if ($iva > 0) {
-            $tributos[] = [
+        $tributos = [
+            [
                 "codigo" => "20",
                 "descripcion" => "Impuesto al Valor Agregado 13%",
-                "valor" => round($iva, 2)
-            ];
-        }
+                "valor" => $ivaTotal
+            ]
+        ];
 
         $resumen = [
             "totalNoSuj" => 0.00,
@@ -387,41 +370,127 @@ class SalesController extends Controller
             "pagos" => null
         ];
 
-        $resumen = [
-            "totalNoSuj" => 0.00,
-            "totalExenta" => 0.00,
-            "totalGravada" => round($sumas, 2),
-            "totalNoGravado" => 0.00,
-            "descuNoSuj" => 0.00,
-            "descuExenta" => 0.00,
-            "descuGravada" => round($descuentoTotal, 2),
-            "totalDescu" => round($descuentoTotal, 2),
-            "porcentajeDescuento" => 0.00,
-            "subTotal" => round($sumas, 2),
-            "ivaRete1" => $ivaRetenido,
-            "reteRenta" => 0.00,
-            "subTotalVentas" => round($sumas, 2),
-            "tributos" => $tributos,
-            "montoTotalOperacion" => round($sumas + $ivaTotal - $ivaRetenido, 2),
-            "totalPagar" => $total,
-            "saldoFavor" => 0.00,
-            "totalLetras" => HelpersNumeroALetras::convertir($total, 'DÓLARES'),
-            "condicionOperacion" => (int)$request->tipo_venta,
-            "numPagoElectronico" => "",
-            "pagos" => null
-        ];
-
-        if ($tipoDocumento === 'ccf') {
-            $resumen["ivaPerci1"] = 0.00;
-        }
-
-
-
         return [
             "productos" => $productos,
             "resumen" => $resumen
         ];
     }
+
+    protected function generarBodyFactura(Request $request): array
+    {
+        $productos = [];
+        $totalVentaGravada = 0.0;
+        $totalDescuento = 0.0;
+        $totalIva = 0.0;
+        $porcentajeIVA = 0.13; // 13%
+
+        foreach ($request->producto_id as $index => $productoId) {
+            $cantidad = (int) $request->cantidad[$index];
+            $precioUnitario = (float) $request->precio_unitario[$index]; // PRECIO SIN IVA
+            $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.0;
+
+            $producto = Producto::find($productoId);
+
+            // Calcular venta gravada con descuento aplicado
+            $ventaGravada = ($precioUnitario * $cantidad) - $descuento;
+
+            // Ahora calculamos ivaItem "absorbido" del total venta gravada
+            $base = $ventaGravada / (1 + $porcentajeIVA);
+            $ivaItem = $ventaGravada - $base;
+
+            // Acumulamos totales redondeados a 2 decimales donde corresponde
+            $totalVentaGravada += round($ventaGravada, 3);
+            $totalDescuento += round($descuento, 3);
+            $totalIva += round($ivaItem, 2);
+
+            $productos[] = [
+                "numItem" => $index + 1,
+                "tipoItem" => (int)$producto->items->codigo,
+                "numeroDocumento" => null,
+                "cantidad" => $cantidad,
+                "codigo" => $producto->codigo ?? null,
+                "codTributo" => null,
+                "uniMedida" => (int)$producto->unidad->codigo,
+                "descripcion" => $producto->nombre,
+                "precioUni" => round($precioUnitario, 2),
+                "montoDescu" => round($descuento, 3), // 3 decimales
+                "ventaNoSuj" => 0,
+                "ventaExenta" => 0,
+                "ventaGravada" => round($ventaGravada, 3), // 3 decimales
+                "tributos" => null,
+                "psv" => 0,
+                "noGravado" => 0,
+                "ivaItem" => round($ivaItem, 2), // 2 decimales
+            ];
+        }
+
+        $montoOperacion = round($totalVentaGravada, 2);
+        $ivaTotal = round($totalIva, 2);
+        $totalPagar = round($montoOperacion, 2); // Como en tu ejemplo, montoTotalOperacion no suma IVA explícito
+
+        $resumen = [
+            "totalNoSuj" => 0,
+            "totalExenta" => 0,
+            "totalGravada" => $montoOperacion,
+            "subTotalVentas" => $montoOperacion,
+            "descuNoSuj" => 0,
+            "descuExenta" => 0,
+            "descuGravada" => 0,
+            "porcentajeDescuento" => 0,
+            "totalDescu" => round($totalDescuento, 2),
+            "tributos" => [],
+            "subTotal" => $montoOperacion,
+            "ivaRete1" => 0,
+            "reteRenta" => 0,
+            "montoTotalOperacion" => $montoOperacion,
+            "totalNoGravado" => 0,
+            "totalPagar" => $montoOperacion,
+            "totalLetras" => HelpersNumeroALetras::convertir($totalPagar, 'DÓLARES'),
+            "totalIva" => $ivaTotal,
+            "saldoFavor" => 0,
+            "condicionOperacion" => (int)$request->tipo_venta,
+            "pagos" => [
+                [
+                    "codigo" => "01",
+                    "montoPago" => $montoOperacion,
+                    "plazo" => $request->plazo ?? null,
+                    "referencia" => $request->referencia ?? "",
+                    "periodo" => !empty($request->periodo) ? (int)$request->periodo : null,
+                ]
+            ],
+            "numPagoElectronico" => null,
+        ];
+
+        return [
+            "productos" => $productos,
+            "resumen" => $resumen,
+        ];
+    }
+
+
+
+    public function generarBodyDocumento(Request $request): array
+    {
+        $tipoDocumento = $request->tipo_documento;
+
+        if ($tipoDocumento === 'ccf') {
+            return $this->generarBodyCCF($request);
+        }
+
+        if ($tipoDocumento === 'factura') {
+            return $this->generarBodyFactura($request);
+        }
+
+        // Aquí podrías agregar más tipos de documento en el futuro
+
+        // Por defecto si no es ninguno, retornar arreglo vacío o error
+        return [
+            "productos" => [],
+            "resumen" => []
+        ];
+    }
+
+
 
 
     /* funcion para guardar la venta y emitir el dte */
@@ -585,6 +654,10 @@ class SalesController extends Controller
                 'status' => 'PAID',
                 'tipo_pago' => $tipo_pago,
                 'tipo_venta' => $request->tipo_venta,
+                "plazo" => $request->plazo ?? null,
+                "referencia" => $request->referencia ?? "",
+                "periodo" => $request->periodo ?? null,
+                "iva" => $request->iva ?? null,
                 'observaciones' => $request->observaciones ?? '',
                 'monto_efectivo' => $request->monto_efectivo ?? 0,
                 'monto_transferencia' => $request->monto_transferencia ?? 0,

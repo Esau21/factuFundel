@@ -85,7 +85,7 @@ class ClienteController extends Controller
             'tipo_persona' => 'required|in:natural,juridica',
             'nombre' => 'required|string|max:255',
             'nombreComercial' => 'required',
-            'tipo_documento' => 'required|in:DUI,NIT,PASAPORTE,CEDULA',
+            'tipo_documento' => 'required|in:13,36,37,39',
             'numero_documento' => 'required_if:tipo_persona,natural|string|max:20', /* Solo obligatorio si es natural */
             'direccion' => 'required|string|max:255',
             'departamento_id' => 'required|string',

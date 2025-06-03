@@ -21,6 +21,10 @@ return new class extends Migration
             $table->enum('status', ['PAID', 'PENDING', 'CANCEL'])->default('PENDING');
             $table->string('tipo_pago')->nullable();
             $table->string('tipo_venta', 20);
+            $table->string('plazo')->nullable();
+            $table->string('referencia')->nullable();
+            $table->string('periodo')->nullable();
+            $table->decimal('iva', 10, 2)->default(0.00);
             $table->text('observaciones');
             $table->decimal('monto_efectivo', 12, 2)->nullable();
             $table->decimal('monto_transferencia', 12, 2)->nullable();
