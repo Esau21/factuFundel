@@ -1,16 +1,16 @@
 {
     "identificacion": {
-        "version": 1,
+        "version": 3,
         "ambiente": "00",
-        "tipoDte": "01",
-        "numeroControl": "DTE-01-00000001-000000000000028",
-        "codigoGeneracion": "FDCAC4B6-BA85-4585-A925-41658F93CC27",
+        "tipoDte": "03",
+        "numeroControl": "DTE-03-00000001-000000000000027",
+        "codigoGeneracion": "98EA6AC8-54B8-4F27-B917-99F33BD2444F",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
         "motivoContin": null,
         "fecEmi": "2025-06-03",
-        "horEmi": "16:14:19",
+        "horEmi": "16:19:54",
         "tipoMoneda": "USD"
     },
     "documentoRelacionado": null,
@@ -35,19 +35,19 @@
         "codPuntoVenta": null
     },
     "receptor": {
-        "tipoDocumento": "13",
-        "numDocumento": "06184644-3",
-        "nrc": null,
-        "nombre": "Edgar Esau Moran",
-        "codActividad": "71102",
-        "descActividad": "Servicios de ingeniería",
+        "nit": "06141512211121",
+        "nrc": "3113376",
+        "nombre": "LENTI S.A DE C.V",
+        "codActividad": "96091",
+        "descActividad": "Servicios de sauna y otros servicios para la estética corporal n.c.p.",
+        "nombreComercial": "LENTI S.A DE C.V",
         "direccion": {
             "departamento": "06",
-            "municipio": "24",
-            "complemento": "Colonia San Luis calle principal"
+            "municipio": "23",
+            "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
         },
-        "telefono": "76458987",
-        "correo": "esaumoran1999@gmail.com"
+        "telefono": "74474442",
+        "correo": "factura@opticaavplussv.com"
     },
     "otrosDocumentos": null,
     "ventaTercero": null,
@@ -55,54 +55,53 @@
         {
             "numItem": 1,
             "tipoItem": 2,
-            "numeroDocumento": null,
             "cantidad": 1,
             "codigo": "P00001",
             "codTributo": null,
+            "numeroDocumento": null,
             "uniMedida": 99,
             "descripcion": "Convenio con alcaldía municipal santa ana norte",
-            "precioUni": 180.8,
+            "precioUni": 160,
             "montoDescu": 0,
             "ventaNoSuj": 0,
             "ventaExenta": 0,
-            "ventaGravada": 180.8,
-            "tributos": null,
+            "ventaGravada": 160,
             "psv": 0,
             "noGravado": 0,
-            "ivaItem": 20.8
+            "tributos": [
+                "20"
+            ]
         }
     ],
     "resumen": {
         "totalNoSuj": 0,
         "totalExenta": 0,
-        "totalGravada": 180.8,
-        "subTotalVentas": 180.8,
+        "totalGravada": 160,
+        "totalNoGravado": 0,
         "descuNoSuj": 0,
         "descuExenta": 0,
         "descuGravada": 0,
-        "porcentajeDescuento": 0,
         "totalDescu": 0,
-        "tributos": [],
-        "subTotal": 180.8,
+        "porcentajeDescuento": 0,
+        "subTotal": 160,
         "ivaRete1": 0,
+        "ivaPerci1": 0,
         "reteRenta": 0,
-        "montoTotalOperacion": 180.8,
-        "totalNoGravado": 0,
-        "totalPagar": 180.8,
-        "totalLetras": "CIENTO OCHENTA CON 80\/100 DÓLARES",
-        "totalIva": 20.8,
-        "saldoFavor": 0,
-        "condicionOperacion": 1,
-        "pagos": [
+        "subTotalVentas": 160,
+        "tributos": [
             {
-                "codigo": "01",
-                "montoPago": 180.8,
-                "plazo": null,
-                "referencia": "",
-                "periodo": null
+                "codigo": "20",
+                "descripcion": "Impuesto al Valor Agregado 13%",
+                "valor": 20.8
             }
         ],
-        "numPagoElectronico": null
+        "montoTotalOperacion": 180.8,
+        "totalPagar": 180.8,
+        "saldoFavor": 0,
+        "totalLetras": "CIENTO OCHENTA CON 80\/100 DÓLARES",
+        "condicionOperacion": 1,
+        "numPagoElectronico": "",
+        "pagos": null
     },
     "extension": {
         "nombEntrega": null,

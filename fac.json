@@ -3,14 +3,14 @@
         "version": 1,
         "ambiente": "00",
         "tipoDte": "01",
-        "numeroControl": "DTE-01-00000001-000000000000028",
-        "codigoGeneracion": "FDCAC4B6-BA85-4585-A925-41658F93CC27",
+        "numeroControl": "DTE-01-00000001-000000000000029",
+        "codigoGeneracion": "F721399A-4A7F-4201-BFB2-91F61C23E413",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
         "motivoContin": null,
         "fecEmi": "2025-06-03",
-        "horEmi": "16:14:19",
+        "horEmi": "16:28:46",
         "tipoMoneda": "USD"
     },
     "documentoRelacionado": null,
@@ -92,14 +92,14 @@
         "totalLetras": "CIENTO OCHENTA CON 80\/100 DÓLARES",
         "totalIva": 20.8,
         "saldoFavor": 0,
-        "condicionOperacion": 1,
+        "condicionOperacion": 2,
         "pagos": [
             {
                 "codigo": "01",
                 "montoPago": 180.8,
-                "plazo": null,
-                "referencia": "",
-                "periodo": null
+                "plazo": "02",
+                "referencia": "referente a convenio",
+                "periodo": 2
             }
         ],
         "numPagoElectronico": null

@@ -367,7 +367,15 @@ class SalesController extends Controller
             "totalLetras" => HelpersNumeroALetras::convertir($total, 'DÓLARES'),
             "condicionOperacion" => (int)$request->tipo_venta,
             "numPagoElectronico" => "",
-            "pagos" => null
+            "pagos" => (int)$request->tipo_venta === 2 ? [
+                [
+                    "codigo" => "02",
+                    "montoPago" => round($sumas + $ivaTotal - $ivaRetenido, 2),
+                    "plazo" => $request->plazo ?? null,
+                    "referencia" => $request->referencia ?? "",
+                    "periodo" => !empty($request->periodo) ? (int)$request->periodo : null,
+                ]
+            ] : null
         ];
 
         return [
@@ -386,19 +394,18 @@ class SalesController extends Controller
 
         foreach ($request->producto_id as $index => $productoId) {
             $cantidad = (int) $request->cantidad[$index];
-            $precioUnitario = (float) $request->precio_unitario[$index]; // PRECIO SIN IVA
+            $precioUnitarioSinIVA = (float) $request->precio_unitario[$index]; // PRECIO SIN IVA
+            $precioUnitarioConIVA = round($precioUnitarioSinIVA * (1 + $porcentajeIVA), 4); // ahora incluye el 13%
+
             $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.0;
 
             $producto = Producto::find($productoId);
 
-            // Calcular venta gravada con descuento aplicado
-            $ventaGravada = ($precioUnitario * $cantidad) - $descuento;
+            $ventaGravada = ($precioUnitarioConIVA * $cantidad) - $descuento;
 
-            // Ahora calculamos ivaItem "absorbido" del total venta gravada
             $base = $ventaGravada / (1 + $porcentajeIVA);
             $ivaItem = $ventaGravada - $base;
 
-            // Acumulamos totales redondeados a 2 decimales donde corresponde
             $totalVentaGravada += round($ventaGravada, 3);
             $totalDescuento += round($descuento, 3);
             $totalIva += round($ivaItem, 2);
@@ -412,17 +419,18 @@ class SalesController extends Controller
                 "codTributo" => null,
                 "uniMedida" => (int)$producto->unidad->codigo,
                 "descripcion" => $producto->nombre,
-                "precioUni" => round($precioUnitario, 2),
-                "montoDescu" => round($descuento, 3), // 3 decimales
+                "precioUni" => round($precioUnitarioConIVA, 2), // aquí va el precio con IVA
+                "montoDescu" => round($descuento, 3),
                 "ventaNoSuj" => 0,
                 "ventaExenta" => 0,
-                "ventaGravada" => round($ventaGravada, 3), // 3 decimales
+                "ventaGravada" => round($ventaGravada, 3),
                 "tributos" => null,
                 "psv" => 0,
                 "noGravado" => 0,
-                "ivaItem" => round($ivaItem, 2), // 2 decimales
+                "ivaItem" => round($ivaItem, 2),
             ];
         }
+
 
         $montoOperacion = round($totalVentaGravada, 2);
         $ivaTotal = round($totalIva, 2);
@@ -657,7 +665,10 @@ class SalesController extends Controller
                 "plazo" => $request->plazo ?? null,
                 "referencia" => $request->referencia ?? "",
                 "periodo" => $request->periodo ?? null,
-                "iva" => $request->iva ?? null,
+                "iva" => $tipo_dte === '03'
+                    ? (collect($bodyDocumento['resumen']['tributos'] ?? [])
+                        ->firstWhere('codigo', '20')['valor'] ?? 0)
+                    : ($bodyDocumento['resumen']['totalIva'] ?? 0),
                 'observaciones' => $request->observaciones ?? '',
                 'monto_efectivo' => $request->monto_efectivo ?? 0,
                 'monto_transferencia' => $request->monto_transferencia ?? 0,

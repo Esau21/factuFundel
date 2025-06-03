@@ -269,14 +269,13 @@
                 totalItems += parseInt($(this).val()) || 0;
             });
 
-            // Calcular y mostrar IVA y Subtotal (precio sin IVA)
-            let iva = total - (total / 1.13);
-            let subTotal = total / 1.13;
-
-            $('#IvaAmount').text(iva.toFixed(2));
-            $('#subTotalAmount').text(subTotal.toFixed(2));
+            // Mostrar total y cantidad de ítems
             $('#totalAmount').text(total.toFixed(2));
             $('#totalItems').text(totalItems);
+
+            // Calcular y mostrar IVA (13%)
+            let iva = total - (total / 1.13);
+            $('#IvaAmount').text(iva.toFixed(2));
 
             // Calcular cambio
             let efectivo = parseFloat($('#cash').val()) || 0;
@@ -284,7 +283,6 @@
             $('#changeAmount').text(cambio >= 0 ? cambio.toFixed(2) : "0.00");
             $('#cambioInput').val(cambio >= 0 ? cambio.toFixed(2) : 0);
         }
-
 
 
         //escuchamos el evento de la tecla F5
@@ -333,23 +331,6 @@
             const cambio = parseFloat($('#cambioInput').val()) || 0;
             const tipo_documento = $('#tipo_documento').val();
 
-            let iva = 0;
-            let totalSinIVA = 0;
-
-            $("#productRows tr").each(function() {
-                const subtotal = parseFloat($(this).find('.sub_total').val()) || 0;
-                totalSinIVA += subtotal;
-            });
-
-            iva = +(totalSinIVA - (totalSinIVA / 1.13)).toFixed(2);
-            const totalConIVA = +(totalSinIVA).toFixed(
-                2); // Ya está con IVA absorbido si así lo manejás
-
-            // Actualizar el DOM si querés verlos también antes de enviar
-            $('#IvaAmount').text(iva.toFixed(2));
-            $('#totalAmount').text(totalConIVA.toFixed(2));
-
-
             const plazo = $('#plazo').val();
             const referencia = $('#referencia').val();
             const periodo = $('#periodo').val();
@@ -364,7 +345,6 @@
                     cliente_id,
                     efectivo,
                     total,
-                    iva,
                     tipo_pago,
                     tipo_venta,
                     cambio,
@@ -376,7 +356,7 @@
                     descuento_en_dolar,
                     tipo_documento,
                     plazo,
-                    referencia,
+                    referencia, 
                     periodo,
 
                     // cheque
