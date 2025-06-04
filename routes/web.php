@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Categorias\CategoriaController;
 use App\Http\Controllers\Cobros\BancosController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Post\SalesController;
 use App\Http\Controllers\Producto\ProductoController;
 use App\Http\Controllers\ProfileController;
@@ -18,9 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::get('/ventas-por-mes', [DashboardController::class, 'ventasPorMes'])->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -34,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/categoria/save', [CategoriaController::class, 'storeCategoria'])->name('categorias.storeCategoria');
     Route::post('/actualizar/categoria/{id}', [CategoriaController::class, 'actualizarCategoria'])->name('categorias.actualizarCategoria');
     Route::delete('/delete/categoria/{id}', [CategoriaController::class, 'deleteCategoria'])->name('categorias.deleteCategoria');
-    
+
 
     //usuarios del sistema
     Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
@@ -125,11 +128,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/buscar/productos', [SalesController::class, 'buscarProductos'])->name('sales.buscarProductos');
     Route::post('/generar/sale', [SalesController::class, 'generarSale'])->name('sales.generarSale');
     Route::post('/generar/cotizacion', [SalesController::class, 'generarCotizacion'])->name('sales.generarCotizacion');
+    Route::get('/ventas/totales', [SalesController::class, 'SalesIndex'])->name('sales.SalesIndex');
+    Route::get('/ventas/totalGetData', [SalesController::class, 'SalesIndexGetData'])->name('sales.SalesIndexGetData');
     Route::get('/sales/days/get', [SalesController::class, 'ventasDays'])->name('sales.getdays');
     Route::get('/sales/days/get/data', [SalesController::class, 'ventasDelDia'])->name('sales.ventasDelDia');
     Route::get('/detalles/ventas/{id}', [SalesController::class, 'verDetallesdeVenta'])->name('sales.verDetallesdeVenta');
     Route::get('/generar/pdf/ventas/dia/{id}', [SalesController::class, 'generarPDfDetalles'])->name('sales.generarPDfDetalles');
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

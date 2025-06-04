@@ -74,4 +74,12 @@ class Sales extends Model
 
         return $data;
     }
+
+    public static function getSalesDataTotal()
+    {
+        $data = Sales::select('sales.*')->orderBy('sales.id', 'desc')
+            ->get();
+
+        return $data;
+    }
 }

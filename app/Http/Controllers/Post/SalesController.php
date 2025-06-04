@@ -809,15 +809,15 @@ class SalesController extends Controller
     }
 
 
-    public function ventasDays()
+    public function SalesIndex()
     {
-        return view('salesday.index');
+        return view('sales.salesIndex');
     }
 
-    public function ventasDelDia(Request $request)
+    public function SalesIndexGetData(Request $request)
     {
         if ($request->ajax()) {
-            $data = Sales::getSalesdelDia();
+            $data = Sales::getSalesDataTotal();
             return DataTables::of($data)
                 ->addColumn('cliente', function ($data) {
                     return $data?->clientes?->nombre ?? 'sin data';
@@ -826,16 +826,46 @@ class SalesController extends Controller
                     return $data?->users?->name ?? 'sin data';
                 })
                 ->addColumn('fecha_venta', function ($data) {
-                    return $data?->fecha_venta ?? 'sin data';
+                    if (!$data?->fecha_venta) return 'sin data';
+
+                    Carbon::setLocale('es');
+                    $fecha = Carbon::parse($data->fecha_venta);
+                    return $fecha->translatedFormat('l d \d\e F \d\e Y \a \l\a\s h:i A');
                 })
                 ->addColumn('tipo_pago', function ($data) {
-                    return $data?->tipo_pago ?? 'sin data';
+                    if ($data->tipo_pago == '01') {
+                        return '<span class="badge badge-center rounded-pill bg-label-primary me-1"><i class="icon-base bx bx-money"></i></span> Efectivo';
+                    } elseif ($data->tipo_pago == '04') {
+                        return '<span class="badge badge-center rounded-pill bg-label-success me-1"><i class="icon-base bx bx-receipt"></i></span> Cheque';
+                    } elseif ($data->tipo_pago == '05') {
+                        return '<span class="badge badge-center rounded-pill bg-label-danger me-1"><i class="icon-base bx bx-transfer"></i></span> Transferencia';
+                    } else {
+                        return '<span class="badge badge-center rounded-pill bg-label-secondary me-1"><i class="icon-base bx bx-help-circle"></i></span> Otro';
+                    }
                 })
                 ->addColumn('status', function ($data) {
-                    return $data?->status ?? 'sin data';
+                    switch ($data->status) {
+                        case 'PAID':
+                            return '<span class="badge badge-center rounded-pill bg-label-success me-1">
+                        <i class="icon-base bx bx-check-circle"></i>
+                    </span> Pagado';
+                        case 'PENDING':
+                            return '<span class="badge badge-center rounded-pill bg-label-warning me-1">
+                        <i class="icon-base bx bx-time-five"></i>
+                    </span> Pendiente';
+                        case 'CANCEL':
+                            return '<span class="badge badge-center rounded-pill bg-label-danger me-1">
+                        <i class="icon-base bx bx-x-circle"></i>
+                    </span> Cancelado';
+                        default:
+                            return '<span class="badge badge-center rounded-pill bg-label-secondary me-1">
+                        <i class="icon-base bx bx-help-circle"></i>
+                    </span> Desconocido';
+                    }
                 })
                 ->addColumn('total', function ($data) {
-                    return number_format($data?->total, 2) ?? 'sin data';
+                    $monto = ($data->total ?? 0) + ($data->iva ?? 0);
+                    return '$' . number_format($monto, 2);
                 })
                 ->addColumn('acciones', function ($data) {
                     $viewsalesdetails =
@@ -855,7 +885,88 @@ class SalesController extends Controller
 
                     return $viewsalesdetails . $imprimir;
                 })
-                ->rawColumns(['acciones'])
+                ->rawColumns(['acciones', 'tipo_pago', 'status'])
+                ->make(true);
+        }
+    }
+
+    public function ventasDays()
+    {
+        return view('salesday.index');
+    }
+
+    public function ventasDelDia(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Sales::getSalesdelDia();
+            return DataTables::of($data)
+                ->addColumn('cliente', function ($data) {
+                    return $data?->clientes?->nombre ?? 'sin data';
+                })
+                ->addColumn('usuario', function ($data) {
+                    return $data?->users?->name ?? 'sin data';
+                })
+                ->addColumn('fecha_venta', function ($data) {
+                    if (!$data?->fecha_venta) return 'sin data';
+
+                    Carbon::setLocale('es');
+                    $fecha = Carbon::parse($data->fecha_venta);
+                    return $fecha->translatedFormat('l d \d\e F \d\e Y \a \l\a\s h:i A');
+                })
+                ->addColumn('tipo_pago', function ($data) {
+                    if ($data->tipo_pago == '01') {
+                        return '<span class="badge badge-center rounded-pill bg-label-primary me-1"><i class="icon-base bx bx-money"></i></span> Efectivo';
+                    } elseif ($data->tipo_pago == '04') {
+                        return '<span class="badge badge-center rounded-pill bg-label-success me-1"><i class="icon-base bx bx-receipt"></i></span> Cheque';
+                    } elseif ($data->tipo_pago == '05') {
+                        return '<span class="badge badge-center rounded-pill bg-label-danger me-1"><i class="icon-base bx bx-transfer"></i></span> Transferencia';
+                    } else {
+                        return '<span class="badge badge-center rounded-pill bg-label-secondary me-1"><i class="icon-base bx bx-help-circle"></i></span> Otro';
+                    }
+                })
+                ->addColumn('status', function ($data) {
+                    switch ($data->status) {
+                        case 'PAID':
+                            return '<span class="badge badge-center rounded-pill bg-label-success me-1">
+                        <i class="icon-base bx bx-check-circle"></i>
+                    </span> Pagado';
+                        case 'PENDING':
+                            return '<span class="badge badge-center rounded-pill bg-label-warning me-1">
+                        <i class="icon-base bx bx-time-five"></i>
+                    </span> Pendiente';
+                        case 'CANCEL':
+                            return '<span class="badge badge-center rounded-pill bg-label-danger me-1">
+                        <i class="icon-base bx bx-x-circle"></i>
+                    </span> Cancelado';
+                        default:
+                            return '<span class="badge badge-center rounded-pill bg-label-secondary me-1">
+                        <i class="icon-base bx bx-help-circle"></i>
+                    </span> Desconocido';
+                    }
+                })
+                ->addColumn('total', function ($data) {
+                    $monto = ($data->total ?? 0) + ($data->iva ?? 0);
+                    return number_format($monto, 2);
+                })
+                ->addColumn('acciones', function ($data) {
+                    $viewsalesdetails =
+                        '<a href="#" 
+                        class="btn btn-success mt-mobile w-90 mx-2 btn-show-details"
+                        data-bs-toggle="modal"
+                        data-bs-target="#verSale"
+                        data-id="' . $data->id . '"
+                        title="Ver detalles de esta venta">
+                        <i class="bx bx-show"></i>
+                    </a>';
+                    $imprimir = '<a href=" ' . route('sales.generarPDfDetalles', $data->id) . ' " 
+                                    class="btn btn-dark mt-mobile w-90 mx-2"
+                                    title="Imprimir" target="_blank">
+                                    <i class="bx bx-printer"></i>
+                             </a>';
+
+                    return $viewsalesdetails . $imprimir;
+                })
+                ->rawColumns(['acciones', 'tipo_pago', 'status'])
                 ->make(true);
         }
     }

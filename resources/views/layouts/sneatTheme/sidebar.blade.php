@@ -22,20 +22,12 @@
         <li class="menu-item active open">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-home-smile"></i>
-                <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
-                <span class="badge rounded-pill bg-danger ms-auto">5</span>
+                <div class="text-truncate" data-i18n="Dashboards">Inicio</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item active">
                     <a href="{{ route('dashboard') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Analytics">Home</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/app-academy-dashboard.html"
-                        target="_blank" class="menu-link">
-                        <div class="text-truncate" data-i18n="Academy">Notifiaciones</div>
-                        <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">Pro</div>
                     </a>
                 </li>
             </ul>
@@ -145,8 +137,8 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('sales.index') }}" class="menu-link">
-                        <div class="text-truncate" data-i18n="Basic">Pos venta</div>
+                    <a href="{{ route('sales.SalesIndex') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Basic">Ventas</div>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -162,13 +154,23 @@
             </ul>
         </li>
 
-        <!-- Pages -->
-
         <li class="menu-item">
-            <a href="{{ route('categorias.index') }}" class="menu-link">
-                <img src="{{ asset('assets/img/files.png') }}" class="menu-icon tf-icons" alt="img">
-                <div class="text-truncate" data-i18n="Josn">Lector JSON</div>
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <img src="{{ asset('assets/img/libro-digital.png') }}" class="menu-icon tf-icons" alt="img">
+                <div class="text-truncate" data-i18n="Authentications">Facturacíon</div>
             </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('sales.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Basic">Documentos DTE</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('sales.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Basic">Lector JSON</div>
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 </aside>
