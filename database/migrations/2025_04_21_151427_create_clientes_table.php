@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('nombreComercial')->nullable();
             $table->string('tipo_documento');
+            $table->string('codDomiciliado')->nullable();
+            $table->string('codPais')->nullable();
             $table->string('numero_documento');
             $table->string('nit')->nullable();
             $table->string('nrc')->nullable();

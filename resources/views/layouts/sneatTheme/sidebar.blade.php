@@ -157,11 +157,11 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <img src="{{ asset('assets/img/libro-digital.png') }}" class="menu-icon tf-icons" alt="img">
-                <div class="text-truncate" data-i18n="Authentications">Facturacíon</div>
+                <div class="text-truncate" data-i18n="Facturacion">Facturacíon</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('sales.index') }}" class="menu-link">
+                    <a href="{{ route('facturacion.index') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Basic">Documentos DTE</div>
                     </a>
                 </li>

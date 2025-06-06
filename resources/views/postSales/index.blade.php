@@ -124,8 +124,6 @@
                                 <select name="tipo_documento" id="tipo_documento" class="form-select">
                                     <option value="">Seleccione</option>
                                     <option value="factura">Factura</option>
-                                    {{-- <option value="nota_credito">Nota de Crédito</option> --}}
-                                    {{-- <option value="nota_debito">Nota de Débito</option> --}}
                                     <option value="ccf">Comprobante de Crédito Fiscal</option>
                                     <option value="factura_sujeto_excluido">Factura de Sujeto Excluido</option>
                                     <option value="comprobante_donacion">Comprobante de Donación</option>

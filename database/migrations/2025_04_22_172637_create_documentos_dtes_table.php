@@ -22,7 +22,8 @@ return new class extends Migration
             $table->enum('estado', ['PROCESADO', 'NO VALIDADO', 'FIRMADO', 'ANULADO'])->default('FIRMADO');
             $table->string('tipo_transmision');
             $table->text('json_dte');
-            $table->text('mh_response');
+            $table->string('sello_recibido')->nullable()->change();
+            $table->text('mh_response')->nullable();
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes');

@@ -19,6 +19,7 @@ class DocumentosDte extends Model
         'empresa_id',
         'estado',
         'json_dte',
+        'sello_recibido',
         'tipo_transmision',
         'mh_response'
     ];
@@ -36,5 +37,16 @@ class DocumentosDte extends Model
     public function empresa()
     {
         return $this->belongsTo(Empresa::class, 'empresa_id');
+    }
+
+    public static function getData($tipo = '')
+    {
+        $query = DocumentosDte::with(['cliente', 'empresa'])->orderBy('id', 'desc');
+
+        if (in_array($tipo, ['01', '03', '14', '15'])) {
+            $query->where('tipo_documento', $tipo);
+        }
+
+        return $query->get();
     }
 }

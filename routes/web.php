@@ -3,6 +3,7 @@
 use App\Http\Controllers\Categorias\CategoriaController;
 use App\Http\Controllers\Cobros\BancosController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DGII\DocumentosDTEController;
 use App\Http\Controllers\Post\SalesController;
 use App\Http\Controllers\Producto\ProductoController;
 use App\Http\Controllers\ProfileController;
@@ -134,6 +135,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/sales/days/get/data', [SalesController::class, 'ventasDelDia'])->name('sales.ventasDelDia');
     Route::get('/detalles/ventas/{id}', [SalesController::class, 'verDetallesdeVenta'])->name('sales.verDetallesdeVenta');
     Route::get('/generar/pdf/ventas/dia/{id}', [SalesController::class, 'generarPDfDetalles'])->name('sales.generarPDfDetalles');
+
+    //facturacion
+    Route::get('/facturacion/index', [DocumentosDTEController::class, 'index'])->name('facturacion.index');
+    Route::get('/facturacion/getData', [DocumentosDTEController::class, 'indexGetDtaDocumentosDte'])->name('facturacion.indexGetDtaDocumentosDte');
+    Route::get('/download/json/dte/{documento_id}', [DocumentosDTEController::class, 'getDocumentoTributarioJson'])->name('facturacion.getDocumentoTributarioJson');
+    Route::post('/documentos-dte/enviar/{documento}', [DocumentosDTEController::class, 'enviarADGII'])
+        ->name('documentos-dte.enviar');
 });
 
 require __DIR__ . '/auth.php';

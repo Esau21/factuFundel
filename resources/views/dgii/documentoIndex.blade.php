@@ -1,0 +1,212 @@
+@extends('layouts.sneatTheme.base')
+
+@section('title', 'DocumentosDTE - Facturación')
+
+@section('content')
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card h-100 d-flex flex-column">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Documentos Tributarios Electrónicos.</h5>
+                        <div class="btn-group" role="group" aria-label="Filtrar por tipo">
+                            <button class="btn bg-label-secondary filter-btn active me-1" data-tipo=""><i class="icon-base bx bx-receipt"></i> Todos</button>
+                            <button class="btn bg-label-primary filter-btn me-1" data-tipo="01"><i class="icon-base bx bx-receipt"></i> Factura</button>
+                            <button class="btn bg-label-success filter-btn me-1" data-tipo="03"><i class="icon-base bx bx-receipt"></i> Comprobante de
+                                crédito
+                                fiscal</button>
+                            <button class="btn bg-label-dark filter-btn me-1" data-tipo="14"><i class="icon-base bx bx-receipt"></i> Sujeto excluido</button>
+                            <button class="btn bg-label-warning filter-btn me-1" data-tipo="15"><i class="icon-base bx bx-receipt"></i> Comprobante de
+                                donación</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="sysconta-datatable" class="display cell-border stripe hover order-column"
+                                style="width:100%">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="text-left" style="display: none;">Id</th>
+                                        <th class="text-left">Tipo documento</th>
+                                        <th class="text-left">Numero control</th>
+                                        <th class="text-left">Codigo generacíon</th>
+                                        <th class="text-left">Fecha de Emision</th>
+                                        <th class="text-left">Cliente</th>
+                                        <th class="text-left">Empresa</th>
+                                        <th class="text-left">Sello recibido</th>
+                                        <th class="text-left">Estado</th>
+                                        <th class="text-left">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th class="no-search" style="display: none;"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th class="no-search"></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @include('salesday.modal.viewdetailssales')
+@endsection
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script>
+    $(document).ready(function() {
+        let tipoSeleccionado = '';
+        const table = $('#sysconta-datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            lengthChange: true,
+            autoWidth: false,
+            pagingType: 'simple_numbers',
+            order: [
+                [0, 'desc']
+            ],
+            ajax: {
+                url: '{!! route('facturacion.indexGetDtaDocumentosDte') !!}',
+                data: function(d) {
+                    d.tipo = tipoSeleccionado;
+                }
+            },
+            columns: [{
+                    data: 'id',
+                    name: 'id',
+                    visible: false
+                },
+                {
+                    data: 'tipo_documento',
+                    name: 'tipo_documento'
+                },
+                {
+                    data: 'numero_control',
+                    name: 'numero_control'
+                },
+                {
+                    data: 'codigo_generacion',
+                    name: 'codigo_generacion'
+                },
+                {
+                    data: 'fecha_emision',
+                    name: 'fecha_emision'
+                },
+                {
+                    data: 'cliente',
+                    name: 'cliente'
+                },
+                {
+                    data: 'empresa',
+                    name: 'empresa'
+                },
+                {
+                    data: 'sello_recibido',
+                    name: 'sello_recibido'
+                },
+                {
+                    data: 'estado',
+                    name: 'estado'
+                },
+                {
+                    data: 'acciones',
+                    name: 'acciones',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
+                lengthMenu: 'Mostrar _MENU_ registros'
+            },
+            dom: '<"top d-flex justify-content-between align-items-center mb-3"fl>rt<"bottom d-flex justify-content-between align-items-center mt-3"ip><"clear">',
+            buttons: [{
+                    extend: 'copy',
+                    text: 'Copiar'
+                },
+                {
+                    extend: 'excel',
+                    text: 'Exportar Excel'
+                },
+                {
+                    extend: 'pdf',
+                    text: 'Exportar PDF'
+                },
+                {
+                    extend: 'print',
+                    text: 'Imprimir'
+                }
+            ],
+            initComplete: function() {
+                $('#sysconta-datatable tfoot th').each(function() {
+                    if (!$(this).hasClass('no-search')) {
+                        $(this).html(
+                            '<input type="text" class="form-control form-control-lg" placeholder="Buscar..." style="font-size: 0.85rem;" />'
+                        );
+                    }
+                });
+
+                const table = this.api();
+
+                $('#sysconta-datatable tfoot input').on('keyup change', function(e) {
+                    if (e.key === 'Enter' || e.type === 'change') {
+                        table.column($(this).parent().index()).search(this.value).draw();
+                    }
+                });
+            },
+            drawCallback: function() {
+                $('#sysconta-datatable_length label').css({
+                    'margin-right': '10px',
+                    'font-size': '0.9rem'
+                });
+
+                $('#sysconta-datatable_length select').addClass('form-select form-select-md').css({
+                    'width': '80px',
+                    'margin-left': '8px',
+                    'display': 'inline-block',
+                    'vertical-align': 'middle'
+                });
+
+                $('#sysconta-datatable_filter input')
+                    .removeClass('form-control-lg')
+                    .addClass('form-control')
+                    .attr('placeholder', 'Buscar...')
+                    .css({
+                        'width': '160px',
+                        'display': 'inline-block',
+                        'font-size': '0.85rem'
+                    });
+
+                $('.dataTables_paginate').addClass('pagination-sm');
+                $('.dataTables_paginate .paginate_button').css({
+                    'padding': '0.25rem 0.5rem',
+                    'font-size': '0.85rem'
+                });
+            }
+        });
+
+
+        $('.filter-btn').on('click', function() {
+            /* Cambiar la clase activa en los botones de filtro */
+            $('.filter-btn').removeClass('active');
+            $(this).addClass('active');
+
+            /* Obtener el tipo de cliente seleccionado */
+            tipoSeleccionado = $(this).data('tipo');
+
+            /* Recargar la tabla con el nuevo filtro */
+            table.ajax.reload();
+        });
+    });
+</script>

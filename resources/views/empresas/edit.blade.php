@@ -53,6 +53,20 @@
                                     </div>
                                 </div>
 
+                                 <!-- Tipo de documento -->
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="tipo_documento">Tipo de documento</label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="tipo_documento" id="tipo_documento" class="form-control" required>
+                                            <option value="">Elegir</option>
+                                            <option value="36"
+                                                {{ $empresa->tipo_documento == '36' ? 'selected' : '' }}>NIT</option>
+                                        </select>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
                                 <!-- Nrc -->
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="nrc">Nrc</label>
@@ -134,15 +148,15 @@
                                     </div>
                                 </div>
 
-
-
                                 <!-- Tipo de establecimiento  -->
                                 <div class="col-12 col-md-4 form-control-validation mb-3">
                                     <label class="form-label w-100" for="ambiente">Ambiente</label>
                                     <div class="input-group input-group-merge">
                                         <select name="ambiente" id="ambiente" class="form-select">
-                                            <option value="00">Modo prueba</option>
-                                            <option value="01">Modo producción</option>
+                                            <option value="00" {{ $empresa->ambiente == '00' ? 'selected' : '' }}>
+                                                Modo prueba</option>
+                                            <option value="01" {{ $empresa->ambiente == '01' ? 'selected' : '' }}>
+                                                Modo producción</option>
                                         </select>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
@@ -166,8 +180,8 @@
                                     <label class="form-label w-100" for="codPuntoVentaMH">Punto venta</label>
                                     <div class="input-group input-group-merge">
                                         <input id="codPuntoVentaMH" name="codPuntoVentaMH" class="form-control"
-                                            type="text" placeholder="ejemplo"
-                                            value="{{ $empresa->codPuntoVentaMH }}" readonly />
+                                            type="text" placeholder="ejemplo" value="{{ $empresa->codPuntoVentaMH }}"
+                                            readonly />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>

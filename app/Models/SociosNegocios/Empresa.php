@@ -15,6 +15,7 @@ class Empresa extends Model
     protected $fillable = [
         'nombre',
         'nombreComercial',
+        'tipo_documento',
         'departamento_id',
         'municipio_id',
         'complemento',

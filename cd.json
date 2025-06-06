@@ -1,0 +1,84 @@
+{
+  "identificacion": {
+    "version": 1,
+    "ambiente": "00",
+    "tipoDte": "15",
+    "numeroControl": "DTE-15-00000001-000000000000017",
+    "codigoGeneracion": "CF02D410-478D-4D0A-8EF4-C6FB7BB5061C",
+    "tipoModelo": 1,
+    "tipoOperacion": 1,
+    "fecEmi": "2025-06-05",
+    "horEmi": "19:27:52",
+    "tipoMoneda": "USD"
+  },
+  "donatario": {
+    "tipoDocumento": "36",
+    "numDocumento": "06140607181088",
+    "nrc": "2760965",
+    "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
+    "nombreComercial": "FUNDEL",
+    "codActividad": "86909",
+    "descActividad": "Otros Servicio relacionados con la salud ncp",
+    "direccion": {
+      "departamento": "00",
+      "municipio": "00",
+      "complemento": "CALLE AL MIRADOR COLONIA ESCALON"
+    },
+    "telefono": "77665545",
+    "correo": "fundelong@gmail.com",
+    "tipoEstablecimiento": "01",
+    "codEstableMH": null,
+    "codEstable": null,
+    "codPuntoVentaMH": null,
+    "codPuntoVenta": null
+  },
+  "donante": {
+    "tipoDocumento": "13",
+    "numDocumento": "061846443",
+    "nrc": "3113376",
+    "nombre": "LENTI S.A DE C.V",
+    "codActividad": "96091",
+    "descActividad": "Servicios de sauna y otros servicios para la estética corporal n.c.p.",
+    "direccion": {
+      "departamento": "06",
+      "municipio": "23",
+      "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
+    },
+    "telefono": "74474442",
+    "correo": "factura@opticaavplussv.com",
+    "codDomiciliado": 1,
+    "codPais": "SV"
+  },
+  "otrosDocumentos": [
+    {
+      "codDocAsociado": 1,
+      "descDocumento": "Resolución Alcaldía Municipal",
+      "detalleDocumento": "Convenio firmado para entrega de donación en el marco del programa social 2025"
+    }
+  ],
+  "cuerpoDocumento": [
+    {
+      "numItem": 1,
+      "tipoDonacion": 2,
+      "cantidad": 1,
+      "codigo": "P00001",
+      "uniMedida": 99,
+      "descripcion": "Convenio con alcaldía municipal santa ana norte",
+      "valorUni": 160,
+      "valor": 160,
+      "depreciacion": 0
+    }
+  ],
+  "resumen": {
+    "valorTotal": 160,
+    "totalLetras": "CIENTO SESENTA CON 00\/100 DÓLARES",
+    "pagos": [
+      {
+        "codigo": "01",
+        "montoPago": 160,
+        "referencia": ""
+      }
+    ]
+  },
+  "apendice": null
+}

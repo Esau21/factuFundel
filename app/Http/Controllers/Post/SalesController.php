@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bancos\Bancos;
 use App\Models\Bancos\ChequeRecibido;
 use App\Models\Bancos\CuentasBancarias;
+use App\Models\CorrelativoDte;
 use App\Models\DGII\DocumentosDte;
 use App\Models\Producto\Producto;
 use App\Models\SociosNegocios\Clientes;
@@ -19,6 +20,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
@@ -81,6 +83,11 @@ class SalesController extends Controller
             "tipoMoneda" => "USD"
         ];
 
+        if ($tipoDte === '15') {
+            unset($identificacion['tipoContingencia'], $identificacion['motivoContin']);
+        }
+
+
         return $identificacion;
     }
 
@@ -91,11 +98,11 @@ class SalesController extends Controller
         string $nit,
         string $codActividad,
         string $descActividad,
-        string $nombreComercial,
+        ?string $nombreComercial,
         string $tipoEstablecimiento,
         string $complemento,
         string $telefono,
-        string $correo
+        string $correo,
     ): array {
         $departamento = $empresa['departamento']['codigo'] ?? 'No definido';
         $municipio = $empresa['municipio']['codigo'] ?? 'No definido';
@@ -116,22 +123,36 @@ class SalesController extends Controller
             "correo" => $correo
         ];
 
+        if (!empty($nombreComercial) && $tipo_dte !== '14') {
+            $emisor['nombreComercial'] = $nombreComercial;
+        }
+
         if ($tipo_dte == "01" || $tipo_dte == "03") {
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
-            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? '';
-            $emisor['codEstable'] = $empresa['codEstable'] ?? '';
-            $emisor['codPuntoVentaMH'] = $empresa['codPuntoVentaMH'] ?? '';
-            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? '';
+            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? null;
+            $emisor['codEstable'] = $empresa['codEstable'] ?? null;
+            $emisor['codPuntoVentaMH'] = !empty($empresa['codPuntoVentaMH']) ? $empresa['codPuntoVentaMH'] : null;
+            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? null;
         } elseif ($tipo_dte == "05" || $tipo_dte == "06") {
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
         } elseif ($tipo_dte == "14") {
-            $emisor['nombreComercial'] = (string)$nombreComercial;
+            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? null;
+            $emisor['codEstable'] = $empresa['codEstable'] ?? null;
+            $emisor['codPuntoVentaMH'] = !empty($empresa['codPuntoVentaMH']) ? $empresa['codPuntoVentaMH'] : null;
+            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? null;
         } elseif ($tipo_dte  == '15') {
             $emisor['nombreComercial'] = (string)$nombreComercial;
+            $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
+            $emisor['tipoDocumento'] = $empresa['tipo_documento'] ?? null;
+            $emisor['numDocumento'] = $empresa['nit'] ?? null;
+            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? null;
+            $emisor['codEstable'] = $empresa['codEstable'] ?? null;
+            $emisor['codPuntoVentaMH'] = !empty($empresa['codPuntoVentaMH']) ? $empresa['codPuntoVentaMH'] : null;
+            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? null;
         } else {
-            return []; // Retorna vacío si el tipo no coincide
+            return [];
         }
 
         return ['emisor' => $emisor];
@@ -154,6 +175,8 @@ class SalesController extends Controller
         $complemento = isset($receptor['direccion']) ? (string)$receptor['direccion'] : null;
         $telefono = isset($receptor['telefono']) ? (string)str_replace('-', '', $receptor['telefono']) : null;
         $correo = isset($receptor['correo']) ? (string)$receptor['correo'] : null;
+        $codDomiciliado = isset($receptor['codDomiciliado']) ? (int)$receptor['codDomiciliado'] : null;
+        $codPais = isset($receptor['codPais']) ? (string)$receptor['codPais'] : null;
 
         $dataReceptorDte = [];
 
@@ -201,7 +224,6 @@ class SalesController extends Controller
                     "nombre" => $nombre,
                     "codActividad" => $codActividad,
                     "descActividad" => $descActividad,
-                    "nombreComercial" => $nombreComercial,
                     "direccion" => [
                         "departamento" => $departamento,
                         "municipio" => $municipio,
@@ -220,14 +242,15 @@ class SalesController extends Controller
                     "nombre" => $nombre,
                     "codActividad" => $codActividad,
                     "descActividad" => $descActividad,
-                    "nombreComercial" => $nombreComercial,
                     "direccion" => [
                         "departamento" => $departamento,
                         "municipio" => $municipio,
                         "complemento" => $complemento
                     ],
                     "telefono" => (string)$telefono,
-                    "correo" => (string)$correo
+                    "correo" => (string)$correo,
+                    "codDomiciliado" => (int)$codDomiciliado,
+                    "codPais" => (string)$codPais
                 ];
                 break;
             default:
@@ -247,6 +270,22 @@ class SalesController extends Controller
             $codigoEstablecimiento,
             $correlativo
         );
+    }
+
+    private function obtenerCorrelativo(string $tipoDte, string $codigoEstablecimiento): int
+    {
+        $registro = CorrelativoDte::firstOrCreate(
+            ['tipo_dte' => $tipoDte, 'codigo_establecimiento' => $codigoEstablecimiento],
+            ['correlativo' => 1]
+        );
+
+        $correlativoActual = $registro->correlativo;
+        /**
+         * Incrementamos para el siguiente uso
+         */
+        $registro->increment('correlativo');
+
+        return $correlativoActual;
     }
 
     /* resumen de ventas */
@@ -390,12 +429,15 @@ class SalesController extends Controller
         $totalVentaGravada = 0.0;
         $totalDescuento = 0.0;
         $totalIva = 0.0;
-        $porcentajeIVA = 0.13; // 13%
+        $porcentajeIVA = 0.13;
+        /**Equivale al 13% */
 
         foreach ($request->producto_id as $index => $productoId) {
             $cantidad = (int) $request->cantidad[$index];
-            $precioUnitarioSinIVA = (float) $request->precio_unitario[$index]; // PRECIO SIN IVA
-            $precioUnitarioConIVA = round($precioUnitarioSinIVA * (1 + $porcentajeIVA), 4); // ahora incluye el 13%
+            $precioUnitarioSinIVA = (float) $request->precio_unitario[$index];
+            /**Precio cin Iva */
+            $precioUnitarioConIVA = round($precioUnitarioSinIVA * (1 + $porcentajeIVA), 4);
+            /**ahora incluye el 13% */
 
             $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.0;
 
@@ -419,7 +461,8 @@ class SalesController extends Controller
                 "codTributo" => null,
                 "uniMedida" => (int)$producto->unidad->codigo,
                 "descripcion" => $producto->nombre,
-                "precioUni" => round($precioUnitarioConIVA, 2), // aquí va el precio con IVA
+                "precioUni" => round($precioUnitarioConIVA, 2),
+                /**Precio con IVA */
                 "montoDescu" => round($descuento, 3),
                 "ventaNoSuj" => 0,
                 "ventaExenta" => 0,
@@ -434,7 +477,7 @@ class SalesController extends Controller
 
         $montoOperacion = round($totalVentaGravada, 2);
         $ivaTotal = round($totalIva, 2);
-        $totalPagar = round($montoOperacion, 2); // Como en tu ejemplo, montoTotalOperacion no suma IVA explícito
+        $totalPagar = round($montoOperacion, 2);
 
         $resumen = [
             "totalNoSuj" => 0,
@@ -475,6 +518,122 @@ class SalesController extends Controller
         ];
     }
 
+    protected function generarBodyExcluido(Request $request): array
+    {
+        $productos = [];
+        $totalDescuento = 0.0;
+        $sumaItemsExacta = 0.0;
+
+        foreach ($request->producto_id as $index => $productoId) {
+            $cantidad = (int) $request->cantidad[$index];
+            $precioUnitario = (float) $request->precio_unitario[$index];
+            $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.0;
+
+            $producto = Producto::find($productoId);
+            $precioTotal = $precioUnitario * $cantidad;
+            $compraSinRedondear = $precioTotal - $descuento;
+
+            $sumaItemsExacta += $compraSinRedondear;
+            $totalDescuento += $descuento;
+
+            $productos[] = [
+                "numItem" => $index + 1,
+                "tipoItem" => (int) $producto->items->codigo,
+                "cantidad" => $cantidad,
+                "codigo" => $producto->codigo ?? null,
+                "uniMedida" => (int) $producto->unidad->codigo,
+                "descripcion" => $producto->nombre,
+                "precioUni" => round($precioUnitario, 2),
+                "montoDescu" => round($descuento, 2),
+                "compra" => round($compraSinRedondear, 2)
+            ];
+        }
+
+        $reteRenta = round($sumaItemsExacta * 0.10, 2);
+        $totalPagar = round($sumaItemsExacta - $reteRenta, 2);
+
+        $resumen = [
+            "totalCompra" => round($sumaItemsExacta, 2),
+            "descu" => round($totalDescuento, 2),
+            "totalDescu" => round($totalDescuento, 2),
+            "subTotal" => round($sumaItemsExacta, 2),
+            "ivaRete1" => 0.00,
+            "reteRenta" => $reteRenta,
+            "totalPagar" => $totalPagar,
+            "totalLetras" => HelpersNumeroALetras::convertir($totalPagar, 'DÓLARES'),
+            "condicionOperacion" => (int) $request->tipo_venta,
+            "pagos" => [
+                [
+                    "codigo" => "01",
+                    "montoPago" => $totalPagar,
+                    "plazo" => $request->plazo ?? null,
+                    "referencia" => $request->referencia ?? "",
+                    "periodo" => !empty($request->periodo) ? (int) $request->periodo : null,
+                ]
+            ],
+            "observaciones" => $request->observaciones ?? 'Sujeto Excluido'
+        ];
+
+        return [
+            "productos" => $productos,
+            "resumen" => $resumen,
+        ];
+    }
+
+    protected function generarBodyComprobanteDonacion(Request $request): array
+    {
+        $cuerpoDocumento = [];
+        $valorTotal = 0.0;
+
+        foreach ($request->producto_id as $index => $productoId) {
+            $cantidad = (int) $request->cantidad[$index];
+            $valorUnitario = (float) $request->precio_unitario[$index];
+
+            $producto = Producto::find($productoId);
+            $valor = $cantidad * $valorUnitario;
+            $valorTotal += $valor;
+
+            $cuerpoDocumento[] = [
+                "numItem" => $index + 1,
+                "tipoDonacion" => (int) $producto->items->codigo,
+                "cantidad" => $cantidad,
+                "codigo" => $producto->codigo ?? null,
+                "uniMedida" => (int) $producto->unidad->codigo,
+                "descripcion" => $producto->nombre,
+                "valorUni" => round($valorUnitario, 2),
+                "valor" => round($valor, 2),
+                "depreciacion" => 0.00
+            ];
+        }
+
+        $resumen = [
+            "valorTotal" => round($valorTotal, 2),
+            "totalLetras" => HelpersNumeroALetras::convertir($valorTotal, 'DÓLARES'),
+            "pagos" => [
+                [
+                    "codigo" => "01",
+                    "montoPago" => $valorTotal,
+                    "referencia" => $request->referencia ?? "",
+                ]
+            ],
+        ];
+
+        $otrosDocumentos = [
+            [
+                "tipoDocRel" => "99",
+                "descDocumento" => "Sin documento relacionado",
+                "detalleDocumento" => "Donación sin documento fuente"
+            ]
+        ];
+
+        return [
+            "otrosDocumentos" => $otrosDocumentos,
+            "productos" => $cuerpoDocumento,
+            "resumen" => $resumen,
+            "apendice" => null
+        ];
+    }
+
 
 
     public function generarBodyDocumento(Request $request): array
@@ -489,9 +648,16 @@ class SalesController extends Controller
             return $this->generarBodyFactura($request);
         }
 
-        // Aquí podrías agregar más tipos de documento en el futuro
+        if ($tipoDocumento === 'factura_sujeto_excluido') {
+            return $this->generarBodyExcluido($request);
+        }
+        if ($tipoDocumento === 'comprobante_donacion') {
+            return $this->generarBodyComprobanteDonacion($request);
+        }
 
-        // Por defecto si no es ninguno, retornar arreglo vacío o error
+        /**
+         * Por defecto si no es ninguno, retornar arreglo vacío o error
+         */
         return [
             "productos" => [],
             "resumen" => []
@@ -544,17 +710,17 @@ class SalesController extends Controller
             $codigoGeneracion = strtoupper(Str::uuid());
             $fecha = now()->format('Y-m-d');
             $hora = now()->format('H:i:s');
-            $ultimoDTE = DocumentosDte::where('tipo_documento', $tipo_dte)->max('id');
-            $correlativo = $ultimoDTE ? $ultimoDTE + 1 : 1;
-            $codigoEstablecimiento = $empresa->codigo_establecimiento ?? '1'; // o '00000001' si ya viene con ceros
+            $codigoEstablecimiento = str_pad($empresa->codigo_establecimiento ?? '1', 8, '0', STR_PAD_LEFT);
+            $correlativo = $this->obtenerCorrelativo($tipo_dte, $codigoEstablecimiento);
+            $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
             $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
             switch ($tipo_dte) {
                 case '03': // CCF
                     $version = 3;
                     break;
                 case '01': // Factura
-                case '15': // Sujeto Excluido
-                case '14': // Comprobante de Donación
+                case '14': // Sujeto Excluido 
+                case '15': // Comprobante de Donación
                 default:
                     $version = 1;
                     break;
@@ -570,9 +736,10 @@ class SalesController extends Controller
                 null
             );
             $cliente = Clientes::findOrFail($request->cliente_id);
-            $receptor = self::getReceptor($tipo_dte, [
+
+            $receptor = self::getReceptor($tipo_dte, array_merge([
                 'nombre' => $cliente->nombre,
-                'nombreComercial' => $cliente->nombreComercial,
+                'nombreComercial' => $tipo_dte === '14' ? null : $cliente->nombreComercial,
                 'tipo_documento' => $cliente->tipo_documento,
                 'numDocumento' => $cliente->numero_documento,
                 'nit' => $cliente->nit,
@@ -584,7 +751,10 @@ class SalesController extends Controller
                 'direccion' => $cliente->direccion,
                 'telefono' => $cliente->telefono,
                 'correo' => $cliente->correo_electronico,
-            ]);
+            ], $tipo_dte === '15' ? [
+                'codDomiciliado' => $cliente->codDomiciliado ?? null,
+                'codPais' => $cliente->codPais ?? 'SV',
+            ] : []));
             $empresa = Auth::user()->empresa->load('actividad', 'departamento', 'municipio');
             $emisorData = self::obtenerEmisor(
                 $empresa->toArray(),
@@ -593,13 +763,26 @@ class SalesController extends Controller
                 $empresa->nit,
                 $empresa->actividad->codActividad,
                 $empresa->actividad->descActividad,
-                $empresa->nombreComercial,
+                $tipo_dte === '14' ? null : $empresa->nombreComercial,
                 $empresa->tipo_establecimiento ?? '01',
                 $empresa->complemento ?? '',
                 $empresa->telefono ?? '',
                 $empresa->correo ?? ''
             );
 
+            if ($tipo_dte === '14') {
+                unset($emisorData['emisor']['nombreComercial']);
+            }
+            if ($tipo_dte === '15') {
+                $emisor = $emisorData['emisor'];
+                unset($emisor['nit']); // Quitar nit
+
+                // Insertar al principio con + operator para controlar el orden
+                $emisorData['emisor'] = [
+                    'tipoDocumento' => $empresa->tipo_documento,
+                    'numDocumento'  => $empresa->num_documento ?? $empresa->nit,
+                ] + $emisor;
+            }
 
             $cuerpoDocumento = $bodyDocumento['productos'];
 
@@ -634,8 +817,15 @@ class SalesController extends Controller
             } elseif ($tipo_dte === '15') {
                 $jsonDTE['dteJson'] = [
                     "identificacion" => $identificacion,
-                    "emisor" => $emisorData['emisor'],
-                    "receptor" => isset($receptor['receptor']) ? $receptor['receptor'] : $receptor,
+                    "donatario" => $emisorData['emisor'],
+                    "donante" => isset($receptor['receptor']) ? $receptor['receptor'] : $receptor,
+                    "otrosDocumentos" => [
+                        [
+                            "codDocAsociado" => (int)$cliente->codDomiciliado ?? null,
+                            "descDocumento" => "Resolución Alcaldía Municipal",
+                            "detalleDocumento" => "Convenio firmado para entrega de donación en el marco del programa social 2025"
+                        ]
+                    ],
                     "cuerpoDocumento" => $cuerpoDocumento,
                     "resumen" => $bodyDocumento['resumen'],
                     "apendice" => null,
@@ -652,6 +842,7 @@ class SalesController extends Controller
                 'estado' => 'firmado',
                 'json_dte' => json_encode($jsonDTE['dteJson'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
             ]);
+
 
             $sale = Sales::create([
                 'cliente_id' => $request->cliente_id,

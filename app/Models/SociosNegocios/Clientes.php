@@ -15,6 +15,8 @@ class Clientes extends Model
         'nombre',
         'nombreComercial',
         'tipo_documento',
+        'codDomiciliado',
+        'codPais',
         'numero_documento',
         'nit',
         'nrc',

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->string('nombreComercial');
+             $table->string('tipo_documento');
             $table->integer('departamento_id')->unsigned();
             $table->integer('municipio_id')->unsigned();
             $table->string('complemento');

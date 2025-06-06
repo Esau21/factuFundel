@@ -92,6 +92,7 @@ class EmpresaController extends Controller
         $request->validate([
             'nombre' => 'required|unique:empresas,nombre',
             'nombreComercial' => 'required',
+            'tipo_documento' => 'required',
             'departamento_id' => 'required',
             'municipio_id' => 'required',
             'nrc' => 'required',
@@ -109,6 +110,7 @@ class EmpresaController extends Controller
             'nombre.required' => 'El nombre de la empresa es obligatorio.',
             'nombre.unique' => 'Este nombre de empresa ya está registrado.',
             'nombreComercial.required' => 'El nombre comercial de la empresa es obligatorio.',
+            'tipo_documento.required' => 'El tipo de documento es requerido',
             'departamento_id.required' => 'El departamento es obligatorio',
             'municipio_id.required' => 'El municipio es obligatorio',
             'actividad_economica_id.required' => 'La actividad economica es obligatoria',
@@ -167,6 +169,7 @@ class EmpresaController extends Controller
         $request->validate([
             'nombre' => 'required|unique:empresas,nombre,' . $id,
             'nombreComercial' => 'required',
+            'tipo_documento' => 'required',
             'departamento_id' => 'required',
             'municipio_id' => 'required',
             'nrc' => 'required',
@@ -182,6 +185,7 @@ class EmpresaController extends Controller
             'nombre.required' => 'El nombre de la empresa es obligatorio.',
             'nombre.unique' => 'Este nombre de empresa ya está registrado.',
             'nombreComercial.required' => 'El nombre comercial de la empresa es obligatorio.',
+            'tipo_documento.required' => 'El tipo de documento es requerido',
             'departamento_id.required' => 'El departamento es obligatorio',
             'municipio_id.required' => 'El municipio es obligatorio',
             'actividad_economica_id.required' => 'La actividad economica es obligatoria',

@@ -52,6 +52,18 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="tipo_documento">Tipo documento</label>
+                                    <div class="input-group input-group-merge">
+                                         <select name="tipo_documento" id="tipo_documento" class="form-control" required>
+                                            <option value="">Elegir</option>
+                                            <option value="36">NIT</option>
+                                        </select>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
                                 <!-- Nrc -->
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="nrc">Nrc</label>

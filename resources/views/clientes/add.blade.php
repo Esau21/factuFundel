@@ -49,6 +49,30 @@
                                     </div>
                                 </div>
 
+
+                                 <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codDomiciliado">Domicilio <b class="text-danger">(Opcional)</b></label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="codDomiciliado" id="codDomiciliado" class="form-select">
+                                            <option value="">Seleccionar</option>
+                                            <option value="1">Domiciliado en El Salvador</option>
+                                            <option value="2">No domiciliado en El Salvador</option>
+                                        </select>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codPais">Codigo pais <b class="text-danger">(Opcional)</b></label>
+                                    <div class="input-group input-group-merge">
+                                       <input type="text" name="codPais" id="codPais" class="form-control" placeholder="SV">
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+
                                 <!-- Tipo de documento -->
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="tipo_documento">Tipo de documento</label>

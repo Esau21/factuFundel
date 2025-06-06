@@ -2,23 +2,21 @@
     "identificacion": {
         "version": 1,
         "ambiente": "00",
-        "tipoDte": "01",
-        "numeroControl": "DTE-01-00000001-000000000000030",
-        "codigoGeneracion": "2EE25EC1-1BF1-48F1-9CD6-A2E572E77DD7",
+        "tipoDte": "14",
+        "numeroControl": "DTE-14-00000001-000000000000024",
+        "codigoGeneracion": "9052DB59-4B7F-4283-AEA0-482DE7D00595",
         "tipoModelo": 1,
         "tipoOperacion": 1,
         "tipoContingencia": null,
         "motivoContin": null,
-        "fecEmi": "2025-06-03",
-        "horEmi": "17:35:12",
+        "fecEmi": "2025-06-05",
+        "horEmi": "09:53:49",
         "tipoMoneda": "USD"
     },
-    "documentoRelacionado": null,
     "emisor": {
         "nrc": "2760965",
         "nit": "06140607181088",
         "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
-        "nombreComercial": "FUNDEL",
         "codActividad": "86909",
         "descActividad": "Otros Servicio relacionados con la salud ncp",
         "direccion": {
@@ -28,89 +26,58 @@
         },
         "telefono": "77665545",
         "correo": "fundelong@gmail.com",
-        "tipoEstablecimiento": "01",
         "codEstableMH": null,
         "codEstable": null,
         "codPuntoVentaMH": null,
         "codPuntoVenta": null
     },
-    "receptor": {
+    "sujetoExcluido": {
         "tipoDocumento": "13",
-        "numDocumento": "06184644-3",
-        "nrc": null,
-        "nombre": "Edgar Esau Moran",
-        "codActividad": "71102",
-        "descActividad": "Servicios de ingeniería",
+        "numDocumento": "061846443",
+        "nombre": "LENTI S.A DE C.V",
+        "codActividad": "96091",
+        "descActividad": "Servicios de sauna y otros servicios para la estética corporal n.c.p.",
         "direccion": {
             "departamento": "06",
-            "municipio": "24",
-            "complemento": "Colonia San Luis calle principal"
+            "municipio": "23",
+            "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
         },
-        "telefono": "76458987",
-        "correo": "esaumoran1999@gmail.com"
+        "telefono": "74474442",
+        "correo": "factura@opticaavplussv.com"
     },
-    "otrosDocumentos": null,
-    "ventaTercero": null,
     "cuerpoDocumento": [
         {
             "numItem": 1,
-            "tipoItem": 1,
-            "numeroDocumento": null,
+            "tipoItem": 2,
             "cantidad": 1,
-            "codigo": "P00002",
-            "codTributo": null,
-            "uniMedida": 59,
-            "descripcion": "Elite Ice Bath",
-            "precioUni": 175.14,
+            "codigo": "P00001",
+            "uniMedida": 99,
+            "descripcion": "Convenio con alcaldía municipal santa ana norte",
+            "precioUni": 160,
             "montoDescu": 0,
-            "ventaNoSuj": 0,
-            "ventaExenta": 0,
-            "ventaGravada": 175.139,
-            "tributos": null,
-            "psv": 0,
-            "noGravado": 0,
-            "ivaItem": 20.15
+            "compra": 160
         }
     ],
     "resumen": {
-        "totalNoSuj": 0,
-        "totalExenta": 0,
-        "totalGravada": 175.14,
-        "subTotalVentas": 175.14,
-        "descuNoSuj": 0,
-        "descuExenta": 0,
-        "descuGravada": 0,
-        "porcentajeDescuento": 0,
+        "totalCompra": 160,
+        "descu": 0,
         "totalDescu": 0,
-        "tributos": [],
-        "subTotal": 175.14,
+        "subTotal": 160,
         "ivaRete1": 0,
-        "reteRenta": 0,
-        "montoTotalOperacion": 175.14,
-        "totalNoGravado": 0,
-        "totalPagar": 175.14,
-        "totalLetras": "CIENTO SETENTA Y CINCO CON 14\/100 DÓLARES",
-        "totalIva": 20.15,
-        "saldoFavor": 0,
-        "condicionOperacion": 2,
+        "reteRenta": 16,
+        "totalPagar": 144,
+        "totalLetras": "CIENTO CUARENTA Y CUATRO CON 00\/100 DÓLARES",
+        "condicionOperacion": 1,
         "pagos": [
             {
                 "codigo": "01",
-                "montoPago": 175.14,
-                "plazo": "02",
-                "referencia": "te pago este producto",
-                "periodo": 2
+                "montoPago": 144,
+                "plazo": null,
+                "referencia": "",
+                "periodo": null
             }
         ],
-        "numPagoElectronico": null
-    },
-    "extension": {
-        "nombEntrega": null,
-        "docuEntrega": null,
-        "nombRecibe": null,
-        "docuRecibe": null,
-        "observaciones": null,
-        "placaVehiculo": null
+        "observaciones": "Sujeto Excluido"
     },
     "apendice": null
 }

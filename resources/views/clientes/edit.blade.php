@@ -50,21 +50,55 @@
                                     </div>
                                 </div>
 
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codDomiciliado">Domicilio <b
+                                            class="text-danger">(Opcional)</b></label>
+                                    <div class="input-group input-group-merge">
+                                        <select name="codDomiciliado" id="codDomiciliado" class="form-select">
+                                            <option value="">Seleccionar</option>
+                                            <option value="1"
+                                                {{ old('codDomiciliado', $cliente->codDomiciliado ?? '') == '1' ? 'selected' : '' }}>
+                                                Domiciliado en El Salvador
+                                            </option>
+                                            <option value="2"
+                                                {{ old('codDomiciliado', $cliente->codDomiciliado ?? '') == '2' ? 'selected' : '' }}>
+                                                No domiciliado en El Salvador
+                                            </option>
+                                        </select>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="codPais">Codigo pais <b
+                                            class="text-danger">(Opcional)</b></label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="text" name="codPais" id="codPais" class="form-control"
+                                            placeholder="SV" value="{{ $cliente->codPais }}">
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
                                 <!-- Tipo de documento -->
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="tipo_documento">Tipo de documento</label>
                                     <div class="input-group input-group-merge">
                                         <select name="tipo_documento" id="tipo_documento" class="form-control" required>
                                             <option value="">Elegir</option>
-                                            <option value="13"
-                                                {{ $cliente->tipo_documento == '13' ? 'selected' : '' }}>DUI</option>
-                                            <option value="36"
-                                                {{ $cliente->tipo_documento == '36' ? 'selected' : '' }}>NIT</option>
+                                            <option value="13" {{ $cliente->tipo_documento == '13' ? 'selected' : '' }}>
+                                                DUI</option>
+                                            <option value="36" {{ $cliente->tipo_documento == '36' ? 'selected' : '' }}>
+                                                NIT</option>
                                             <option value="37"
-                                                {{ $cliente->tipo_documento == '37' ? 'selected' : '' }}>Pasaporte
+                                                {{ $cliente->tipo_documento == '37' ? 'selected' : '' }}>
+                                                Pasaporte
                                             </option>
                                             <option value="39"
-                                                {{ $cliente->tipo_documento == '39' ? 'selected' : '' }}>Cédula</option>
+                                                {{ $cliente->tipo_documento == '39' ? 'selected' : '' }}>
+                                                Cédula</option>
                                         </select>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
@@ -76,7 +110,8 @@
                                     <label class="form-label w-100" for="numero_documento">Numero de documento</label>
                                     <div class="input-group input-group-merge">
                                         <input id="numero_documento" name="numero_documento" class="form-control"
-                                            type="text" placeholder="ejemplo" value="{{ $cliente->numero_documento }}" />
+                                            type="text" placeholder="ejemplo"
+                                            value="{{ $cliente->numero_documento }}" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
