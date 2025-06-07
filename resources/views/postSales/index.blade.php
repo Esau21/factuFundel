@@ -72,7 +72,7 @@
                                 </select>
                             </div>
 
-                             <!-- Plazo -->
+                            <!-- Plazo -->
                             <div class="col-sm-6">
                                 <label for="plazo">Plazo</label>
                                 <select name="plazo" id="plazo" class="form-select w-100">
@@ -83,13 +83,13 @@
                                 </select>
                             </div>
 
-                             <!-- referencia -->
+                            <!-- referencia -->
                             <div class="col-sm-6">
                                 <label for="plazo">Referencia (Opcional)</label>
                                 <input type="text" name="referencia" id="referencia" class="form-control text-center">
                             </div>
 
-                             <!-- Periodo -->
+                            <!-- Periodo -->
                             <div class="col-sm-6">
                                 <label for="plazo">Periodo</label>
                                 <input type="text" name="periodo" id="periodo" class="form-control text-center">
@@ -128,6 +128,11 @@
                                     <option value="factura_sujeto_excluido">Factura de Sujeto Excluido</option>
                                     <option value="comprobante_donacion">Comprobante de Donación</option>
                                 </select>
+                            </div>
+
+                            <div class="col-sm-6" id="campoObservaciones" style="display: none;">
+                                <label for="estado" class="form-label">Observaciones</label>
+                                <textarea name="observaciones" id="observaciones" class="form-control" rows="1"></textarea>
                             </div>
 
 

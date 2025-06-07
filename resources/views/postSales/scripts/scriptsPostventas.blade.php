@@ -47,6 +47,14 @@
             toggleCamposPago();
         });
 
+        $('#tipo_documento').on('change', function(){
+             var tipoDoc = $(this).val();
+            $('#campoObservaciones').hide();
+            if (tipoDoc === 'factura_sujeto_excluido') {
+                $('#campoObservaciones').show();
+            } 
+        });
+
 
         function actualizarTotalPago() {
             let totalVenta = parseFloat($('#totalAmount').text()) || 0;
@@ -334,6 +342,7 @@
             const plazo = $('#plazo').val();
             const referencia = $('#referencia').val();
             const periodo = $('#periodo').val();
+            const observaciones = $('#observaciones').val();
 
             $("#guardarVenta").prop('disabled', true);
 
@@ -349,6 +358,7 @@
                     tipo_venta,
                     cambio,
                     producto_id,
+                    observaciones,
                     cantidad,
                     precio_unitario,
                     sub_total,

@@ -27,7 +27,7 @@
  <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+ <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -36,18 +36,22 @@
  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
  <script>
-    $(document).ready(function() {
-        $('.select2').select2({
-            width: '100%'
-        });
+     $(document).ready(function() {
+         $('.select2').select2({
+             width: '100%'
+         });
 
-        $('.modal').on('shown.bs.modal', function () {
-            $(this).find('.select2').each(function() {
-                $(this).select2({
-                    width: '100%'
-                });
-            });
-        });
-    });
-</script>
+         $('.modal').on('shown.bs.modal', function() {
+             $(this).find('.select2').each(function() {
+                 $(this).select2({
+                     width: '100%'
+                 });
+             });
+         });
+     });
+ </script>
 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+ <script>
+     hljs.highlightAll();
+ </script>

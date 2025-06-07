@@ -714,6 +714,8 @@ class SalesController extends Controller
             $correlativo = $this->obtenerCorrelativo($tipo_dte, $codigoEstablecimiento);
             $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
             $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
+            $empresa = Auth::user()->empresa->load('actividad', 'departamento', 'municipio');
+            $ambiente = $empresa->ambiente ?? '00';
             switch ($tipo_dte) {
                 case '03': // CCF
                     $version = 3;
@@ -728,7 +730,7 @@ class SalesController extends Controller
             $identificacion = self::identificacionGet(
                 $version,
                 $tipo_dte,
-                '00',
+                $ambiente,
                 $codigoGeneracion,
                 $fecha,
                 $hora,
@@ -755,7 +757,6 @@ class SalesController extends Controller
                 'codDomiciliado' => $cliente->codDomiciliado ?? null,
                 'codPais' => $cliente->codPais ?? 'SV',
             ] : []));
-            $empresa = Auth::user()->empresa->load('actividad', 'departamento', 'municipio');
             $emisorData = self::obtenerEmisor(
                 $empresa->toArray(),
                 $tipo_dte,
@@ -775,9 +776,8 @@ class SalesController extends Controller
             }
             if ($tipo_dte === '15') {
                 $emisor = $emisorData['emisor'];
-                unset($emisor['nit']); // Quitar nit
-
-                // Insertar al principio con + operator para controlar el orden
+                unset($emisor['nit']);
+                /* Insertamos al principio con + operator para controlar el orden */
                 $emisorData['emisor'] = [
                     'tipoDocumento' => $empresa->tipo_documento,
                     'numDocumento'  => $empresa->num_documento ?? $empresa->nit,
@@ -860,7 +860,7 @@ class SalesController extends Controller
                     ? (collect($bodyDocumento['resumen']['tributos'] ?? [])
                         ->firstWhere('codigo', '20')['valor'] ?? 0)
                     : ($bodyDocumento['resumen']['totalIva'] ?? 0),
-                'observaciones' => $request->observaciones ?? '',
+                'observaciones' => $request->observaciones ?? null,
                 'monto_efectivo' => $request->monto_efectivo ?? 0,
                 'monto_transferencia' => $request->monto_transferencia ?? 0,
                 'cuenta_bancaria_id' => $request->cuenta_bancaria_id ?? null,

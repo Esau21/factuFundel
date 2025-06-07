@@ -12,4 +12,11 @@ class CorrelativoDte extends Model
         'codigo_establecimiento',
         'correlativo',
     ];
+
+    public static function getData()
+    {
+        $data = CorrelativoDte::select('*')->orderBy('id', 'asc')->get();
+
+        return $data;
+    }
 }

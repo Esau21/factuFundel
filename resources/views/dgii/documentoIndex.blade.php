@@ -9,15 +9,28 @@
                 <div class="card h-100 d-flex flex-column">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Documentos Tributarios Electrónicos.</h5>
-                        <div class="btn-group" role="group" aria-label="Filtrar por tipo">
-                            <button class="btn bg-label-secondary filter-btn active me-1" data-tipo=""><i class="icon-base bx bx-receipt"></i> Todos</button>
-                            <button class="btn bg-label-primary filter-btn me-1" data-tipo="01"><i class="icon-base bx bx-receipt"></i> Factura</button>
-                            <button class="btn bg-label-success filter-btn me-1" data-tipo="03"><i class="icon-base bx bx-receipt"></i> Comprobante de
-                                crédito
-                                fiscal</button>
-                            <button class="btn bg-label-dark filter-btn me-1" data-tipo="14"><i class="icon-base bx bx-receipt"></i> Sujeto excluido</button>
-                            <button class="btn bg-label-warning filter-btn me-1" data-tipo="15"><i class="icon-base bx bx-receipt"></i> Comprobante de
-                                donación</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="btn-group d-flex flex-wrap gap-2" role="group" aria-label="Filtrar por tipo">
+                            <button class="btn bg-label-secondary filter-btn active px-4 py-3 fw-semibold text-nowrap"
+                                data-tipo="">
+                                <i class="icon-base bx bx-receipt me-2"></i>Todos
+                            </button>
+                            <button class="btn bg-label-primary filter-btn px-4 py-3 fw-semibold text-nowrap"
+                                data-tipo="01">
+                                <i class="icon-base bx bx-receipt me-2"></i>Factura
+                            </button>
+                            <button class="btn bg-label-success filter-btn px-4 py-3 fw-semibold text-nowrap"
+                                data-tipo="03">
+                                <i class="icon-base bx bx-receipt me-2"></i>Comprobante de crédito fiscal
+                            </button>
+                            <button class="btn bg-label-dark filter-btn px-4 py-3 fw-semibold text-nowrap" data-tipo="14">
+                                <i class="icon-base bx bx-receipt me-2"></i>Sujeto excluido
+                            </button>
+                            <button class="btn bg-label-warning filter-btn px-4 py-3 fw-semibold text-nowrap"
+                                data-tipo="15">
+                                <i class="icon-base bx bx-receipt me-2"></i>Comprobante de donación
+                            </button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -131,23 +144,6 @@
                 lengthMenu: 'Mostrar _MENU_ registros'
             },
             dom: '<"top d-flex justify-content-between align-items-center mb-3"fl>rt<"bottom d-flex justify-content-between align-items-center mt-3"ip><"clear">',
-            buttons: [{
-                    extend: 'copy',
-                    text: 'Copiar'
-                },
-                {
-                    extend: 'excel',
-                    text: 'Exportar Excel'
-                },
-                {
-                    extend: 'pdf',
-                    text: 'Exportar PDF'
-                },
-                {
-                    extend: 'print',
-                    text: 'Imprimir'
-                }
-            ],
             initComplete: function() {
                 $('#sysconta-datatable tfoot th').each(function() {
                     if (!$(this).hasClass('no-search')) {

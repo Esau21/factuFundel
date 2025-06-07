@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DGII;
 
 use App\Http\Controllers\Controller;
+use App\Models\CorrelativoDte;
 use App\Models\DGII\DocumentosDte as DGIIDocumentosDte;
 use Carbon\Carbon;
 use Exception;
@@ -59,7 +60,7 @@ class DocumentosDTEController extends Controller
                     return $data->sello_recibido ?? '';
                 })
                 ->addColumn('acciones', function ($data) {
-                    $sendMH = '<a href="' . route('clientes.edit', $data->id) . '" 
+                    $resMH = '<a href="' . route('facturacion.viewMHResponse', $data->id) . '" 
                     class="mx-1 d-inline-block" 
                     title="Respuesta Hacienda"
                     style="text-decoration: none;">
@@ -77,7 +78,7 @@ class DocumentosDTEController extends Controller
                     </i>
                 </a>';
 
-                    return $sendMH . $json;
+                    return $resMH . $json;
                 })
                 ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision'])->make(true);
         }
@@ -99,5 +100,48 @@ class DocumentosDTEController extends Controller
             'Content-Type' => 'application/json',
             'Content-Disposition' => 'attachment; filename="' . $uuid . '.json"',
         ]);
+    }
+
+    public function viewMHResponse($documentoId)
+    {
+
+        $documentoDTE = DGIIDocumentosDte::find($documentoId);
+        if (!$documentoDTE) {
+            return response()->json(['error' => 'No existe el documento dte quer quieres visualizar']);
+        }
+
+        return view('dgii.mhResponse', compact('documentoDTE'));
+    }
+
+    public function correlativosDteIndex()
+    {
+        return view('dgii.dteCorrelativos');
+    }
+
+    public function correlativosDteIndexGetData(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = CorrelativoDte::getData();
+            return DataTables::of($data)
+                ->addColumn('tipo_dte', function ($data) {
+                    if ($data->tipo_dte == '01') {
+                        return '<span class="badge badge-center rounded-pill bg-label-primary me-1"><i class="icon-base bx bx-receipt"></i></span>' . $data->tipo_dte . ' | Factura';
+                    } elseif ($data->tipo_dte == '03') {
+                        return '<span class="badge badge-center rounded-pill bg-label-success me-1"><i class="icon-base bx bx-receipt"></i></span>' . $data->tipo_dte . ' | Comprobante de crédito fiscal';
+                    } elseif ($data->tipo_dte == '14') {
+                        return '<span class="badge badge-center rounded-pill bg-label-secondary me-1"><i class="icon-base bx bx-receipt"></i></span>' . $data->tipo_dte . ' | Sujeto Excluido';
+                    } elseif ($data->tipo_dte == '15') {
+                        return '<span class="badge badge-center rounded-pill bg-label-warning me-1"><i class="icon-base bx bx-receipt"></i></span>' . $data->tipo_dte . ' | Comprobante de Donacíon';
+                    } else {
+                        return '<span class="badge badge-center rounded-pill bg-label-danger me-1">Otro</span>';
+                    }
+                })
+                ->addColumn('codigo_establecimiento', function ($data) {
+                    return '<span class="badge bg-light border text-dark fw-semibold">' . e($data->codigo_establecimiento) . '</span>';
+                })
+                ->addColumn('correlativo', function ($data) {
+                    return '<span class="badge bg-light border text-dark fw-semibold">' . e($data->correlativo) . '</span>';
+                })->rawColumns(['tipo_dte', 'codigo_establecimiento', 'correlativo'])->make(true);
+        }
     }
 }

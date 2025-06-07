@@ -166,6 +166,11 @@
                     </a>
                 </li>
                 <li class="menu-item">
+                    <a href="{{ route('correlativos.correlativosDteIndex') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Basic">Correlativos DTE</div>
+                    </a>
+                </li>
+                <li class="menu-item">
                     <a href="{{ route('sales.index') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Basic">Lector JSON</div>
                     </a>
