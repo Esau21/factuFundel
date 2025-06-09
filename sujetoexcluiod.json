@@ -1,22 +1,23 @@
+
 {
     "identificacion": {
         "version": 1,
         "ambiente": "00",
-        "tipoDte": "15",
-        "numeroControl": "DTE-15-00000001-000000000000043",
-        "codigoGeneracion": "BC5ACDF3-00FD-4459-8F22-A8BBF1D6CD85",
+        "tipoDte": "14",
+        "numeroControl": "DTE-14-00000001-000000000000028",
+        "codigoGeneracion": "207AF7B9-DDD9-4965-9012-C954FDFB62F8",
         "tipoModelo": 1,
         "tipoOperacion": 1,
-        "fecEmi": "2025-06-09",
-        "horEmi": "13:39:02",
+        "tipoContingencia": null,
+        "motivoContin": null,
+        "fecEmi": "2025-06-06",
+        "horEmi": "11:16:16",
         "tipoMoneda": "USD"
     },
-    "donatario": {
-        "tipoDocumento": "36",
-        "numDocumento": "06140607181088",
+    "emisor": {
         "nrc": "2760965",
+        "nit": "06140607181088",
         "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
-        "nombreComercial": "FUNDEL",
         "codActividad": "86909",
         "descActividad": "Otros Servicio relacionados con la salud ncp",
         "direccion": {
@@ -26,16 +27,14 @@
         },
         "telefono": "77665545",
         "correo": "fundelong@gmail.com",
-        "tipoEstablecimiento": "01",
         "codEstableMH": null,
         "codEstable": null,
         "codPuntoVentaMH": null,
         "codPuntoVenta": null
     },
-    "donante": {
+    "sujetoExcluido": {
         "tipoDocumento": "13",
         "numDocumento": "061846443",
-        "nrc": "3113376",
         "nombre": "LENTI S.A DE C.V",
         "codActividad": "96091",
         "descActividad": "Servicios de sauna y otros servicios para la estética corporal n.c.p.",
@@ -45,40 +44,41 @@
             "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
         },
         "telefono": "74474442",
-        "correo": "factura@opticaavplussv.com",
-        "codDomiciliado": 1,
-        "codPais": "SV"
+        "correo": "factura@opticaavplussv.com"
     },
-    "otrosDocumentos": [
-        {
-            "codDocAsociado": 1,
-            "descDocumento": "alcaldia de san pedro nonualco",
-            "detalleDocumento": "detalles del convenio"
-        }
-    ],
     "cuerpoDocumento": [
         {
             "numItem": 1,
-            "tipoDonacion": 2,
+            "tipoItem": 2,
             "cantidad": 1,
             "codigo": "P00001",
             "uniMedida": 99,
             "descripcion": "Convenio con alcaldía municipal santa ana norte",
-            "valorUni": 160,
-            "valor": 160,
-            "depreciacion": 0
+            "precioUni": 160,
+            "montoDescu": 0,
+            "compra": 160
         }
     ],
     "resumen": {
-        "valorTotal": 160,
-        "totalLetras": "CIENTO SESENTA CON 00\/100 DÓLARES",
+        "totalCompra": 160,
+        "descu": 0,
+        "totalDescu": 0,
+        "subTotal": 160,
+        "ivaRete1": 0,
+        "reteRenta": 16,
+        "totalPagar": 144,
+        "totalLetras": "CIENTO CUARENTA Y CUATRO CON 00/100 DÓLARES",
+        "condicionOperacion": 1,
         "pagos": [
             {
                 "codigo": "01",
-                "montoPago": 160,
-                "referencia": ""
+                "montoPago": 144,
+                "plazo": null,
+                "referencia": "",
+                "periodo": null
             }
-        ]
+        ],
+        "observaciones": "Sujeto Excluido"
     },
     "apendice": null
 }

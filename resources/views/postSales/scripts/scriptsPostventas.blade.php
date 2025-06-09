@@ -50,12 +50,11 @@
         $('#tipo_documento').on('change', function() {
             var tipoDoc = $(this).val();
             $('#campoObservaciones').hide();
+            $('#OtrosDocumentos').hide();
             if (tipoDoc === 'factura_sujeto_excluido') {
                 $('#campoObservaciones').show();
-            } else if (tipoDoc === 'factura') {
-                $('#campoObservaciones').show();
             } else if (tipoDoc === 'comprobante_donacion') {
-                $('#campoObservaciones').show();
+                $('#OtrosDocumentos').show();
             }
         });
 
@@ -347,6 +346,8 @@
             const referencia = $('#referencia').val();
             const periodo = $('#periodo').val();
             const observaciones = $('#observaciones').val();
+            const descDocumento = $('#descDocumento').val();
+            const detalleDocumento = $('#detalleDocumento').val();
 
             $("#guardarVenta").prop('disabled', true);
 
@@ -363,6 +364,8 @@
                     cambio,
                     producto_id,
                     observaciones,
+                    descDocumento,
+                    detalleDocumento,
                     cantidad,
                     precio_unitario,
                     sub_total,

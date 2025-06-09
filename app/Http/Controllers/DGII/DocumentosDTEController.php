@@ -5,6 +5,7 @@ namespace App\Http\Controllers\DGII;
 use App\Http\Controllers\Controller;
 use App\Models\CorrelativoDte;
 use App\Models\DGII\DocumentosDte as DGIIDocumentosDte;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -87,7 +88,16 @@ class DocumentosDTEController extends Controller
                                     </i>
                                 </a>';
 
-                    return $resMH . $json . $documento;
+                    $documentoDownload = '<a href="' . route('facturacion.descargarPDFTipoDocumento', $data->id) . '" 
+                                    class="mx-1 d-inline-block" 
+                                    title="Descargar Factura"
+                                    style="text-decoration: none;" target="_blank">
+                                    <i class="bx bxs-download text-warning" 
+                                        style="font-size: 28px; transition: transform 0.2s;">
+                                    </i>
+                                </a>';
+
+                    return $resMH . $json . $documento . $documentoDownload;
                 })
                 ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision'])->make(true);
         }
@@ -161,7 +171,7 @@ class DocumentosDTEController extends Controller
 
         switch ($documento->tipo_documento) {
             case '01': // Factura electrónica
-                $jsonDte = $this->generarFacturaElectronica($documento);
+                return $this->generarFacturaElectronica($documento);
                 break;
 
             case '03': // CCF
@@ -170,11 +180,11 @@ class DocumentosDTEController extends Controller
                 break;
 
             case '14': // Sujeto excluido
-                $jsonDte = $this->generarFacturaSujetoExcluido($documento);
+                return $this->generarFacturaSujetoExcluido($documento);
                 break;
 
             case '15': // Donación
-                $jsonDte = $this->generarComprobanteDonacion($documento);
+                return $this->generarComprobanteDonacion($documento);
                 break;
 
             default:
@@ -193,11 +203,16 @@ class DocumentosDTEController extends Controller
 
     protected function generarFacturaElectronica($documento)
     {
-        // Aquí va tu lógica para estructurar el JSON de la factura electrónica
+        // Logica para mostrar el documento de la factura
+        return view('documentos.factura_consumidor_final', [
+            'json' => json_decode($documento->json_dte, true),
+            'mh' => json_decode($documento->mh_response, true),
+        ]);
     }
 
     protected function verCCF($documento)
     {
+        // Logica para mostrar el documento comprobante de credito fiscal
         return view('documentos.factura_comprobante_credito_fiscal', [
             'json' => json_decode($documento->json_dte, true),
             'mh' => json_decode($documento->mh_response, true),
@@ -208,10 +223,38 @@ class DocumentosDTEController extends Controller
     protected function generarFacturaSujetoExcluido($documento)
     {
         // Lógica para sujeto excluido
+        return view('documentos.factura_sujeto_excluido', [
+            'json' => json_decode($documento->json_dte, true),
+            'mh' => json_decode($documento->mh_response, true),
+        ]);
     }
 
     protected function generarComprobanteDonacion($documento)
     {
         // Lógica para donación
+        return view('documentos.factura_comprobante_donacion', [
+            'json' => json_decode($documento->json_dte, true),
+            'mh' => json_decode($documento->mh_response, true),
+        ]);
+    }
+
+    public function descargarPDFTipoDocumento($documentoId)
+    {
+        $documento = DGIIDocumentosDte::with(['cliente', 'empresa'])->findOrFail($documentoId);
+
+        $view = match ($documento->tipo_documento) {
+            '01' => 'documentos.pdf.fe',
+            '03' => 'documentos.pdf.ccf',
+            '14' => 'documentos.pdf.se',
+            '15' => 'documentos.pdf.cd',
+            default => throw new \Exception("Tipo de documento no soportado")
+        };
+
+        $json = json_decode($documento->json_dte, true);
+        $mh = json_decode($documento->mh_response, true);
+
+        $pdf = Pdf::loadView($view, compact('json', 'mh'))->setPaper('A4');
+
+        return $pdf->stream("documento-{$documentoId}.pdf");
     }
 }

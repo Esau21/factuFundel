@@ -26,6 +26,8 @@ class Sales extends Model
         'periodo',
         'iva',
         'observaciones',
+        'descDocumento',
+        'detalleDocumento',
         'cambio',
         'documento_dte_id',
         'cheque_bancario_id',

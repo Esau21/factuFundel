@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('tipo_venta', 20);
             $table->string('plazo')->nullable();
             $table->string('referencia')->nullable();
+            $table->string('descDocumento')->nullable();
+            $table->string('detalleDocumento');
             $table->string('periodo')->nullable();
             $table->decimal('iva', 10, 2)->default(0.00);
             $table->text('observaciones');

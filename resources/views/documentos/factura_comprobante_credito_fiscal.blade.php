@@ -100,7 +100,6 @@
 </head>
 
 <body>
-
     <div class="page">
         <div class="text-center header">
             <div class="bold">DOCUMENTO TRIBUTARIO ELECTRÓNICO</div>

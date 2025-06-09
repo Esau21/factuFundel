@@ -135,6 +135,20 @@
                                 <textarea name="observaciones" id="observaciones" class="form-control" rows="1"></textarea>
                             </div>
 
+                            <div class="col-sm-6" id="OtrosDocumentos" style="display: none;">
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <label for="descDocumento" class="form-label">Descripción del documento</label>
+                                        <textarea name="descDocumento" id="descDocumento" class="form-control" rows="1"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <label for="detalleDocumento" class="form-label">Detalle del documento</label>
+                                        <textarea name="detalleDocumento" id="detalleDocumento" class="form-control" rows="1"></textarea>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Efectivo -->
                             <div id="efectivo_fields" class="col-12 mt-3" style="display: none;">

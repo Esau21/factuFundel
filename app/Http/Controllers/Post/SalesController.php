@@ -813,8 +813,8 @@ class SalesController extends Controller
                     "otrosDocumentos" => [
                         [
                             "codDocAsociado" => (int)$cliente->codDomiciliado ?? null,
-                            "descDocumento" => "Resolución Alcaldía Municipal",
-                            "detalleDocumento" => "Convenio firmado para entrega de donación en el marco del programa social 2025"
+                            "descDocumento" => $request->descDocumento ?? null,
+                            "detalleDocumento" => $request->detalleDocumento ?? null
                         ]
                     ],
                     "cuerpoDocumento" => $cuerpoDocumento,
@@ -852,6 +852,8 @@ class SalesController extends Controller
                         ->firstWhere('codigo', '20')['valor'] ?? 0)
                     : ($bodyDocumento['resumen']['totalIva'] ?? 0),
                 'observaciones' => $request->observaciones ?? null,
+                'descDocumento' => $request->descDocumento ?? null,
+                'detalleDocumento' => $request->detalleDocumento ?? null,
                 'monto_efectivo' => $request->monto_efectivo ?? 0,
                 'monto_transferencia' => $request->monto_transferencia ?? 0,
                 'cuenta_bancaria_id' => $request->cuenta_bancaria_id ?? null,
