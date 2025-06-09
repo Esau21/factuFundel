@@ -247,13 +247,16 @@ class DocumentosDTEController extends Controller
             '03' => 'documentos.pdf.ccf',
             '14' => 'documentos.pdf.se',
             '15' => 'documentos.pdf.cd',
-            default => throw new \Exception("Tipo de documento no soportado")
+            default => abort(404, 'Tipo de documento no soportado.')
         };
 
         $json = json_decode($documento->json_dte, true);
-        $mh = json_decode($documento->mh_response, true);
+        $mh = json_decode($documento->mh_response ?? '{}', true); // Evita errores si es null
 
-        $pdf = Pdf::loadView($view, compact('json', 'mh'))->setPaper('A4');
+        $pdf = Pdf::loadView($view, compact('json', 'mh'))
+            ->setPaper('A4')
+            ->setOption('isHtml5ParserEnabled', true);
+
 
         return $pdf->stream("documento-{$documentoId}.pdf");
     }

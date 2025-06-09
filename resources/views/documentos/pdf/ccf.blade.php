@@ -5,177 +5,145 @@
     <meta charset="UTF-8">
     <title>Comprobante de Crédito Fiscal</title>
     <style>
-        /* Reset y caja */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
+        /* Contenedor principal */
+        .page {
+            width: 800px;
+            margin: 0 auto;
             font-family: Arial, sans-serif;
             font-size: 10pt;
-            margin: 0;
-            padding: 0;
-            color: #000;
         }
 
-        .page {
-            width: 18cm;
-            /* A4 ancho real útil */
-            min-height: 27cm;
-            /* A4 altura útil */
-            padding: 10mm;
-            margin: auto;
-            border: 1px solid #000;
-            position: relative;
+        h1, h2 {
+            margin: 0;
         }
 
         .text-center {
             text-align: center;
         }
 
-        .text-right {
+        .text-end {
             text-align: right;
         }
 
-        .text-left {
-            text-align: left;
+        .mb-2 {
+            margin-bottom: 12px;
         }
 
-        .bold {
-            font-weight: bold;
-        }
-
-        .header,
-        .section {
-            margin-bottom: 6px;
-        }
-
-        .section-title {
-            font-weight: bold;
-            margin-bottom: 4px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 2px;
-        }
-
-        .flex {
+        .row {
             display: flex;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            page-break-inside: avoid; /* Evitar corte dentro del bloque */
         }
 
-        .box {
-            border: 1px solid #000;
-            padding: 6px;
-            margin-bottom: 6px;
-            font-size: 9pt;
-            word-wrap: break-word;
+        .col-5 {
+            width: 41.66%;
+            box-sizing: border-box;
         }
 
-        /* Contenedores del flex, para evitar desbordes */
-        .box.w49 {
+        .col-2 {
+            width: 16.66%;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col-6 {
             width: 49%;
-            min-width: 49%;
+            box-sizing: border-box;
         }
 
-        .qr {
+        .border-box {
+            border: 1px solid #000;
+            padding: 8px;
+            font-size: 9pt;
+            margin-bottom: 12px;
+            page-break-inside: avoid; /* Evitar corte dentro del bloque */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin-bottom: 12px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 4px 6px;
             text-align: center;
         }
 
-        /* Imagen QR tamaño fijo */
-        img.qr-img {
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .text-end td {
+            text-align: right;
+        }
+
+        .qr-img {
             width: 90px;
             height: 90px;
             object-fit: contain;
         }
 
-        table.table,
-        table.summary-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 6px;
-            font-size: 9pt;
-        }
-
-        table.table th,
-        table.table td,
-        table.summary-table td {
-            border: 1px solid #000;
-            padding: 4px 6px;
-            text-align: center;
-            word-break: break-word;
-        }
-
-        table.summary-table td {
-            text-align: left;
-        }
-
-        /* Para que descripción no se desborde y tenga algo más de espacio */
-        table.table td:nth-child(4) {
-            text-align: left;
-            max-width: 8cm;
-            white-space: normal;
-        }
-
-        .footer {
-            text-align: right;
-            margin-top: 12px;
-            font-size: 9pt;
-        }
-
-        .signature-section {
+        /* Firmas lado a lado */
+        .firma-container {
             display: flex;
             justify-content: space-between;
-            margin-top: 12px;
-            font-size: 9pt;
-            gap: 20px;
+            margin-top: 30px;
+            page-break-inside: avoid;
         }
 
-        .signature-section>div {
-            width: 48%;
+        .firma {
+            width: 45%;
             border-top: 1px solid #000;
-            padding-top: 4px;
+            padding-top: 10px;
             text-align: center;
+            font-size: 9pt;
         }
 
-        /* Pequeño ajuste responsive para flex */
-        @media print {
-            .flex {
-                flex-wrap: nowrap;
-            }
+        /* Evitar que elementos se dividan en salto de página */
+        tr, tbody, thead {
+            page-break-inside: avoid;
         }
     </style>
 </head>
 
 <body>
     <div class="page">
-        <div class="text-center header">
-            <div class="bold" style="font-size: 12pt;">DOCUMENTO TRIBUTARIO ELECTRÓNICO</div>
-            <div class="bold" style="font-size: 11pt;">COMPROBANTE DE CRÉDITO FISCAL</div>
+        <div class="text-center mb-2">
+            <h1>DOCUMENTO TRIBUTARIO ELECTRÓNICO</h1>
+            <h2>COMPROBANTE DE CRÉDITO FISCAL</h2>
         </div>
 
-        <div class="text-right" style="font-size: 9pt;">Ver.3</div>
+        <div class="text-end mb-2" style="font-size: 9pt;">Ver.3</div>
 
-        <div class="flex header" style="font-size: 9pt;">
-            <div style="width: 38%;">
+        <div class="row">
+            <div class="col-5">
                 <div><strong>Código de Generación:</strong> {{ $json['identificacion']['codigoGeneracion'] }}</div>
                 <div><strong>Número de Control:</strong> {{ $json['identificacion']['numeroControl'] }}</div>
                 <div><strong>Sello de recepción:</strong> {{ $mh['selloRecibido'] ?? '—' }}</div>
             </div>
-            @php
-                $qrUrl =
-                    'https://admin.factura.gob.sv/consultaPublica?ambiente=' .
-                    $json['identificacion']['ambiente'] .
-                    '&codGen=' .
-                    $json['identificacion']['codigoGeneracion'] .
-                    '&fechaEmi=' .
-                    $json['identificacion']['fecEmi'];
-            @endphp
-            <div class="qr" style="width: 20%;">
+
+            <div class="col-2">
+                @php
+                    $qrUrl =
+                        'https://admin.factura.gob.sv/consultaPublica?ambiente=' .
+                        $json['identificacion']['ambiente'] .
+                        '&codGen=' .
+                        $json['identificacion']['codigoGeneracion'] .
+                        '&fechaEmi=' .
+                        $json['identificacion']['fecEmi'];
+                @endphp
                 <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode($qrUrl) }}"
                     alt="QR">
             </div>
-            <div style="width: 38%; text-align: right;">
+
+            <div class="col-5 text-end">
                 <div><strong>Modelo de Facturación:</strong> {{ $json['identificacion']['tipoModelo'] }}</div>
                 <div><strong>Tipo de Transmisión:</strong> {{ $json['identificacion']['tipoOperacion'] }}</div>
                 <div><strong>Fecha y Hora de Generación:</strong> {{ $json['identificacion']['fecEmi'] }}
@@ -183,59 +151,49 @@
             </div>
         </div>
 
-        <div class="flex" style="font-size: 9pt;">
-            <div class="box w49">
+        <div class="row mb-2">
+            <div class="col-6 border-box">
                 <strong>EMISOR</strong><br>
-                Nombre o razón social: {{ $json['emisor']['nombre'] }}<br>
+                Nombre: {{ $json['emisor']['nombre'] }}<br>
                 NIT: {{ $json['emisor']['nit'] }}<br>
                 NRC: {{ $json['emisor']['nrc'] }}<br>
-                Actividad económica: {{ $json['emisor']['descActividad'] }}<br>
+                Actividad: {{ $json['emisor']['descActividad'] }}<br>
                 Dirección: {{ $json['emisor']['direccion']['complemento'] }}<br>
-                Número de teléfono: {{ $json['emisor']['telefono'] }}<br>
-                Correo electrónico: {{ $json['emisor']['correo'] }}<br>
-                Nombre comercial: {{ $json['emisor']['nombreComercial'] }}<br>
-                Tipo de establecimiento: {{ $json['emisor']['tipoEstablecimiento'] }}
+                Teléfono: {{ $json['emisor']['telefono'] }}<br>
+                Correo: {{ $json['emisor']['correo'] }}<br>
+                Comercial: {{ $json['emisor']['nombreComercial'] }}<br>
+                Establecimiento: {{ $json['emisor']['tipoEstablecimiento'] }}
             </div>
-            <div class="box w49">
+            <div class="col-6 border-box">
                 <strong>RECEPTOR</strong><br>
-                Nombre o razón social: {{ $json['receptor']['nombre'] }}<br>
+                Nombre: {{ $json['receptor']['nombre'] }}<br>
                 NIT: {{ $json['receptor']['nit'] }}<br>
                 NRC: {{ $json['receptor']['nrc'] }}<br>
-                Actividad económica: {{ $json['receptor']['descActividad'] }}<br>
+                Actividad: {{ $json['receptor']['descActividad'] }}<br>
                 Dirección: {{ $json['receptor']['direccion']['complemento'] }}<br>
-                Correo electrónico: {{ $json['receptor']['correo'] }}<br>
-                Nombre comercial: {{ $json['receptor']['nombreComercial'] }}
+                Correo: {{ $json['receptor']['correo'] }}<br>
+                Comercial: {{ $json['receptor']['nombreComercial'] }}
             </div>
         </div>
 
-        <div class="box" style="font-size: 9pt;">
-            <strong>OTROS DOCUMENTOS ASOCIADOS</strong><br>
-            Identificación del documento: ____________________ Descripción: ____________________
+        <div class="border-box">OTROS DOCUMENTOS ASOCIADOS:<br>Identificación: ___________ Descripción: ___________
         </div>
+        <div class="border-box">VENTA A CUENTA DE TERCEROS:<br>NIT: ___________ Nombre: ___________</div>
+        <div class="border-box">DOCUMENTOS RELACIONADOS:<br>Tipo: __________ Nº: __________ Fecha: __________</div>
 
-        <div class="box" style="font-size: 9pt;">
-            <strong>VENTA A CUENTA DE TERCEROS</strong><br>
-            NIT: ____________________ Nombre, denominación o razón social: ____________________
-        </div>
-
-        <div class="box" style="font-size: 9pt;">
-            <strong>DOCUMENTOS RELACIONADOS</strong><br>
-            Tipo de Documento: _______________ Nº de documento: _______________ Fecha del documento: _______________
-        </div>
-
-        <table class="table" cellspacing="0" cellpadding="0">
+        <table>
             <thead>
                 <tr>
-                    <th>N°</th>
-                    <th>Cantidad</th>
+                    <th>#</th>
+                    <th>Cant</th>
                     <th>Unidad</th>
                     <th>Descripción</th>
-                    <th>Precio Unitario</th>
-                    <th>Descuento por Ítem</th>
-                    <th>Otros montos no afectos</th>
-                    <th>Ventas No Sujetas</th>
-                    <th>Ventas Exentas</th>
-                    <th>Ventas Gravadas</th>
+                    <th>Precio Unit.</th>
+                    <th>Desc.</th>
+                    <th>No Afecto</th>
+                    <th>No Suj.</th>
+                    <th>Exento</th>
+                    <th>Gravado</th>
                 </tr>
             </thead>
             <tbody>
@@ -244,7 +202,7 @@
                         <td>{{ $item['numItem'] }}</td>
                         <td>{{ $item['cantidad'] }}</td>
                         <td>{{ $item['uniMedida'] }}</td>
-                        <td>{{ $item['descripcion'] }}</td>
+                        <td style="text-align: left;">{{ $item['descripcion'] }}</td>
                         <td>{{ number_format($item['precioUni'], 2) }}</td>
                         <td>{{ number_format($item['montoDescu'], 2) }}</td>
                         <td>{{ number_format($item['noGravado'], 2) }}</td>
@@ -256,83 +214,78 @@
             </tbody>
         </table>
 
-        <div class="flex" style="margin-top: 12px;">
-            <div style="width: 45%;"></div>
-            <div style="width: 53%;">
-                <table class="summary-table" cellspacing="0" cellpadding="0">
+        <div class="row">
+            <div class="col-6"></div>
+            <div class="col-6">
+                <table>
                     <tbody>
                         <tr>
-                            <td colspan="2"><strong>SUMA DE VENTAS</strong></td>
+                            <td><strong>Suma Total:</strong></td>
+                            <td class="text-end">${{ number_format($json['resumen']['subTotalVentas'], 2) }}</td>
                         </tr>
                         <tr>
-                            <td>Suma Total de Operaciones:</td>
-                            <td>${{ number_format($json['resumen']['subTotalVentas'], 2) }}</td>
+                            <td>Desc. No Suj:</td>
+                            <td class="text-end">${{ number_format($json['resumen']['descuNoSuj'], 2) }}</td>
                         </tr>
                         <tr>
-                            <td>Monto global Desc., Rebajas y otras ventas no sujetas:</td>
-                            <td>${{ number_format($json['resumen']['descuNoSuj'], 2) }}</td>
+                            <td>Desc. Exenta:</td>
+                            <td class="text-end">${{ number_format($json['resumen']['descuExenta'], 2) }}</td>
                         </tr>
                         <tr>
-                            <td>Monto global Desc., Rebajas y otras ventas exentas:</td>
-                            <td>${{ number_format($json['resumen']['descuExenta'], 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Monto global Desc., Rebajas y otras ventas gravadas:</td>
-                            <td>${{ number_format($json['resumen']['descuGravada'], 2) }}</td>
+                            <td>Desc. Gravada:</td>
+                            <td class="text-end">${{ number_format($json['resumen']['descuGravada'], 2) }}</td>
                         </tr>
                         @foreach ($json['resumen']['tributos'] as $tributo)
                             <tr>
                                 <td>{{ $tributo['descripcion'] }}</td>
-                                <td>${{ number_format($tributo['valor'], 2) }}</td>
+                                <td class="text-end">${{ number_format($tributo['valor'], 2) }}</td>
                             </tr>
                         @endforeach
                         <tr>
                             <td><strong>Sub-Total:</strong></td>
-                            <td>${{ number_format($json['resumen']['subTotal'], 2) }}</td>
+                            <td class="text-end">${{ number_format($json['resumen']['subTotal'], 2) }}</td>
                         </tr>
                         <tr>
                             <td>IVA Percibido:</td>
-                            <td>${{ number_format($json['resumen']['ivaPerci1'], 2) }}</td>
+                            <td class="text-end">${{ number_format($json['resumen']['ivaPerci1'], 2) }}</td>
                         </tr>
                         <tr>
                             <td>IVA Retenido:</td>
-                            <td>${{ number_format($json['resumen']['ivaRete1'], 2) }}</td>
+                            <td class="text-end">${{ number_format($json['resumen']['ivaRete1'], 2) }}</td>
                         </tr>
                         <tr>
-                            <td>Retención Renta:</td>
-                            <td>${{ number_format($json['resumen']['reteRenta'], 2) }}</td>
+                            <td>Renta Retenida:</td>
+                            <td class="text-end">${{ number_format($json['resumen']['reteRenta'], 2) }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Monto Total de la Operación:</strong></td>
-                            <td>${{ number_format($json['resumen']['montoTotalOperacion'], 2) }}</td>
+                            <td><strong>Total Operación:</strong></td>
+                            <td class="text-end">${{ number_format($json['resumen']['montoTotalOperacion'], 2) }}</td>
                         </tr>
                         <tr>
-                            <td>Total Otros montos no afectos:</td>
-                            <td>${{ number_format($json['resumen']['totalNoGravado'], 2) }}</td>
+                            <td>Total No Afecto:</td>
+                            <td class="text-end">${{ number_format($json['resumen']['totalNoGravado'], 2) }}</td>
                         </tr>
                         <tr>
                             <td><strong>Total a Pagar:</strong></td>
-                            <td>${{ number_format($json['resumen']['totalPagar'], 2) }}</td>
+                            <td class="text-end">${{ number_format($json['resumen']['totalPagar'], 2) }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="box" style="font-size: 9pt;">
+        <div class="border-box" style="margin-top: 20px;">
             Valor en Letras: {{ $json['resumen']['totalLetras'] }}<br>
             Condición de la Operación: {{ $json['resumen']['condicionOperacion'] }}<br>
             Observaciones: {{ $json['extension']['observaciones'] ?? '-' }}
         </div>
 
-        <div class="signature-section">
-            <div>
-                Responsable por parte del emisor:<br> ____________________<br>
-                Nº de Documento: ___________
+        <div class="firma-container">
+            <div class="firma">
+                Responsable por el Emisor<br>____________________<br>Nº Documento: ___________
             </div>
-            <div>
-                Responsable por parte del receptor:<br> __________________<br>
-                Nº de Documento: ___________
+            <div class="firma">
+                Responsable por el Receptor<br>____________________<br>Nº Documento: ___________
             </div>
         </div>
     </div>

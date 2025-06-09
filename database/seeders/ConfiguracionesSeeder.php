@@ -34,7 +34,7 @@ class ConfiguracionesSeeder extends Seeder
             'token_expire' => 'token_expiredffrrffvrfvfv',
             'ambiente' => '00',
             'codPuntoVentaMH' => '01',
-            'codEstablecimientoMH' => 'MP0001',
+            'codEstablecimientoMH' => 'MP000001',
             'claveAPI' => Crypt::encryptString('Fundel@2025**'),
             'claveCert' => Crypt::encryptString('FundelOng@2025##')
         ]);

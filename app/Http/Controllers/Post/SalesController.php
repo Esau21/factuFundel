@@ -264,13 +264,16 @@ class SalesController extends Controller
     /* generamos el numero de control */
     private function generarNumeroControl(string $tipoDte, string $codigoEstablecimiento, int $correlativo): string
     {
-        return sprintf(
-            'DTE-%02s-%08s-%015d',
-            $tipoDte,
-            $codigoEstablecimiento,
-            $correlativo
-        );
+        /* Asegurarse que el código de establecimiento tenga el formato correcto (ej. MP000001) */
+        $codigoEstablecimientoFormateado = strtoupper($codigoEstablecimiento); // No lo modificamos más
+
+        /* Asegurarse que el correlativo tenga 15 dígitos con ceros a la izquierda */
+        $correlativoFormateado = str_pad((string) $correlativo, 15, '0', STR_PAD_LEFT);
+
+        return "DTE-{$tipoDte}-{$codigoEstablecimientoFormateado}-{$correlativoFormateado}";
     }
+
+
 
     private function obtenerCorrelativo(string $tipoDte, string $codigoEstablecimiento): int
     {
@@ -696,17 +699,16 @@ class SalesController extends Controller
                 'comprobante_donacion' => '15',
                 default => null
             };
-
             $bodyDocumento = $this->generarBodyDocumento($request);
             $codigoGeneracion = strtoupper(Str::uuid());
             $fecha = now()->format('Y-m-d');
             $hora = now()->format('H:i:s');
-            $codigoEstablecimiento = str_pad($empresa->codigo_establecimiento ?? '1', 8, '0', STR_PAD_LEFT);
+            $empresa = Auth::user()->empresa->load('actividad', 'departamento', 'municipio');
+            $codigoEstablecimiento = strtoupper($empresa->codEstablecimientoMH ?? 'MP000001');
             $correlativo = $this->obtenerCorrelativo($tipo_dte, $codigoEstablecimiento);
             $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
-            $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
-            $empresa = Auth::user()->empresa->load('actividad', 'departamento', 'municipio');
             $ambiente = $empresa->ambiente ?? '00';
+
             switch ($tipo_dte) {
                 case '03': // CCF
                     $version = 3;
