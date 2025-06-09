@@ -141,6 +141,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/facturacion/getData', [DocumentosDTEController::class, 'indexGetDtaDocumentosDte'])->name('facturacion.indexGetDtaDocumentosDte');
     Route::get('/download/json/dte/{documento_id}', [DocumentosDTEController::class, 'getDocumentoTributarioJson'])->name('facturacion.getDocumentoTributarioJson');
     Route::get('/mh/response/{documentoId}', [DocumentosDTEController::class, 'viewMHResponse'])->name('facturacion.viewMHResponse');
+    Route::get('/mostrar/factura/tipo/{documentoId}', [DocumentosDTEController::class, 'generarDocumentoElectronico'])->name('facturacion.generarDocumentoElectronico');
     Route::get('/correlativos/dte', [DocumentosDTEController::class, 'correlativosDteIndex'])->name('correlativos.correlativosDteIndex');
     Route::get('/get/data/correlativos/index', [DocumentosDTEController::class, 'correlativosDteIndexGetData'])->name('correlativos.correlativosDteIndexGetData');
     Route::post('/documentos-dte/enviar/{documento}', [DocumentosDTEController::class, 'enviarADGII'])

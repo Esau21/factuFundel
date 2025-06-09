@@ -47,12 +47,16 @@
             toggleCamposPago();
         });
 
-        $('#tipo_documento').on('change', function(){
-             var tipoDoc = $(this).val();
+        $('#tipo_documento').on('change', function() {
+            var tipoDoc = $(this).val();
             $('#campoObservaciones').hide();
             if (tipoDoc === 'factura_sujeto_excluido') {
                 $('#campoObservaciones').show();
-            } 
+            } else if (tipoDoc === 'factura') {
+                $('#campoObservaciones').show();
+            } else if (tipoDoc === 'comprobante_donacion') {
+                $('#campoObservaciones').show();
+            }
         });
 
 
@@ -366,7 +370,7 @@
                     descuento_en_dolar,
                     tipo_documento,
                     plazo,
-                    referencia, 
+                    referencia,
                     periodo,
 
                     // cheque

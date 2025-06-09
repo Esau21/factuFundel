@@ -414,7 +414,7 @@ class SalesController extends Controller
                     "referencia" => $request->referencia ?? "",
                     "periodo" => !empty($request->periodo) ? (int)$request->periodo : null,
                 ]
-            ] : null
+            ] : null,
         ];
 
         return [
@@ -618,16 +618,7 @@ class SalesController extends Controller
             ],
         ];
 
-        $otrosDocumentos = [
-            [
-                "tipoDocRel" => "99",
-                "descDocumento" => "Sin documento relacionado",
-                "detalleDocumento" => "Donación sin documento fuente"
-            ]
-        ];
-
         return [
-            "otrosDocumentos" => $otrosDocumentos,
             "productos" => $cuerpoDocumento,
             "resumen" => $resumen,
             "apendice" => null

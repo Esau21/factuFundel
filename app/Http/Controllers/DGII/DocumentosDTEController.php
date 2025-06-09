@@ -78,7 +78,16 @@ class DocumentosDTEController extends Controller
                     </i>
                 </a>';
 
-                    return $resMH . $json;
+                    $documento = '<a href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '" 
+                                    class="mx-1 d-inline-block" 
+                                    title="Mostrar Factura"
+                                    style="text-decoration: none;">
+                                    <i class="bx bxs-file-pdf text-danger" 
+                                        style="font-size: 28px; transition: transform 0.2s;">
+                                    </i>
+                                </a>';
+
+                    return $resMH . $json . $documento;
                 })
                 ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision'])->make(true);
         }
@@ -143,5 +152,66 @@ class DocumentosDTEController extends Controller
                     return '<span class="badge bg-light border text-dark fw-semibold">' . e($data->correlativo) . '</span>';
                 })->rawColumns(['tipo_dte', 'codigo_establecimiento', 'correlativo'])->make(true);
         }
+    }
+
+
+    public function generarDocumentoElectronico($documentoId)
+    {
+        $documento = DGIIDocumentosDte::with(['cliente', 'empresa'])->findOrFail($documentoId);
+
+        switch ($documento->tipo_documento) {
+            case '01': // Factura electrónica
+                $jsonDte = $this->generarFacturaElectronica($documento);
+                break;
+
+            case '03': // CCF
+                // Solo mostramos la vista directamente
+                return $this->verCCF($documento);
+                break;
+
+            case '14': // Sujeto excluido
+                $jsonDte = $this->generarFacturaSujetoExcluido($documento);
+                break;
+
+            case '15': // Donación
+                $jsonDte = $this->generarComprobanteDonacion($documento);
+                break;
+
+            default:
+                throw new \Exception("Tipo de documento no soportado: " . $documento->tipo_documento);
+        }
+
+        // Guardar el JSON generado (si aplica)
+        $documento->json_dte = json_encode($jsonDte, JSON_UNESCAPED_UNICODE);
+        $documento->save();
+
+        return response()->json([
+            'message' => 'DTE generado correctamente',
+            'json_dte' => $jsonDte,
+        ]);
+    }
+
+    protected function generarFacturaElectronica($documento)
+    {
+        // Aquí va tu lógica para estructurar el JSON de la factura electrónica
+    }
+
+    protected function verCCF($documento)
+    {
+        return view('documentos.factura_comprobante_credito_fiscal', [
+            'json' => json_decode($documento->json_dte, true),
+            'mh' => json_decode($documento->mh_response, true),
+        ]);
+    }
+
+
+    protected function generarFacturaSujetoExcluido($documento)
+    {
+        // Lógica para sujeto excluido
+    }
+
+    protected function generarComprobanteDonacion($documento)
+    {
+        // Lógica para donación
     }
 }
