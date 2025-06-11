@@ -251,7 +251,7 @@ class DocumentosDTEController extends Controller
         };
 
         $json = json_decode($documento->json_dte, true);
-        $mh = json_decode($documento->mh_response ?? '{}', true); // Evita errores si es null
+        $mh = json_decode($documento->mh_response ?? '{}', true);
 
         $pdf = Pdf::loadView($view, compact('json', 'mh'))
             ->setPaper('A4')
