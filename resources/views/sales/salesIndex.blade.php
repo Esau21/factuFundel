@@ -35,8 +35,8 @@
                                     <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
                                 </div>
                                 <div class="col-sm-2 d-flex align-items-end">
-                                    <button type="button" id="btn-filtrar" class="btn btn-primary w-100">
-                                        <i class="bx bx-search"></i> Filtrar
+                                    <button type="button" id="btn-filtrar" class="btn bg-label-primary w-100">
+                                        <i class="bx bx-filter-alt"></i> Filtrar
                                     </button>
                                 </div>
                                 <div class="col-sm-2 d-flex align-items-end mt-2">

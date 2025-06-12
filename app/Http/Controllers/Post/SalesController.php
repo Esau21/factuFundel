@@ -1087,11 +1087,16 @@ class SalesController extends Controller
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFin = $request->input('fecha_fin');
 
+        $cliente = null;
+        if ($clienteId) {
+            $cliente = Clientes::find($clienteId);
+        }
+
         /* Obtener datos filtrados */
         $ventas = Sales::getSalesDataTotal($clienteId, $fechaInicio, $fechaFin);
 
         /* Aquí generas el PDF (usando por ejemplo DomPDF) */
-        $pdf = PDF::loadView('sales.historialPDF', compact('ventas', 'clienteId', 'fechaInicio', 'fechaFin'));
+        $pdf = PDF::loadView('sales.historialPDF', compact('ventas', 'cliente', 'fechaInicio', 'fechaFin'));
 
         /* Descargar PDF */
         return $pdf->download('historial_ventas.pdf');

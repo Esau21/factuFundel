@@ -1,7 +1,7 @@
 <h2>Historial de ventas</h2>
 
-@if ($clienteId)
-    <p>Cliente: {{ ($clienteId)->nombre ?? 'Desconocido' }}</p>
+@if ($cliente)
+    <p>Cliente: {{ $cliente->nombre ?? 'Desconocido' }}</p>
 @endif
 
 @if ($fechaInicio)
