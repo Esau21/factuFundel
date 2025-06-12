@@ -14,6 +14,40 @@
                         </a>
                     </div>
                     <div class="card-body">
+                        <form id="filtro-form">
+                            @csrf
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="cliente_id">Cliente:</label>
+                                    <select id="cliente_id" name="cliente_id" class="form-select select2 w-100">
+                                        <option value="">-- Todos los clientes --</option>
+                                        @foreach ($clientes as $cliente)
+                                            <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="fecha_inicio">Desde:</label>
+                                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="fecha_fin">Hasta:</label>
+                                    <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-end">
+                                    <button type="button" id="btn-filtrar" class="btn btn-primary w-100">
+                                        <i class="bx bx-search"></i> Filtrar
+                                    </button>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-end mt-2">
+                                    <button type="button" id="btn-descargar-historial"
+                                        class="btn btn-sm bg-label-danger w-100">
+                                        <i class="bx bxs-file-pdf" style="font-size: 20px; transition: transform 0.2s;"></i>
+                                        Descagar historial
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                         <div class="table-responsive">
                             <table id="sysconta-datatable" class="display cell-border stripe hover order-column"
                                 style="width:100%">
@@ -61,7 +95,14 @@
             lengthChange: true,
             autoWidth: false,
             pagingType: 'simple_numbers',
-            ajax: '{!! route('sales.SalesIndexGetData') !!}',
+            ajax: {
+                url: '{!! route('sales.SalesIndexGetData') !!}',
+                data: function(d) {
+                    d.cliente_id = $('#cliente_id').val();
+                    d.fecha_inicio = $('#fecha_inicio').val();
+                    d.fecha_fin = $('#fecha_fin').val();
+                }
+            },
             columns: [{
                     data: 'id',
                     name: 'id'
@@ -149,5 +190,41 @@
                 });
             }
         });
+
+        $('#btn-descargar-historial').prop('disabled', true);
+
+        $('#btn-filtrar').click(function() {
+            $('#sysconta-datatable').DataTable().ajax.reload();
+
+            const clienteId = $('#cliente_id').val();
+            const fechaInicio = $('#fecha_inicio').val();
+            const fechaFin = $('#fecha_fin').val();
+
+            if (clienteId || fechaInicio || fechaFin) {
+                $('#btn-descargar-historial').prop('disabled', false);
+            } else {
+                $('#btn-descargar-historial').prop('disabled', true);
+            }
+        });
+
+
+        $('#btn-descargar-historial').click(function() {
+            if ($(this).prop('disabled')) return;
+
+            let clienteId = $('#cliente_id').val();
+            let fechaInicio = $('#fecha_inicio').val();
+            let fechaFin = $('#fecha_fin').val();
+
+            let url = `/ventas/historial/pdf?`;
+
+            if (clienteId) url += `cliente_id=${clienteId}&`;
+            if (fechaInicio) url += `fecha_inicio=${fechaInicio}&`;
+            if (fechaFin) url += `fecha_fin=${fechaFin}&`;
+
+            url = url.slice(0, -1);
+
+            window.open(url, '_blank');
+        });
+
     });
 </script>

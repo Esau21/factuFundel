@@ -997,13 +997,18 @@ class SalesController extends Controller
 
     public function SalesIndex()
     {
-        return view('sales.salesIndex');
+        $clientes = Clientes::all();
+        return view('sales.salesIndex', compact('clientes'));
     }
 
     public function SalesIndexGetData(Request $request)
     {
         if ($request->ajax()) {
-            $data = Sales::getSalesDataTotal();
+            $data = Sales::getSalesDataTotal(
+                $request->cliente_id,
+                $request->fecha_inicio,
+                $request->fecha_fin
+            );
             return DataTables::of($data)
                 ->addColumn('cliente', function ($data) {
                     return $data?->clientes?->nombre ?? 'sin data';
@@ -1075,6 +1080,23 @@ class SalesController extends Controller
                 ->make(true);
         }
     }
+
+    public function descargarHistorialPDF(Request $request)
+    {
+        $clienteId = $request->input('cliente_id');
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFin = $request->input('fecha_fin');
+
+        /* Obtener datos filtrados */
+        $ventas = Sales::getSalesDataTotal($clienteId, $fechaInicio, $fechaFin);
+
+        /* Aquí generas el PDF (usando por ejemplo DomPDF) */
+        $pdf = PDF::loadView('sales.historialPDF', compact('ventas', 'clienteId', 'fechaInicio', 'fechaFin'));
+
+        /* Descargar PDF */
+        return $pdf->download('historial_ventas.pdf');
+    }
+
 
     public function ventasDays()
     {

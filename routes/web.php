@@ -131,6 +131,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/generar/cotizacion', [SalesController::class, 'generarCotizacion'])->name('sales.generarCotizacion');
     Route::get('/ventas/totales', [SalesController::class, 'SalesIndex'])->name('sales.SalesIndex');
     Route::get('/ventas/totalGetData', [SalesController::class, 'SalesIndexGetData'])->name('sales.SalesIndexGetData');
+    Route::get('/ventas/historial/pdf', [SalesController::class, 'descargarHistorialPDF'])->name('sales.descargarHistorialPDF');
     Route::get('/sales/days/get', [SalesController::class, 'ventasDays'])->name('sales.getdays');
     Route::get('/sales/days/get/data', [SalesController::class, 'ventasDelDia'])->name('sales.ventasDelDia');
     Route::get('/detalles/ventas/{id}', [SalesController::class, 'verDetallesdeVenta'])->name('sales.verDetallesdeVenta');

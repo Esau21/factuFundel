@@ -77,11 +77,22 @@ class Sales extends Model
         return $data;
     }
 
-    public static function getSalesDataTotal()
+    public static function getSalesDataTotal($clienteId = null, $fechaInicio = null, $fechaFin = null)
     {
-        $data = Sales::select('sales.*')->orderBy('sales.id', 'desc')
-            ->get();
+        $query = Sales::select('sales.*')->orderBy('sales.id', 'desc');
 
-        return $data;
+        if ($clienteId) {
+            $query->where('cliente_id', $clienteId);
+        }
+
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('fecha_venta', [$fechaInicio, $fechaFin]);
+        } elseif ($fechaInicio) {
+            $query->where('fecha_venta', '>=', $fechaInicio);
+        } elseif ($fechaFin) {
+            $query->where('fecha_venta', '<=', $fechaFin);
+        }
+
+        return $query->get();
     }
 }

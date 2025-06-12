@@ -62,42 +62,43 @@ class DocumentosDTEController extends Controller
                 })
                 ->addColumn('acciones', function ($data) {
                     $resMH = '<a href="' . route('facturacion.viewMHResponse', $data->id) . '" 
-                    class="mx-1 d-inline-block" 
-                    title="Respuesta Hacienda"
-                    style="text-decoration: none;">
-                    <i class="bx bxl-squarespace text-primary" 
-                       style="font-size: 28px; transition: transform 0.2s;">
-                    </i>
-                </a>';
+                                        class="mx-1 d-inline-block btn btn-sm bg-label-primary" 
+                                        title="Respuesta Hacienda"
+                                        style="text-decoration: none;">
+                                        <i class="bx bx-message-dots" 
+                                            style="font-size: 28px; transition: transform 0.2s;">
+                                        </i>
+                            </a>';
 
-                    $json = '<a href="' . route('facturacion.getDocumentoTributarioJson', $data->id) . '" 
-                    class="mx-1 d-inline-block" 
-                    title="Descargar JSON"
-                    style="text-decoration: none;">
-                    <i class="bx bxs-file-json text-secondary" 
-                       style="font-size: 28px; transition: transform 0.2s;">
-                    </i>
-                </a>';
 
                     $documento = '<a href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '" 
-                                    class="mx-1 d-inline-block" 
+                                    class="btn btn-sm mx-1 d-inline-block bg-label-success" 
                                     title="Mostrar Factura"
                                     style="text-decoration: none;">
-                                    <i class="bx bxs-file-pdf text-danger" 
+                                    <i class="bx bxs-spreadsheet" 
                                         style="font-size: 28px; transition: transform 0.2s;">
                                     </i>
                                 </a>';
+
+                    $json = '<a href="' . route('facturacion.getDocumentoTributarioJson', $data->id) . '" 
+                                    class="mx-1 d-inline-block btn btn-sm bg-label-secondary" 
+                                    title="Descargar JSON"
+                                    style="text-decoration: none;">
+                                    <i class="bx bxs-file-json" 
+                                        style="font-size: 28px; transition: transform 0.2s;">
+                                    </i>
+                            </a>';
 
                     $documentoDownload = '<a href="' . route('facturacion.descargarPDFTipoDocumento', $data->id) . '" 
-                                    class="mx-1 d-inline-block" 
+                                    class="mx-1 d-inline-block btn btn-sm bg-label-danger" 
                                     title="Descargar Factura"
                                     style="text-decoration: none;" target="_blank">
-                                    <i class="bx bxs-download text-warning" 
+                                    <i class="bx bxs-file-pdf" 
                                         style="font-size: 28px; transition: transform 0.2s;">
                                     </i>
                                 </a>';
 
-                    return $resMH . $json . $documento . $documentoDownload;
+                    return $resMH . $documento . $json . $documentoDownload;
                 })
                 ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision'])->make(true);
         }
@@ -175,7 +176,6 @@ class DocumentosDTEController extends Controller
                 break;
 
             case '03': // CCF
-                // Solo mostramos la vista directamente
                 return $this->verCCF($documento);
                 break;
 

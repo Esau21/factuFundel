@@ -41,8 +41,11 @@
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 
@@ -58,18 +61,18 @@
 
 
 <style>
-      .select2-container--default .select2-selection--single {
-            height: 38px;
-            border: 1px solid #ced4da;
-            border-radius: 0.25rem;
-            padding: 6px 12px;
-        }
+    .select2-container--default .select2-selection--single {
+        height: 38px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 6px 12px;
+    }
 
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 24px;
-        }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 24px;
+    }
 
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 36px;
-        }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px;
+    }
 </style>
