@@ -106,7 +106,6 @@
                         <th class="p-1">Codigo</th>
                         <th class="p-1">Descripción</th>
                         <th class="p-1">Valor Unitario</th>
-                        <th class="p-1">Monto Descuento</th>
                         <th class="p-1">Total</th>
                     </tr>
                 </thead>
@@ -117,7 +116,6 @@
                             <td class="p-2">{{ $item['codigo'] }}</td>
                             <td class="p-2">{{ $item['descripcion'] }}</td>
                             <td class="p-2">${{ number_format($item['precioUni'], 2) }}</td>
-                            <td class="p-2">${{ number_format($item['montoDescu'], 2) }}</td>
                             <td class="p-2">${{ number_format($item['compra'], 2) }}</td>
                         </tr>
                     @endforeach

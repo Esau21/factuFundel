@@ -89,6 +89,11 @@
                         <div class="text-truncate" data-i18n="Bancos">Bancos | Cuentas</div>
                     </a>
                 </li>
+                <li class="menu-item">
+                    <a href="{{ route('bancos.index') }}" class="menu-link">
+                        <div class="text-truncate" data-i18n="Bancos">Cheques | Recibidos</div>
+                    </a>
+                </li>
             </ul>
         </li>
 

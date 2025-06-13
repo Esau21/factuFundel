@@ -152,19 +152,6 @@
                                     <input type="number" class="form-control cantidad" name="cantidad[]" value="1" min="1">
                                 </td>
                                 <td>
-                                    <!-- Descuento Porcentaje -->
-                                    <select name="descuento_porcentaje[]" class="form-select descuento_porcentaje">
-                                        <option value="">Elg.</option>
-                                        <option value="10">10%</option>
-                                        <option value="15">15%</option>
-                                        <option value="20">20%</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <!-- Descuento en Dólar -->
-                                    <input type="text" name="descuento_en_dolar[]" class="form-control descuento_en_dolar" placeholder="$">
-                                </td>
-                                <td>
                                     <input type="text" class="form-control sub_total" name="sub_total[]" value="${parseFloat(productoPrecio).toFixed(2)}" readonly>
                                 </td>
                                 <td>
@@ -350,6 +337,8 @@
             const detalleDocumento = $('#detalleDocumento').val();
 
             $("#guardarVenta").prop('disabled', true);
+            const spinnerModal = new bootstrap.Modal(document.getElementById('spinnerModal'));
+            spinnerModal.show();
 
             $.ajax({
                 url: "{{ route('sales.generarSale') }}",
@@ -395,6 +384,7 @@
 
                 },
                 success: function(response) {
+                    spinnerModal.hide();
                     if (response.error) {
                         Toastify({
                             text: response.message || "Error al guardar la venta.",
@@ -432,6 +422,7 @@
                     }, 2000);
                 },
                 error: function(xhr) {
+                    spinnerModal.hide();
                     let msg = 'Error al guardar la venta.';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         msg = xhr.responseJSON.message;
@@ -449,101 +440,6 @@
                 }
             });
         });
-
-
-
-        //escuchamos el evento de tecla f4
-        $(document).on('keydown', function(e) {
-            if (e.key === "F4") {
-                e.preventDefault();
-                $('#guardarCotizacion').click();
-            }
-        });
-
-        // Guardamos la cotizacion
-        $(document).on('click', '#guardarCotizacion', function(e) {
-            e.preventDefault();
-            var producto_id = [],
-                cantidad = [],
-                precio_unitario = [],
-                sub_total = [];
-
-            $("#productRows tr").each(function() {
-                var id = $(this).find('td:first').text().trim();
-                var cant = parseInt($(this).find('.cantidad').val());
-                var precio = parseFloat($(this).find('.precio_unitario').val());
-                var subtotal = parseFloat($(this).find('.sub_total')
-                    .val());
-
-                if (id && !isNaN(cant) && !isNaN(precio) && !isNaN(subtotal)) {
-                    producto_id.push(id);
-                    cantidad.push(cant);
-                    precio_unitario.push(precio);
-                    sub_total.push(subtotal); // Este es el valor con descuento
-                }
-            });
-
-            var cliente_id = $('#cliente_id').val();
-            var efectivo = parseFloat($('#cash').val());
-            var total = parseFloat($('#totalAmount').text());
-            var tipo_pago = 'COTIZACION';
-            var cambio = $('#cambioInput').val();
-
-            var descuento_porcentaje = parseFloat($('#descuento_porcentaje').val().replace('%', '')) ||
-                0;
-            var descuento_en_dolar = $('#descuento_en_dolar').val();
-
-            $("#guardarCotizacion").prop('disabled', true);
-
-
-            $.ajax({
-                url: "{{ route('sales.generarCotizacion') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    cliente_id,
-                    efectivo,
-                    total,
-                    tipo_pago,
-                    cambio,
-                    producto_id,
-                    cantidad,
-                    precio_unitario,
-                    sub_total, // Aquí estás enviando el valor con descuento
-                    descuento_porcentaje,
-                    descuento_en_dolar
-                },
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(response) {
-                    Toastify({
-                        text: "Cotizacion guardada exitosamente.",
-                        className: "success",
-                        style: {
-                            background: "linear-gradient(to right, #28a745, #218838)"
-                        }
-                    }).showToast();
-                    var url = URL.createObjectURL(response);
-                    window.open(url, '_blank');
-                    setTimeout(() => {
-                        window.location.href = "{{ route('sales.index') }}";
-                    }, 2000);
-                },
-                error: function() {
-                    Toastify({
-                        text: "Error al guardar la venta.",
-                        className: "error",
-                        style: {
-                            background: "linear-gradient(to right, #dc3545, #c82333)"
-                        }
-                    }).showToast();
-                    $("#guardarCotizacion").prop('disabled', false);
-                }
-            });
-
-        });
-
         // Subtotal y total inicial
         actualizarSubtotal();
         actualizarTotal();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Post;
 
 use App\Helpers\NumeroALetras as HelpersNumeroALetras;
 use App\Http\Controllers\Controller;
+use App\Mail\EnviarDTECliente;
 use App\Models\Bancos\Bancos;
 use App\Models\Bancos\ChequeRecibido;
 use App\Models\Bancos\CuentasBancarias;
@@ -15,12 +16,14 @@ use App\Models\SociosNegocios\Empresa;
 use App\Models\Ventas\Sales;
 use App\Models\Ventas\SalesDetails;
 use App\Services\DteGeneratorService;
+use App\Services\DteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
@@ -55,7 +58,6 @@ class SalesController extends Controller
     }
 
     /* procedemos a armar el dte */
-
     public static function identificacionGet($version, $tipoDte, $ambiente, $codigoGeneracion, $fecha, $hora, $numeroControl, $tipoContingencia = null)
     {
         if ($tipoContingencia != null) {
@@ -628,8 +630,6 @@ class SalesController extends Controller
         ];
     }
 
-
-
     public function generarBodyDocumento(Request $request): array
     {
         $tipoDocumento = $request->tipo_documento;
@@ -657,9 +657,6 @@ class SalesController extends Controller
             "resumen" => []
         ];
     }
-
-
-
 
     /* funcion para guardar la venta y emitir el dte */
     public function generarSale(Request $request)
@@ -710,12 +707,12 @@ class SalesController extends Controller
             $ambiente = $empresa->ambiente ?? '00';
 
             switch ($tipo_dte) {
-                case '03': // CCF
+                case '03':
                     $version = 3;
                     break;
-                case '01': // Factura
-                case '14': // Sujeto Excluido 
-                case '15': // Comprobante de Donación
+                case '01':
+                case '14':
+                case '15':
                 default:
                     $version = 1;
                     break;
@@ -770,7 +767,7 @@ class SalesController extends Controller
             if ($tipo_dte === '15') {
                 $emisor = $emisorData['emisor'];
                 unset($emisor['nit']);
-                /* Insertamos al principio con + operator para controlar el orden */
+                /* Insertamos al principio con + operador para controlar el orden */
                 $emisorData['emisor'] = [
                     'tipoDocumento' => $empresa->tipo_documento,
                     'numDocumento'  => $empresa->num_documento ?? $empresa->nit,
@@ -836,7 +833,9 @@ class SalesController extends Controller
                 'json_dte' => json_encode($jsonDTE['dteJson'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
             ]);
 
-
+            /**
+             * Guardamos la venta
+             */
             $sale = Sales::create([
                 'cliente_id' => $request->cliente_id,
                 'user_id' => Auth::id(),
@@ -878,7 +877,9 @@ class SalesController extends Controller
                 $sale->save();
             }
 
-            // Guardar detalles y modificar stock
+            /**
+             * Guardar detalles y modificar stock 
+             */
             foreach ($request->producto_id as $index => $productoId) {
                 $cantidad = $request->cantidad[$index];
 
@@ -898,9 +899,45 @@ class SalesController extends Controller
 
             DB::commit();
 
-            $pdf = PDF::loadView('postSales.ticket', [
-                'venta' => $sale->load('clientes', 'detalles.producto'),
+            $token = $empresa->token;
+            if (!$token || Carbon::now()->greaterThan($empresa->token_expire)) {
+                $token = DteService::loginMH($empresa);
+            }
+
+            $xmlFirmado = DteService::firmarDTE($jsonDTE['dteJson'], $empresa);
+            $mhResponse = DteService::enviarDTE($xmlFirmado, $empresa, $tipo_dte, $codigoGeneracion, $ambiente);
+
+            $documentoDte->update([
+                'sello_recibido' => $mhResponse['selloRecibido'] ?? null,
+                'mh_response' => json_encode($mhResponse, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
             ]);
+
+            /**
+             * enviamos el tipo de dte generado al correo del cliente.
+             */
+            $view = match ($tipo_dte) {
+                '01' => 'documentos.pdf.fe',
+                '03' => 'documentos.pdf.ccf',
+                '14' => 'documentos.pdf.se',
+                '15' => 'documentos.pdf.cd',
+                default => abort(404, 'Tipo de documento no soportado.')
+            };
+
+            $json = json_decode($documentoDte->json_dte, true);
+            $mh = json_decode($documentoDte->mh_response ?? '{}', true);
+
+            $pdf = PDF::loadView($view, [
+                'venta' => $sale->load('clientes', 'detalles.producto'),
+                'documento' => $documentoDte,
+                'json' => $json,
+                'mh' => $mh,
+            ]);
+
+            $pdfContent = $pdf->output();
+
+            if ($cliente->correo_electronico) {
+                Mail::to($cliente->correo_electronico)->send(new EnviarDTECliente($sale, $pdfContent));
+            }
 
             return response()->json([
                 'mensaje' => 'Venta creada y documento electrónico generado',
@@ -1099,7 +1136,7 @@ class SalesController extends Controller
         $pdf = PDF::loadView('sales.historialPDF', compact('ventas', 'cliente', 'fechaInicio', 'fechaFin'));
 
         /* Descargar PDF */
-        return $pdf->download('historial_ventas.pdf');
+        return $pdf->stream('historial_ventas.pdf');
     }
 
 

@@ -8,8 +8,8 @@
             <div class="col-12 col-lg-8 d-flex flex-column gap-4">
                 <div class="card mb-0">
                     <div class="card-header">
-                        <h6 class="alert alert-dark d-flex align-items-center gap-2" role="alert">
-                            <i class='bx bx-error-circle fs-4'></i>
+                        <h6 class="alert bg-label-primary d-flex align-items-center gap-2" role="alert">
+                            <i class="bx bx-error-circle" style="font-size: 28px; transition: transform 0.2s;"></i>
                             ¡Aviso Importante! Tienes que buscar y seleccionar el producto, que quieres agregar a la venta.
                         </h6>
                     </div>
@@ -39,8 +39,6 @@
                                         <th class="text-start">PRODUCTO</th>
                                         <th width="30%" class="text-center">PRECIO</th>
                                         <th width="20%" class="text-center">CANT</th>
-                                        <th width="20%" class="text-center">%</th>
-                                        <th width="20%" class="text-center">$</th>
                                         <th class="text-center">IMPORTE</th>
                                         <th class="text-center">PROCESOS</th>
                                     </tr>
@@ -52,8 +50,8 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="alert alert-dark d-flex align-items-center gap-2" role="alert">
-                            <i class='bx bx-error-circle fs-4'></i>
+                        <h6 class="alert bg-label-primary d-flex align-items-center gap-2" role="alert">
+                            <i class="bx bx-error-circle" style="font-size: 28px; transition: transform 0.2s;"></i>
                             ¡Aviso Importante! Tienes que ir llenando los campos que son solicitados, en los tipos de pagos.
                         </h6>
                     </div>
@@ -252,33 +250,55 @@
 
 
             <!-- Resumen de ventas -->
-            <div class="col-12 col-md-4 d-flex self-start">
-                <div class="card shadow-sm w-100 sticky-sidebar">
-                    <div class="card-body d-flex flex-column justify-content-between position-relative">
+            <div class="col-12 col-md-4 d-flex align-self-start">
+                <div class="card shadow-lg w-100 sticky-sidebar border-0 rounded-4">
+                    <div class="card-body d-flex flex-column justify-content-between position-relative p-4">
 
                         <!-- Imagen decorativa centrada -->
                         <img src="{{ asset('assets/img/piggy-bank.png') }}" alt="Decoración"
-                            style="max-width: 100px; margin: 0 auto 10px auto; display: block; opacity: 0.4;">
+                            class="mx-auto mb-3 opacity-50" style="max-width: 80px;">
 
-                        <h5 class="text-center mb-4"><b>***RESUMEN DE VENTAS***</b></h5>
+                        <h5 class="text-center text-primary fw-bold mb-4 border-bottom pb-2">*** RESUMEN DE VENTAS ***</h5>
 
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h3 class="text-success text-uppercase">
+                        <div class="card bg-gradient bg-light border-0 shadow-sm mb-4 rounded-3">
+                            <div class="card-body text-center">
+                                <h3 class="text-success text-uppercase fw-bold mb-2">
                                     Total: $<span id="totalAmount">0.00</span>
                                 </h3>
-                                <h4 class="mt-3">Artículos: <span id="totalItems">0</span></h4>
+                                <h5 class="text-secondary">Artículos: <span id="totalItems">0</span></h5>
                             </div>
                         </div>
 
-                        <h4 class="text-muted text-center mb-4">Cambio: $<span id="changeAmount">0.00</span></h4>
+                        <div class="text-center mb-4">
+                            <span class="badge bg-warning text-dark fs-5 px-4 py-2 rounded-pill">
+                                Cambio: $<span id="changeAmount">0.00</span>
+                            </span>
+                        </div>
                         <input type="hidden" name="cambio" id="cambioInput" value="0">
 
                         <div class="d-grid gap-2">
-                            <button class="btn btn-danger" type="button" id="guardarCotizacion">COTIZACIÓN F4</button>
-                            <button class="btn btn-primary" type="button" id="guardarVenta">GENERAR VENTA F5</button>
+                            <button
+                                class="btn btn-lg btn-primary fw-bold d-flex align-items-center justify-content-center gap-2"
+                                type="button" id="guardarVenta">
+                                GENERAR VENTA F5
+                                <i class="bx bx-cart-download fs-3"></i>
+                            </button>
                         </div>
+
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal con spinner -->
+        <div class="modal fade" id="spinnerModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+            data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div
+                    class="modal-content bg-light border-0 shadow-lg rounded-4 text-center p-4 d-flex flex-column align-items-center justify-content-center">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <h5 class="text-dark fw-semibold text-center">Generando venta, por favor espere...</h5>
                 </div>
             </div>
         </div>

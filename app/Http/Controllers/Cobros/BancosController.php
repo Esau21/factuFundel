@@ -303,4 +303,9 @@ class BancosController extends Controller
 
         return response()->json(['error' => 'Algo salio mal al querer actualizar el banco'], 405);
     }
+
+    public function indexCheques()
+    {
+        return view('bancos.chequeIndex');
+    }
 }

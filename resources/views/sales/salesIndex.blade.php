@@ -95,6 +95,7 @@
             lengthChange: true,
             autoWidth: false,
             pagingType: 'simple_numbers',
+            order: [0, 'desc'],
             ajax: {
                 url: '{!! route('sales.SalesIndexGetData') !!}',
                 data: function(d) {
