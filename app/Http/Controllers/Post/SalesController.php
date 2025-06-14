@@ -822,6 +822,14 @@ class SalesController extends Controller
                 ];
             }
 
+            $token = $empresa->token;
+            if (!$token || Carbon::now()->greaterThan($empresa->token_expire)) {
+                $token = DteService::loginMH($empresa);
+            }
+
+            $xmlFirmado = DteService::firmarDTE($jsonDTE['dteJson'], $empresa);
+            $mhResponse = DteService::enviarDTE($xmlFirmado, $empresa, $tipo_dte, $codigoGeneracion, $ambiente);
+
             $documentoDte = DocumentosDte::create([
                 'tipo_documento' => $tipo_dte,
                 'numero_control' => $numeroControl,
@@ -898,14 +906,6 @@ class SalesController extends Controller
             }
 
             DB::commit();
-
-            $token = $empresa->token;
-            if (!$token || Carbon::now()->greaterThan($empresa->token_expire)) {
-                $token = DteService::loginMH($empresa);
-            }
-
-            $xmlFirmado = DteService::firmarDTE($jsonDTE['dteJson'], $empresa);
-            $mhResponse = DteService::enviarDTE($xmlFirmado, $empresa, $tipo_dte, $codigoGeneracion, $ambiente);
 
             $documentoDte->update([
                 'sello_recibido' => $mhResponse['selloRecibido'] ?? null,

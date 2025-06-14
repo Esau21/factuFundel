@@ -36,4 +36,23 @@ class ChequeRecibido extends Model
     {
         return $this->hasOne(Sales::class, 'cheque_bancario_id');
     }
+
+    public static function getIndexdata($clienteId = null, $fechaInicio = null, $fechaFin = null)
+    {
+        $query = ChequeRecibido::select('cheque_recibidos.*')->orderBy('cheque_recibidos.id', 'desc');
+
+        if ($clienteId) {
+            $query->where('cliente_id', $clienteId);
+        }
+
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('fecha_emision', [$fechaInicio, $fechaFin]);
+        } elseif ($fechaInicio) {
+            $query->where('fecha_emision', '>=', $fechaInicio);
+        } elseif ($fechaFin) {
+            $query->where('fecha_emision', '<=', $fechaFin);
+        }
+
+        return $query->get();
+    }
 }

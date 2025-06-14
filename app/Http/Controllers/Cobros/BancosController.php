@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Cobros;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bancos\Bancos;
+use App\Models\Bancos\ChequeRecibido;
 use App\Models\Bancos\CuentasBancarias;
 use App\Models\SociosNegocios\Clientes;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
@@ -306,6 +309,101 @@ class BancosController extends Controller
 
     public function indexCheques()
     {
-        return view('bancos.chequeIndex');
+        $clientes = Clientes::all();
+        return view('bancos.cobros.chequeIndex', compact('clientes'));
+    }
+
+    public function getIndexDataCheque(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = ChequeRecibido::getIndexdata(
+                $request->cliente_id,
+                $request->fecha_inicio,
+                $request->fecha_fin
+            );
+            return DataTables::of($data)
+                ->addColumn('cliente', function ($data) {
+                    return $data?->cliente?->nombre ?? '';
+                })
+                ->addColumn('cuenta', function ($data) {
+                    $numeroCuenta = $data->cuenta->numero_cuenta ?? 'N/A';
+                    $titular = $data->cuenta->titular ?? 'N/A';
+
+                    return '<div class="bg-light border rounded p-2" style="min-width: 250px;">
+                                <div><strong>Cuenta:</strong> ' . $numeroCuenta . '</div>
+                                <div><strong>Titular:</strong> ' . $titular . '</div>
+                            </div>';
+                })
+                ->addColumn('numero_cheque', function ($data) {
+                    return 'Cheque #' . $data->numero_cheque ?? '';
+                })
+                ->addColumn('monto', function ($data) {
+                    return '<span class="badge bg-label-success text-success fw-semibold px-3 py-2 rounded-pill"> $' . number_format($data->monto, 2) . '
+                            </span>';
+                })
+                ->addColumn('fechaEmi', function ($data) {
+                    return $data->fecha_emision
+                        ? Carbon::parse($data->fecha_emision)->locale('es')->isoFormat('D [de] MMMM [de] YYYY')
+                        : '';
+                })
+                ->addColumn('fechaPago', function ($data) {
+                    return $data->fecha_pago
+                        ? Carbon::parse($data->fecha_pago)->locale('es')->isoFormat('D [de] MMMM [de] YYYY')
+                        : '';
+                })
+                ->addColumn('estado', function ($data) {
+                    return $data->estado ?? '';
+                })
+                ->addColumn('observaciones', function ($data) {
+                    return $data->observaciones ?? '';
+                })
+                ->addColumn('correlativo', function ($data) {
+                    return $data->correlativo ?? '';
+                })
+                ->addColumn('acciones', function ($data) {
+                    $imprimir = '<a href="' . route('cheques.generarCheque', $data->id) . '" 
+                                    class="btn bg-label-info mt-mobile w-90 mx-2"
+                                    title="Generar cheque" target="_blank">
+                                    <i class="bx bx-file" style="font-size: 23px; transition: transform 0.2s;"></i>
+                             </a>';
+
+                    return $imprimir;
+                })
+                ->rawColumns(['monto', 'acciones', 'cuenta'])->make(true);
+        }
+    }
+
+    public function descargarHistorialPDF(Request $request)
+    {
+        $clienteId = $request->input('cliente_id');
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFin = $request->input('fecha_fin');
+
+        $cliente = null;
+        if ($clienteId) {
+            $cliente = Clientes::find($clienteId);
+        }
+
+        /* Obtener datos filtrados */
+        $cheques = ChequeRecibido::getIndexdata($clienteId, $fechaInicio, $fechaFin);
+
+        /* Aquí generas el PDF (usando por ejemplo DomPDF) */
+        $pdf = Pdf::loadView('bancos.cobros.historialPDF', compact('cheques', 'cliente', 'fechaInicio', 'fechaFin'));
+
+        /* Descargar PDF */
+        return $pdf->stream('historial_cheques.pdf');
+    }
+
+
+    public function generarCheque($id)
+    {
+        $cheques = ChequeRecibido::with(['cliente', 'cuenta'])->find($id);
+        if (!$cheques) {
+            return response()->json(['error' => 'El cheque no fue encontrado', 405]);
+        }
+
+        $pdf = Pdf::loadView('bancos.cobros.cheque', compact('cheques'));
+
+        return $pdf->stream('cheque-#' . $cheques->numero_cheque . '.pdf');
     }
 }

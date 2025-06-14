@@ -117,6 +117,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/get/index/data/bancos', [BancosController::class, 'bancosgetIndexData'])->name('bancos.bancosgetIndexData');
     Route::post('/store/banco', [BancosController::class, 'storeBanco'])->name('bancos.store');
     Route::post('/update/banco/{id}', [BancosController::class, 'updateBanco'])->name('bancos.update');
+    Route::get('/cheques/index', [BancosController::class, 'indexCheques'])->name('cheques.indexCheques');
+    Route::get('/cheques/index/dataGet', [BancosController::class, 'getIndexDataCheque'])->name('cheques.getIndexDataCheque');
+    Route::get('/cheques/historial/pdf', [BancosController::class, 'descargarHistorialPDF']);
+    Route::get('/cheque/generate/{id}', [BancosController::class, 'generarCheque'])->name('cheques.generarCheque');
     //Cuentas Bancarias
     Route::get('/cuentas/bancarias/{id}', [BancosController::class, 'indexCuentasBancarias'])->name('cuentas.indexCuentasBancarias');
     Route::get('/cuentas/bancarias/index/data/{id}', [BancosController::class, 'indexGetCuentasBancarias'])->name('cuentas.indexGetCuentasBancarias');

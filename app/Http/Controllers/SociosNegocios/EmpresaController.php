@@ -252,7 +252,7 @@ class EmpresaController extends Controller
         if ($response->successful() && isset($response['body']['token'])) {
             $token = $response['body']['token'];
 
-            $empresa->token = 'Bearer ' . $token;
+            $empresa->token = $token;
             $empresa->token_expire = now()->addDay();
             $empresa->save();
 
