@@ -822,13 +822,6 @@ class SalesController extends Controller
                 ];
             }
 
-            $token = $empresa->token;
-            if (!$token || Carbon::now()->greaterThan($empresa->token_expire)) {
-                $token = DteService::loginMH($empresa);
-            }
-
-            $xmlFirmado = DteService::firmarDTE($jsonDTE['dteJson'], $empresa);
-            $mhResponse = DteService::enviarDTE($xmlFirmado, $empresa, $tipo_dte, $codigoGeneracion, $ambiente);
 
             $documentoDte = DocumentosDte::create([
                 'tipo_documento' => $tipo_dte,
@@ -906,6 +899,14 @@ class SalesController extends Controller
             }
 
             DB::commit();
+
+            $token = $empresa->token;
+            if (!$token || Carbon::now()->greaterThan($empresa->token_expire)) {
+                $token = DteService::loginMH($empresa);
+            }
+
+            $xmlFirmado = DteService::firmarDTE($jsonDTE['dteJson'], $empresa);
+            $mhResponse = DteService::enviarDTE($xmlFirmado, $empresa, $tipo_dte, $codigoGeneracion, $ambiente);
 
             $documentoDte->update([
                 'sello_recibido' => $mhResponse['selloRecibido'] ?? null,
@@ -1111,7 +1112,14 @@ class SalesController extends Controller
                                     <i class="bx bx-printer"></i>
                              </a>';
 
-                    return $viewsalesdetails . $imprimir;
+
+                    $generarFactura = '<a href=" ' . route('sales.generarPDfDetalles', $data->id) . ' " 
+                                    class="btn btn-dark mt-mobile w-90 mx-2"
+                                    title="Emitir DTE" target="_blank">
+                                    <i class="bx bx-file"></i>
+                             </a>';
+
+                    return $viewsalesdetails . $imprimir . $generarFactura;
                 })
                 ->rawColumns(['acciones', 'tipo_pago', 'status'])
                 ->make(true);

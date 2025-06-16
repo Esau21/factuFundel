@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\SociosNegocios\Empresa;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
@@ -86,7 +87,7 @@ class DteService
         return $data['body'];
     }
 
-    public static function enviarDTE($dteFirmado, $empresa, $tipoDte, $codigoGeneracion, $ambiente = "00")
+    public static function enviarDTE($dteFirmado, $empresa, $tipoDte, $codigoGeneracion)
     {
         switch ($tipoDte) {
             case '03':
@@ -101,7 +102,7 @@ class DteService
         }
 
         $payload = [
-            "ambiente" => $ambiente,
+            "ambiente" => $empresa->ambiente ?? '00',
             "idEnvio" => 1,
             "version" => $version,
             "tipoDte" => $tipoDte,

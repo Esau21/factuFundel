@@ -97,8 +97,17 @@ class DocumentosDTEController extends Controller
                                         style="font-size: 28px; transition: transform 0.2s;">
                                     </i>
                                 </a>';
+                    
+                    $anulacionJson = '<a href="' . route('facturacion.descargarPDFTipoDocumento', $data->id) . '" 
+                                    class="mx-1 d-inline-block btn btn-sm bg-label-warning" 
+                                    title="Anular DTE"
+                                    style="text-decoration: none;" target="_blank">
+                                    <i class="bx bxs-shield-minus" 
+                                        style="font-size: 28px; transition: transform 0.2s;">
+                                    </i>
+                                </a>';
 
-                    return $resMH . $documento . $json . $documentoDownload;
+                    return $resMH . $documento . $json . $documentoDownload . $anulacionJson;
                 })
                 ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision'])->make(true);
         }
