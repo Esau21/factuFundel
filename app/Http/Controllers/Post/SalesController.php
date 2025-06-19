@@ -755,7 +755,7 @@ class SalesController extends Controller
                 $empresa->actividad->codActividad,
                 $empresa->actividad->descActividad,
                 $tipo_dte === '14' ? null : $empresa->nombreComercial,
-                $empresa->tipo_establecimiento ?? '01',
+                $empresa->tipoEstablecimiento ?? '01',
                 $empresa->complemento ?? '',
                 $empresa->telefono ?? '',
                 $empresa->correo ?? ''
@@ -1048,6 +1048,32 @@ class SalesController extends Controller
                 $request->fecha_fin
             );
             return DataTables::of($data)
+                ->addColumn('documento_relacionado', function ($data) {
+                    if ($data?->documentoDte) {
+                        $tipo = $data->documentoDte->tipo_documento;
+                        $control = $data->documentoDte->numero_control;
+
+                        return '<span style="
+                                display: inline-block;
+                                background-color: #f1f1f1;
+                                border: 1px solid #ccc;
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                font-size: 13px;
+                                color: #333;
+                                margin: 2px 0;
+                                ">' . e($tipo) . ' <span style="margin: 0 4px;">#</span> ' . e($control) . '</span>';
+                    }
+
+                    return '<span style="
+                                display: inline-block;
+                                background-color: #eee;
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                font-size: 13px;
+                                color: #888;
+                                ">Sin dato</span>';
+                })
                 ->addColumn('cliente', function ($data) {
                     return $data?->clientes?->nombre ?? 'sin data';
                 })
@@ -1097,34 +1123,74 @@ class SalesController extends Controller
                     return '$' . number_format($monto, 2);
                 })
                 ->addColumn('acciones', function ($data) {
-                    $viewsalesdetails =
-                        '<a href="#" 
-                        class="btn btn-success mt-mobile w-90 mx-2 btn-show-details"
-                        data-bs-toggle="modal"
-                        data-bs-target="#verSale"
-                        data-id="' . $data->id . '"
-                        title="Ver detalles de esta venta">
-                        <i class="bx bx-show"></i>
-                    </a>';
-                    $imprimir = '<a href=" ' . route('sales.generarPDfDetalles', $data->id) . ' " 
-                                    class="btn btn-dark mt-mobile w-90 mx-2"
+                    $viewsalesdetails = '<a href="#" 
+                                                class="mx-1 btn btn-sm bg-label-success btn-show-details"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#verSale"
+                                                data-id="' . $data->id . '"
+                                                title="Ver detalles de esta venta">
+                                                <i class="bx bx-show" style="font-size: 22px;"></i>
+                                         </a>';
+
+                    $imprimir = '<a href="' . route('sales.generarPDfDetalles', $data->id) . '" 
+                                    class="mx-1 btn btn-sm bg-label-dark"
                                     title="Imprimir" target="_blank">
-                                    <i class="bx bx-printer"></i>
-                             </a>';
+                                    <i class="bx bx-printer" style="font-size: 22px;"></i>
+                                </a>';
 
 
-                    $generarFactura = '<a href=" ' . route('sales.generarPDfDetalles', $data->id) . ' " 
-                                    class="btn btn-dark mt-mobile w-90 mx-2"
-                                    title="Emitir DTE" target="_blank">
-                                    <i class="bx bx-file"></i>
-                             </a>';
+                    $generarFactura = '';
+                    if ($data?->documentoDte?->tipo_documento !== '15' && $data?->documentoDte?->estado !== 'RECIBIDO' && $data?->documentoDte?->estado !== 'FIRMADO' && $data?->documentoDte?->estado !== 'ANULADO') {
+                        $generarFactura = '<a href="#" 
+                                        class="mx-1 btn btn-sm bg-label-danger btn-send-contingencia"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#sendContingencia"
+                                        data-id="' . $data->id . '"
+                                        title="Emitir DTE" target="_blank">
+                                        <i class="bx bx-file" style="font-size: 22px;"></i>
+                                    </a>';
+                    }
 
-                    return $viewsalesdetails . $imprimir . $generarFactura;
+                    return '<div class="d-flex justify-content-start text-nowrap">' . $viewsalesdetails . $imprimir . $generarFactura . '</div>';
                 })
-                ->rawColumns(['acciones', 'tipo_pago', 'status'])
+                ->rawColumns(['acciones', 'tipo_pago', 'status', 'documento_relacionado'])
                 ->make(true);
         }
     }
+
+    public function emitirEvenetodeContigencia(Request $request, $id)
+    {
+        $documento = DocumentosDte::findOrFail($id);
+        $empresa = $documento->empresa;
+
+        $jsonDte = json_decode($documento->json_dte, true);
+
+        /* Actualizamos solamente los campos relacionados a contingencia */
+        $jsonDte['identificacion']['tipoContingencia'] = (int) $request->tipoContingencia;
+        $jsonDte['identificacion']['motivoContin'] = $request->motivoContingencia ?? '';
+
+        /* Si se está enviando evento de contingencia, actualizamos tipoModelo a 2 */
+        $jsonDte['identificacion']['tipoModelo'] = 2;
+
+        /* Guardamos el JSON actualizado */
+        $documento->json_dte = json_encode($jsonDte);
+
+        try {
+            $respuesta = DteService::enviarEventoContingencia($request, $empresa, $documento);
+
+            $documento->update([
+                'estado' => $respuesta['estado'] ?? null,
+                'sello_recibido' => $respuesta['selloRecibido'] ?? null,
+                'mh_response' => json_encode($respuesta),
+                'json_dte' => $documento->json_dte, /* Guardamos el JSON modificado */
+            ]);
+
+            return response()->json(['success' => true, 'data' => $respuesta]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
 
     public function descargarHistorialPDF(Request $request)
     {

@@ -55,7 +55,7 @@
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="tipo_documento">Tipo documento</label>
                                     <div class="input-group input-group-merge">
-                                         <select name="tipo_documento" id="tipo_documento" class="form-control" required>
+                                        <select name="tipo_documento" id="tipo_documento" class="form-control" required>
                                             <option value="">Elegir</option>
                                             <option value="36">NIT</option>
                                         </select>
@@ -116,7 +116,8 @@
                                 </div>
 
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
-                                    <label class="form-label w-100" for="actividad_economica_id">Actividad economica</label>
+                                    <label class="form-label w-100" for="actividad_economica_id">Actividad
+                                        economica</label>
                                     <div class="input-group input-group-merge">
                                         <select name="actividad_economica_id" id="actividad_economica_id"
                                             class="form-select select2 w-100">
@@ -142,6 +143,16 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nombre_establecimiento">Nombre
+                                        establecimiento</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nombre_establecimiento" name="nombre_establecimiento"
+                                            class="form-control" type="text" placeholder="ejemplo"/>
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
 
 
                                 <!-- Tipo de establecimiento  -->
@@ -182,18 +193,18 @@
                                 <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="claveAPI">API pwd</label>
                                     <div class="input-group input-group-merge">
-                                        <input id="claveAPI" name="claveAPI" class="form-control"
-                                            type="password" placeholder="ejemplo" />
+                                        <input id="claveAPI" name="claveAPI" class="form-control" type="password"
+                                            placeholder="ejemplo" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>
                                 </div>
 
-                                 <div class="col-12 col-md-6 form-control-validation mb-3">
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
                                     <label class="form-label w-100" for="claveCert">pwd Certificado</label>
                                     <div class="input-group input-group-merge">
-                                        <input id="claveCert" name="claveCert" class="form-control"
-                                            type="password" placeholder="ejemplo" />
+                                        <input id="claveCert" name="claveCert" class="form-control" type="password"
+                                            placeholder="ejemplo" />
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>
                                     </div>

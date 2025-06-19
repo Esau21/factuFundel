@@ -33,7 +33,40 @@
                             </button>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" class="pt-0">
+                        <form action="" id="">
+                            @csrf
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="cliente_id">Cliente:</label>
+                                    <select id="cliente_id" name="cliente_id" class="form-select select2 w-100">
+                                        <option value="">-- Todos los clientes --</option>
+                                        @foreach ($clientes as $cliente)
+                                            <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="fecha_inicio">Desde:</label>
+                                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="fecha_fin">Hasta:</label>
+                                    <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-end">
+                                    <button type="button" id="btn-filtrar" class="btn bg-label-primary w-100">
+                                        <i class="bx bx-filter-alt"></i> Filtrar
+                                    </button>
+                                </div>
+                                <div class="col-sm-2 d-flex align-items-end mt-2">
+                                    <button type="button" id="btn-descargar-historial" class="btn bg-label-success w-100">
+                                        <i class="bx bxs-file" style="font-size: 20px; transition: transform 0.2s;"></i>
+                                        Descagar historial
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                         <div class="table-responsive">
                             <table id="sysconta-datatable" class="display cell-border stripe hover order-column"
                                 style="width:100%">
@@ -72,7 +105,7 @@
             </div>
         </div>
     </div>
-    @include('salesday.modal.viewdetailssales')
+    @include('dgii.modal.anularJson')
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

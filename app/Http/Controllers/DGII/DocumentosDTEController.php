@@ -5,10 +5,13 @@ namespace App\Http\Controllers\DGII;
 use App\Http\Controllers\Controller;
 use App\Models\CorrelativoDte;
 use App\Models\DGII\DocumentosDte as DGIIDocumentosDte;
+use App\Models\SociosNegocios\Clientes;
+use App\Services\DteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -16,7 +19,8 @@ class DocumentosDTEController extends Controller
 {
     public function index()
     {
-        return view('dgii.documentoIndex');
+        $clientes = Clientes::all();
+        return view('dgii.documentoIndex', compact('clientes'));
     }
 
     public function indexGetDtaDocumentosDte(Request $request)
@@ -55,7 +59,17 @@ class DocumentosDTEController extends Controller
                     return $data?->empresa?->nombre ?? '';
                 })
                 ->addColumn('estado', function ($data) {
-                    return $data->estado ?? '';
+                    if ($data->estado == 'FIRMADO') {
+                        return '<span class="badge badge-center rounded-pill bg-label-success me-1"><i class="icon-base bx bx-receipt"></i></span>FIRMADO';
+                    } elseif ($data->estado == 'ANULADO') {
+                        return '<span class="badge badge-center rounded-pill bg-label-danger me-1"><i class="icon-base bx bx-receipt"></i></span>ANULADO';
+                    } elseif ($data->estado == 'RECIBIDO') {
+                        return '<span class="badge badge-center rounded-pill bg-label-primary me-1"><i class="icon-base bx bx-receipt"></i></span>RECIBIDO';
+                    } elseif ($data->estado == 'RECHAZADO') {
+                        return '<span class="badge badge-center rounded-pill bg-label-warning me-1"><i class="icon-base bx bx-receipt"></i></span>RECHAZADO';
+                    }elseif ($data->estado == 'PROCESADO') {
+                        return '<span class="badge badge-center rounded-pill bg-label-info me-1"><i class="icon-base bx bx-receipt"></i></span>PROCESADO';
+                    }
                 })
                 ->addColumn('sello_recibido', function ($data) {
                     return $data->sello_recibido ?? '';
@@ -97,21 +111,53 @@ class DocumentosDTEController extends Controller
                                         style="font-size: 28px; transition: transform 0.2s;">
                                     </i>
                                 </a>';
-                    
-                    $anulacionJson = '<a href="' . route('facturacion.descargarPDFTipoDocumento', $data->id) . '" 
-                                    class="mx-1 d-inline-block btn btn-sm bg-label-warning" 
+
+                    $anulacionJson = '';
+
+                    if ($data->estado !== 'ANULADO') {
+                        $anulacionJson = '<a href="#" 
+                                    class="mx-1 d-inline-block btn btn-sm bg-label-warning btn-anular-json" 
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#anularJson"
+                                    data-id="' . $data->id . '"
+                                    data-tipo_documento="' . $data->tipo_documento . '"
+                                    data-numero_control="' . $data->numero_control . '"
+                                    data-codigo_generacion="' . $data->codigo_generacion . '"
+                                    data-fecha_emision="' . $data->fecha_emision . '"
                                     title="Anular DTE"
                                     style="text-decoration: none;" target="_blank">
                                     <i class="bx bxs-shield-minus" 
                                         style="font-size: 28px; transition: transform 0.2s;">
                                     </i>
                                 </a>';
+                    }
 
                     return $resMH . $documento . $json . $documentoDownload . $anulacionJson;
                 })
-                ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision'])->make(true);
+                ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision', 'estado'])->make(true);
         }
     }
+
+    public function anularDocumentoTributarioElectronico(Request $request, $id)
+    {
+        $documento = DGIIDocumentosDte::with('empresa')->findOrFail($id);
+
+        try {
+            // Pasar $request y $documento en el orden correcto
+            $mhResponse = (new DteService())->anularDTE($request, $documento);
+
+            $documento->update([
+                'mh_response' => json_encode($mhResponse),
+                'sello_recibido' => $mhResponse['selloRecibido'] ?? null,
+                'estado' => 'anulado'
+            ]);
+
+            return response()->json(['success' => true, 'mh_response' => $mhResponse]);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
 
     public function getDocumentoTributarioJson($documento_id)
     {

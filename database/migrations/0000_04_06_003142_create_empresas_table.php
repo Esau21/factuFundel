@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('complemento');
             $table->integer('actividad_economica_id')->unsigned();
             $table->string('tipoEstablecimiento')->default('02');
+            $table->string('nombre_establecimiento')->nullable();
             $table->string('nrc')->nullable();
             $table->string('nit')->nullable();
             $table->string('telefono')->nullable();

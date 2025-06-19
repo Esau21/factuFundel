@@ -140,6 +140,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/sales/days/get/data', [SalesController::class, 'ventasDelDia'])->name('sales.ventasDelDia');
     Route::get('/detalles/ventas/{id}', [SalesController::class, 'verDetallesdeVenta'])->name('sales.verDetallesdeVenta');
     Route::get('/generar/pdf/ventas/dia/{id}', [SalesController::class, 'generarPDfDetalles'])->name('sales.generarPDfDetalles');
+    Route::post('/facturacion/emitir/contingencia/documento/{id}', [SalesController::class, 'emitirEvenetodeContigencia'])->name('sales.emitirEvenetodeContigencia');
 
     //facturacion
     Route::get('/facturacion/index', [DocumentosDTEController::class, 'index'])->name('facturacion.index');
@@ -152,6 +153,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/get/data/correlativos/index', [DocumentosDTEController::class, 'correlativosDteIndexGetData'])->name('correlativos.correlativosDteIndexGetData');
     Route::post('/documentos-dte/enviar/{documento}', [DocumentosDTEController::class, 'enviarADGII'])
         ->name('documentos-dte.enviar');
+    Route::post('/facturacion/anular-json/{id}', [DocumentosDTEController::class, 'anularDocumentoTributarioElectronico']);
 });
 
 require __DIR__ . '/auth.php';

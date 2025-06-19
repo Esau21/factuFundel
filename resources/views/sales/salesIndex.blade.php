@@ -54,25 +54,27 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="text-left">ID</th>
+                                        <th class="text-left">Acciones</th>
+                                        <th class="text-left">N° Documento</th>
                                         <th class="text-left">Cliente</th>
                                         <th class="text-left">Usuario</th>
                                         <th class="text-left">fecha venta</th>
                                         <th class="text-left">Tipo pago</th>
                                         <th class="text-left">Total</th>
                                         <th class="text-left">Estado</th>
-                                        <th class="text-left">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
                                         <th class="no-search"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -83,6 +85,7 @@
         </div>
     </div>
     @include('salesday.modal.viewdetailssales')
+    @include('sales.modal.contingencia')
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -109,6 +112,16 @@
                     name: 'id'
                 },
                 {
+                    data: 'acciones',
+                    name: 'acciones',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'documento_relacionado',
+                    name: 'documento_relacionado'
+                },
+                {
                     data: 'cliente',
                     name: 'cliente'
                 },
@@ -131,12 +144,6 @@
                 {
                     data: 'status',
                     name: 'status'
-                },
-                {
-                    data: 'acciones',
-                    name: 'acciones',
-                    orderable: true,
-                    searchable: true
                 }
             ],
             language: {

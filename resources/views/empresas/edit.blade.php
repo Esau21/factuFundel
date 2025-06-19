@@ -148,6 +148,17 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 col-md-6 form-control-validation mb-3">
+                                    <label class="form-label w-100" for="nombre_establecimiento">Nombre establecimiento</label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="nombre_establecimiento" name="nombre_establecimiento" class="form-control"
+                                            type="text" placeholder="ejemplo"
+                                            value="{{ $empresa->nombre_establecimiento }}" readonly />
+                                        <span class="input-group-text cursor-pointer"><span
+                                                class="card-type me-n2"></span></span>
+                                    </div>
+                                </div>
+
                                 <!-- Tipo de establecimiento  -->
                                 <div class="col-12 col-md-4 form-control-validation mb-3">
                                     <label class="form-label w-100" for="ambiente">Ambiente</label>
