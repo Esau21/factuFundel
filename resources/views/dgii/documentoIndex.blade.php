@@ -62,7 +62,7 @@
                                 <div class="col-sm-2 d-flex align-items-end mt-2">
                                     <button type="button" id="btn-descargar-historial" class="btn bg-label-success w-100">
                                         <i class="bx bxs-file" style="font-size: 20px; transition: transform 0.2s;"></i>
-                                        Descagar historial
+                                        Descagar xlsx
                                     </button>
                                 </div>
                             </div>
@@ -126,6 +126,9 @@
                 url: '{!! route('facturacion.indexGetDtaDocumentosDte') !!}',
                 data: function(d) {
                     d.tipo = tipoSeleccionado;
+                    d.cliente_id = $('#cliente_id').val();
+                    d.fecha_inicio = $('#fecha_inicio').val();
+                    d.fecha_fin = $('#fecha_fin').val();
                 }
             },
             columns: [{
@@ -237,5 +240,19 @@
             /* Recargar la tabla con el nuevo filtro */
             table.ajax.reload();
         });
+
+        $('#btn-filtrar').on('click', function() {
+            table.ajax.reload();
+        });
+
+        $('#btn-descargar-historial').on('click', function() {
+            const clienteId = $('#cliente_id').val();
+            const fechaInicio = $('#fecha_inicio').val();
+            const fechaFin = $('#fecha_fin').val();
+
+            let query = `?cliente_id=${clienteId}&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+            window.location.href = '{{ route('facturacion.historialDTEFechasXlsx') }}' + query;
+        });
+
     });
 </script>

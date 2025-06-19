@@ -153,6 +153,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/get/data/correlativos/index', [DocumentosDTEController::class, 'correlativosDteIndexGetData'])->name('correlativos.correlativosDteIndexGetData');
     Route::post('/documentos-dte/enviar/{documento}', [DocumentosDTEController::class, 'enviarADGII'])
         ->name('documentos-dte.enviar');
+    Route::get('/download/history/dte', [DocumentosDTEController::class, 'historialDTEFechasXlsx'])->name('facturacion.historialDTEFechasXlsx');
     Route::post('/facturacion/anular-json/{id}', [DocumentosDTEController::class, 'anularDocumentoTributarioElectronico']);
 });
 

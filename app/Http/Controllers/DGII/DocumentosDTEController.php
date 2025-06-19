@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\DGII;
 
+use App\Exports\HistorialDTEExport;
 use App\Http\Controllers\Controller;
 use App\Models\CorrelativoDte;
 use App\Models\DGII\DocumentosDte as DGIIDocumentosDte;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class DocumentosDTEController extends Controller
@@ -27,7 +29,12 @@ class DocumentosDTEController extends Controller
     {
         if ($request->ajax()) {
             $tipo = $request->get('tipo', '');
-            $data = DGIIDocumentosDte::getData($tipo);
+            $data = DGIIDocumentosDte::getData(
+                $tipo,
+                $request->cliente_id,
+                $request->fecha_inicio,
+                $request->fecha_fin
+            );
             return DataTables::of($data)
                 ->addColumn('tipo_documento', function ($data) {
                     if ($data->tipo_documento == '01') {
@@ -67,7 +74,7 @@ class DocumentosDTEController extends Controller
                         return '<span class="badge badge-center rounded-pill bg-label-primary me-1"><i class="icon-base bx bx-receipt"></i></span>RECIBIDO';
                     } elseif ($data->estado == 'RECHAZADO') {
                         return '<span class="badge badge-center rounded-pill bg-label-warning me-1"><i class="icon-base bx bx-receipt"></i></span>RECHAZADO';
-                    }elseif ($data->estado == 'PROCESADO') {
+                    } elseif ($data->estado == 'PROCESADO') {
                         return '<span class="badge badge-center rounded-pill bg-label-info me-1"><i class="icon-base bx bx-receipt"></i></span>PROCESADO';
                     }
                 })
@@ -136,6 +143,18 @@ class DocumentosDTEController extends Controller
                 })
                 ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision', 'estado'])->make(true);
         }
+    }
+
+    public function historialDTEFechasXlsx(Request $request)
+    {
+        $cliente_id = $request->get('cliente_id');
+        $fecha_inicio = $request->get('fecha_inicio');
+        $fecha_fin = $request->get('fecha_fin');
+
+        return Excel::download(
+            new HistorialDTEExport($cliente_id, $fecha_inicio, $fecha_fin),
+            'historial_dte_' . now()->format('Ymd_His') . '.xlsx'
+        );
     }
 
     public function anularDocumentoTributarioElectronico(Request $request, $id)
