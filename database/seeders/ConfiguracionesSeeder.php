@@ -39,27 +39,5 @@ class ConfiguracionesSeeder extends Seeder
             'claveAPI' => Crypt::encryptString('Fundel@2025**'),
             'claveCert' => Crypt::encryptString('FundelOng@2025##')
         ]);
-        
-
-
-        User::create([
-            'name' => 'Edgar',
-            'email_verified_at' => '2023-09-11 22:44:25',
-            'email' => 'root@gmail.com',
-            'profile' => 'ROOT',
-            'status' => 'Active',
-            'password' => bcrypt('12345678'),
-            'empresa_id' => 1
-        ]);
-
-        User::create([
-            'name' => 'Michelle',
-            'email_verified_at' => '2023-09-11 22:44:25',
-            'email' => 'michelle@gmail.com',
-            'profile' => 'ADMINISTRADOR',
-            'status' => 'Active',
-            'password' => bcrypt('12345678'),
-            'empresa_id' => 1
-        ]);
     }
 }

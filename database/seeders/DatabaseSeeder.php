@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ConfiguracionesSeeder::class);
         $this->call(ItemSeeder::class);
         $this->call(UnidadMedidaSeeder::class);
+        $this->call(PermisosSeeder::class);
     }
 }

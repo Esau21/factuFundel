@@ -102,28 +102,11 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="card-body px-xl-9 py-12 d-flex align-items-center flex-column">
-                            <div class="text-center mb-6">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-primary">
-                                        <script>
-                                            document.write(new Date().getFullYear() - 1);
-                                        </script>
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="visually-hidden">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:void(0);">2021</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0);">2020</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0);">2019</a></li>
-                                    </ul>
-                                </div>
-                            </div>
 
                             <div id="growthChart"></div>
-                            <div class="text-center fw-medium my-6">62% Company Growth</div>
+                            <div class="text-center fw-medium my-6">
+                                {{ $porcentajeCrecimiento }}% Meta alcanzada este mes
+                            </div>
 
                             <div class="d-flex gap-11 justify-content-between">
                                 <div class="d-flex">
@@ -132,12 +115,10 @@
                                                 class="icon-base bx bx-dollar icon-lg text-primary"></i></span>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <small>
-                                            <script>
-                                                document.write(new Date().getFullYear() - 1);
-                                            </script>
-                                        </small>
-                                        <h6 class="mb-0">$32.5k</h6>
+                                        <small>{{ now()->year }}</small>
+                                        <h6 class="mb-0">
+                                            <span class="count-up" data-target="{{ $ventasActual }}">$0</span>
+                                        </h6>
                                     </div>
                                 </div>
                                 <div class="d-flex">
@@ -146,12 +127,10 @@
                                                 class="icon-base bx bx-wallet icon-lg text-info"></i></span>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <small>
-                                            <script>
-                                                document.write(new Date().getFullYear() - 2);
-                                            </script>
-                                        </small>
-                                        <h6 class="mb-0">$41.2k</h6>
+                                        <small>{{ now()->year + 1 }}</small>
+                                        <h6 class="mb-0">
+                                            <span class="count-up" data-target="{{ $ventasSiguiente }}">$0</span>
+                                        </h6>
                                     </div>
                                 </div>
                             </div>
@@ -191,8 +170,7 @@
                         <div class="card-body">
                             <div class="card-title d-flex align-items-start justify-content-between mb-4">
                                 <div class="avatar flex-shrink-0">
-                                    <img src="../assets/img/piggy-bank.png" alt="Credit Card"
-                                        class="rounded" />
+                                    <img src="../assets/img/piggy-bank.png" alt="Credit Card" class="rounded" />
                                 </div>
                                 <div class="dropdown">
                                     <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown"
@@ -206,7 +184,7 @@
                                 </div>
                             </div>
                             <p class="mb-1">Transacciones</p>
-                            <h4 class="card-title mb-3">${{$totalTransaccionesCuentasBancarias}}</h4>
+                            <h4 class="card-title mb-3">${{ $totalTransaccionesCuentasBancarias }}</h4>
                         </div>
                     </div>
                 </div>
@@ -217,19 +195,22 @@
                                 class="d-flex justify-content-between align-items-center flex-sm-row flex-column gap-10 flex-wrap">
                                 <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
                                     <div class="card-title mb-6">
-                                        <h5 class="text-nowrap mb-1">Profile Report</h5>
-                                        <span class="badge bg-label-warning">YEAR 2022</span>
+                                        <h5 class="text-nowrap mb-1">Usuarios Activos</h5>
+                                        <span class="badge bg-label-warning">Últimos 6 días</span>
                                     </div>
                                     <div class="mt-sm-auto">
-                                        <span class="text-success text-nowrap fw-medium"><i
-                                                class="icon-base bx bx-up-arrow-alt"></i> 68.2%</span>
-                                        <h4 class="mb-0">$84,686k</h4>
+                                        <span class="text-success text-nowrap fw-medium">
+                                            <i class="icon-base bx bx-up-arrow-alt"></i>
+                                            {{ number_format(($totalUsuariosActivos / max($totalUsuarios, 1)) * 100, 1) }}%
+                                        </span>
+                                        <h4 class="mb-0">{{ $totalUsuariosActivos }} usuarios</h4>
                                     </div>
                                 </div>
                                 <div id="profileReportChart"></div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -286,13 +267,6 @@
                     dataLabels: {
                         enabled: false
                     },
-                    // ❌ Esta sección eliminada porque causa el error en tipo 'bar'
-                    // stroke: {
-                    //   curve: 'smooth',
-                    //   width: 6,
-                    //   lineCap: 'round',
-                    //   colors: [cardColor]
-                    // },
                     legend: {
                         show: true,
                         horizontalAlign: 'left',
@@ -381,4 +355,222 @@
 
         cargarDatosVentas();
     });
+</script>
+
+<script>
+    const porcentajeCrecimiento = {{ $porcentajeCrecimiento ?? 0 }};
+
+    const growthChartEl = document.querySelector('#growthChart'),
+        growthChartOptions = {
+            series: [porcentajeCrecimiento],
+            labels: ['Meta mensual'],
+            chart: {
+                height: 200,
+                type: 'radialBar'
+            },
+            plotOptions: {
+                radialBar: {
+                    size: 150,
+                    offsetY: 10,
+                    startAngle: -150,
+                    endAngle: 150,
+                    hollow: {
+                        size: '55%'
+                    },
+                    track: {
+                        background: '#f0f0f0',
+                        strokeWidth: '100%'
+                    },
+                    dataLabels: {
+                        name: {
+                            offsetY: 15,
+                            color: '#666',
+                            fontSize: '15px',
+                            fontWeight: '500',
+                            fontFamily: 'Arial'
+                        },
+                        value: {
+                            offsetY: -25,
+                            color: '#333',
+                            fontSize: '22px',
+                            fontWeight: '500',
+                            fontFamily: 'Arial'
+                        }
+                    }
+                }
+            },
+            colors: ['#7367F0'],
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#7367F0'],
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 0.6,
+                    stops: [30, 70, 100]
+                }
+            },
+            stroke: {
+                dashArray: 5
+            },
+            grid: {
+                padding: {
+                    top: -35,
+                    bottom: -10
+                }
+            },
+            states: {
+                hover: {
+                    filter: {
+                        type: 'none'
+                    }
+                },
+                active: {
+                    filter: {
+                        type: 'none'
+                    }
+                }
+            }
+        };
+
+    if (growthChartEl) {
+        const growthChart = new ApexCharts(growthChartEl, growthChartOptions);
+        growthChart.render();
+    }
+</script>
+
+<script>
+    function animateCounter(element, duration = 1500) {
+        const target = +element.getAttribute('data-target');
+        const startTime = performance.now();
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const value = Math.floor(progress * target);
+
+            // Convertir a K (miles) con 1 decimal
+            element.textContent = `$${(value / 1000).toFixed(1)}k`;
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            }
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.count-up').forEach(el => {
+            animateCounter(el);
+        });
+    });
+</script>
+
+
+<script>
+    const profileReportChartEl = document.querySelector('#profileReportChart');
+
+    const profileReportChartConfig = {
+        chart: {
+            height: 75,
+            width: 240,
+            type: 'line',
+            toolbar: {
+                show: false
+            },
+            dropShadow: {
+                enabled: true,
+                top: 10,
+                left: 5,
+                blur: 3,
+                color: '#ffab00',
+                opacity: 0.15
+            },
+            sparkline: {
+                enabled: true
+            }
+        },
+        grid: {
+            show: false,
+            padding: {
+                right: 8
+            }
+        },
+        colors: ['#ffab00'],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            width: 5,
+            curve: 'smooth'
+        },
+        series: [{
+            name: 'Usuarios activos',
+            data: @json($usuariosActivosPorDia)
+        }],
+        xaxis: {
+            show: false,
+            labels: {
+                show: false
+            },
+            axisBorder: {
+                show: false
+            },
+            lines: {
+                show: false
+            }
+        },
+        yaxis: {
+            show: false
+        },
+        responsive: [{
+                breakpoint: 1700,
+                options: {
+                    chart: {
+                        width: 200
+                    }
+                }
+            },
+            {
+                breakpoint: 1579,
+                options: {
+                    chart: {
+                        width: 180
+                    }
+                }
+            },
+            {
+                breakpoint: 1500,
+                options: {
+                    chart: {
+                        width: 160
+                    }
+                }
+            },
+            {
+                breakpoint: 1450,
+                options: {
+                    chart: {
+                        width: 140
+                    }
+                }
+            },
+            {
+                breakpoint: 1400,
+                options: {
+                    chart: {
+                        width: 240
+                    }
+                }
+            }
+        ]
+    };
+
+    if (profileReportChartEl) {
+        const profileReportChart = new ApexCharts(profileReportChartEl, profileReportChartConfig);
+        profileReportChart.render();
+    }
 </script>
