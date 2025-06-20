@@ -241,8 +241,20 @@
             table.ajax.reload();
         });
 
-        $('#btn-filtrar').on('click', function() {
-            table.ajax.reload();
+        $('#btn-descargar-historial').prop('disabled', true);
+
+        $('#btn-filtrar').click(function() {
+            $('#sysconta-datatable').DataTable().ajax.reload();
+
+            const clienteId = $('#cliente_id').val();
+            const fechaInicio = $('#fecha_inicio').val();
+            const fechaFin = $('#fecha_fin').val();
+
+            if (clienteId || fechaInicio || fechaFin) {
+                $('#btn-descargar-historial').prop('disabled', false);
+            } else {
+                $('#btn-descargar-historial').prop('disabled', true);
+            }
         });
 
         $('#btn-descargar-historial').on('click', function() {

@@ -47,7 +47,9 @@ class HistorialDTEExport implements FromCollection, WithHeadings
                 $resumen = $json['resumen'] ?? [];
                 $cuerpo = $json['cuerpoDocumento'] ?? [];
 
-                // Datos generales comunes
+                /**
+                 * Datos generales comunes
+                 */
                 $general = [
                     'Tipo DTE' => $tipoDte,
                     'Número Control' => $identificacion['numeroControl'] ?? '',
@@ -57,7 +59,9 @@ class HistorialDTEExport implements FromCollection, WithHeadings
                     'Estado' => $dte->estado,
                 ];
 
-                // Entidad destino
+                /**
+                 * Entidad destino
+                 */
                 if ($tipoDte === '14') {
                     $entidad = $sujetoExcluido;
                 } elseif ($tipoDte === '15') {
@@ -74,14 +78,18 @@ class HistorialDTEExport implements FromCollection, WithHeadings
                     'Dirección Entidad' => $entidad['direccion']['complemento'] ?? '',
                 ];
 
-                // Emisor / Donatario
+                /**
+                 * Emisor / Donatario
+                 */
                 $general += [
                     'Empresa Emisora' => $emisor['nombre'] ?? ($donatario['nombre'] ?? ''),
                     'NIT Emisor' => $emisor['nit'] ?? ($donatario['numDocumento'] ?? ''),
                     'Correo Emisor' => $emisor['correo'] ?? ($donatario['correo'] ?? ''),
                 ];
 
-                // Datos del resumen
+                /**
+                 * Datos del resumen
+                 */
                 if ($tipoDte === '14') {
                     $resumenDatos = [
                         'Total Compra' => $resumen['totalCompra'] ?? '',
@@ -106,7 +114,9 @@ class HistorialDTEExport implements FromCollection, WithHeadings
                     ];
                 }
 
-                // Mapear los ítems
+                /**
+                 * Mapear los ítems
+                 */
                 return collect($cuerpo)->map(function ($item) use ($general, $resumenDatos, $tipoDte) {
                     if ($tipoDte === '14') {
                         $itemData = [

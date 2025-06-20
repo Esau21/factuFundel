@@ -55,3 +55,16 @@
  <script>
      hljs.highlightAll();
  </script>
+
+ <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+ <script>
+     document.addEventListener('DOMContentLoaded', function() {
+        /* Aplicamos flatpickr solo a inputs date, si existen */
+         flatpickr('input[type="date"]:not([readonly])', {
+             dateFormat: "Y-m-d",
+             theme: "dark",
+             allowInput: true
+         });
+     });
+ </script>
