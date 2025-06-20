@@ -935,10 +935,15 @@ class SalesController extends Controller
             ]);
 
             $pdfContent = $pdf->output();
+            $codigoGeneracion = $json['identificacion']['codigoGeneracion'] ?? 'sin_codigo';
+            $jsonContent = json_encode($json, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
             if ($cliente->correo_electronico) {
-                Mail::to($cliente->correo_electronico)->send(new EnviarDTECliente($sale, $pdfContent));
+                Mail::to($cliente->correo_electronico)->send(
+                    new EnviarDTECliente($sale, $pdfContent, $codigoGeneracion, $jsonContent)
+                );
             }
+
 
             return response()->json([
                 'mensaje' => 'Venta creada y documento electrónico generado',

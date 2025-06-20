@@ -5,7 +5,6 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class EnviarDTECliente extends Mailable
 {
@@ -13,17 +12,21 @@ class EnviarDTECliente extends Mailable
 
     public $venta;
     public $pdfContent;
+    public $codigoGeneracion;
+    public $jsonContent;
 
-    public function __construct($venta, string $pdfContent)
+    public function __construct($venta, string $pdfContent, string $codigoGeneracion, string $jsonContent)
     {
         $this->venta = $venta;
         $this->pdfContent = $pdfContent;
+        $this->codigoGeneracion = $codigoGeneracion;
+        $this->jsonContent = $jsonContent;
     }
 
     public function envelope()
     {
         return new \Illuminate\Mail\Mailables\Envelope(
-            subject: 'Documento Electrónico - Venta #' . $this->venta->id,
+            subject: 'NOTIFICACIÓN DE FACTURA ELECTRÓNICA FUNDEL',
         );
     }
 
@@ -40,10 +43,18 @@ class EnviarDTECliente extends Mailable
     public function attachments()
     {
         return [
+            // PDF attachment
             \Illuminate\Mail\Mailables\Attachment::fromData(function () {
                 return $this->pdfContent;
-            }, "DTE_Venta_{$this->venta->id}.pdf", [
+            }, "DTE_{$this->codigoGeneracion}.pdf", [
                 'mime' => 'application/pdf',
+            ]),
+
+            // JSON attachment
+            \Illuminate\Mail\Mailables\Attachment::fromData(function () {
+                return $this->jsonContent;
+            }, "{$this->codigoGeneracion}.json", [
+                'mime' => 'application/json',
             ]),
         ];
     }
