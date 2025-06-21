@@ -132,27 +132,27 @@ class SalesController extends Controller
         if ($tipo_dte == "01" || $tipo_dte == "03") {
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
-            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? null;
-            $emisor['codEstable'] = $empresa['codEstable'] ?? null;
+            $emisor['codEstableMH'] = $empresa['codEstablecimientoMH'] ?? null;
+            $emisor['codEstable'] = $empresa['codEstablecimientoMH'] ?? null;
             $emisor['codPuntoVentaMH'] = !empty($empresa['codPuntoVentaMH']) ? $empresa['codPuntoVentaMH'] : null;
-            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? null;
+            $emisor['codPuntoVenta'] = $empresa['codPuntoVentaMH'] ?? null;
         } elseif ($tipo_dte == "05" || $tipo_dte == "06") {
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
         } elseif ($tipo_dte == "14") {
-            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? null;
-            $emisor['codEstable'] = $empresa['codEstable'] ?? null;
+            $emisor['codEstableMH'] = $empresa['codEstablecimientoMH'] ?? null;
+            $emisor['codEstable'] = $empresa['codEstablecimientoMH'] ?? null;
             $emisor['codPuntoVentaMH'] = !empty($empresa['codPuntoVentaMH']) ? $empresa['codPuntoVentaMH'] : null;
-            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? null;
+            $emisor['codPuntoVenta'] = $empresa['codPuntoVentaMH'] ?? null;
         } elseif ($tipo_dte  == '15') {
             $emisor['nombreComercial'] = (string)$nombreComercial;
             $emisor['tipoEstablecimiento'] = (string)$tipoEstablecimiento;
             $emisor['tipoDocumento'] = $empresa['tipo_documento'] ?? null;
             $emisor['numDocumento'] = $empresa['nit'] ?? null;
-            $emisor['codEstableMH'] = $empresa['codEstableMH'] ?? null;
-            $emisor['codEstable'] = $empresa['codEstable'] ?? null;
+            $emisor['codEstableMH'] = $empresa['codEstablecimientoMH'] ?? null;
+            $emisor['codEstable'] = $empresa['codEstablecimientoMH'] ?? null;
             $emisor['codPuntoVentaMH'] = !empty($empresa['codPuntoVentaMH']) ? $empresa['codPuntoVentaMH'] : null;
-            $emisor['codPuntoVenta'] = $empresa['codPuntoVenta'] ?? null;
+            $emisor['codPuntoVenta'] = $empresa['codPuntoVentaMH'] ?? null;
         } else {
             return [];
         }
@@ -701,7 +701,7 @@ class SalesController extends Controller
             $fecha = now()->format('Y-m-d');
             $hora = now()->format('H:i:s');
             $empresa = Auth::user()->empresa->load('actividad', 'departamento', 'municipio');
-            $codigoEstablecimiento = strtoupper($empresa->codEstablecimientoMH ?? 'MP000001');
+            $codigoEstablecimiento = $empresa->codEstablecimientoMH . $empresa->codPuntoVentaMH;
             $correlativo = $this->obtenerCorrelativo($tipo_dte, $codigoEstablecimiento);
             $numeroControl = $this->generarNumeroControl($tipo_dte, $codigoEstablecimiento, $correlativo);
             $ambiente = $empresa->ambiente ?? '00';
