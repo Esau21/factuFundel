@@ -179,7 +179,7 @@
 
                     @can('ventas_del_mes_index')
                         <li class="menu-item">
-                            <a href="#" class="menu-link">
+                            <a href="{{ route('sales.ventasDelMes') }}" class="menu-link">
                                 <div class="text-truncate" data-i18n="Basic">Ventas del mes</div>
                             </a>
                         </li>

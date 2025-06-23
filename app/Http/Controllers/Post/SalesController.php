@@ -1151,17 +1151,25 @@ class SalesController extends Controller
 
 
                     $generarFactura = '';
-                    if ($data?->documentoDte?->tipo_documento !== '15' && $data?->documentoDte?->estado !== 'RECIBIDO' && $data?->documentoDte?->estado !== 'FIRMADO' && $data?->documentoDte?->estado !== 'ANULADO') {
-                        $generarFactura = '<a href="#" 
-                                        class="mx-1 btn btn-sm bg-label-danger btn-send-contingencia"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#sendContingencia"
-                                        data-id="' . $data->id . '"
-                                        title="Emitir DTE" target="_blank">
-                                        <i class="bx bx-file" style="font-size: 22px;"></i>
-                                    </a>';
-                    }
 
+                    if (
+                        $data?->documentoDte?->tipo_documento !== '15' &&
+                        $data?->documentoDte?->estado !== 'RECIBIDO' &&
+                        $data?->documentoDte?->estado !== 'ANULADO' &&
+                        (
+                            $data?->documentoDte?->estado !== 'FIRMADO' ||
+                            ($data?->documentoDte?->estado === 'FIRMADO' && $data?->documentoDte?->mh_response === null)
+                        )
+                    ) {
+                        $generarFactura = '<a href="#" 
+                        class="mx-1 btn btn-sm bg-label-danger btn-send-contingencia"
+                        data-bs-toggle="modal"
+                        data-bs-target="#sendContingencia"
+                        data-id="' . $data->id . '"
+                        title="Emitir DTE" target="_blank">
+                        <i class="bx bx-file" style="font-size: 22px;"></i>
+                    </a>';
+                    }
                     return '<div class="d-flex justify-content-start text-nowrap">' . $viewsalesdetails . $imprimir . $generarFactura . '</div>';
                 })
                 ->rawColumns(['acciones', 'tipo_pago', 'status', 'documento_relacionado'])
@@ -1305,6 +1313,127 @@ class SalesController extends Controller
                 ->make(true);
         }
     }
+
+    public function ventasDelMes()
+    {
+        $clientes = Clientes::all();
+
+        return view('saleMonth.index', compact('clientes'));
+    }
+
+    public function getDetalleVentasMensual(Request $request)
+    {
+        $clienteId = $request->cliente_id;
+        $fechaInicio = $request->fecha_inicio;
+        $fechaFin = $request->fecha_fin;
+
+        $query = Sales::with('clientes', 'users')
+            ->when($clienteId, function ($q) use ($clienteId) {
+                $q->where('cliente_id', $clienteId);
+            })
+            ->when($fechaInicio && $fechaFin, function ($q) use ($fechaInicio, $fechaFin) {
+                $q->whereBetween('fecha_venta', [$fechaInicio, $fechaFin]);
+            })
+            ->orderBy('id', 'desc');
+
+        return DataTables::of($query)
+            ->addColumn('cliente', function ($data) {
+                return $data?->clientes?->nombre ?? '';
+            })
+            ->addColumn('usuario', function ($data) {
+                return $data?->users?->name ?? '';
+            })
+            ->addColumn('numero_documento', function ($data) {
+                if ($data?->documentoDte) {
+                    $tipo = $data->documentoDte->tipo_documento;
+                    $control = $data->documentoDte->numero_control;
+
+                    return '<span style="
+                                display: inline-block;
+                                background-color: #f1f1f1;
+                                border: 1px solid #ccc;
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                font-size: 13px;
+                                color: #333;
+                                margin: 2px 0;
+                                ">' . e($tipo) . ' <span style="margin: 0 4px;">#</span> ' . e($control) . '</span>';
+                }
+
+                return '<span style="
+                                display: inline-block;
+                                background-color: #eee;
+                                padding: 4px 8px;
+                                border-radius: 4px;
+                                font-size: 13px;
+                                color: #888;
+                                ">Sin dato</span>';
+            })
+            ->addColumn('tipo_pago', function ($data) {
+                if ($data->tipo_pago == '01') {
+                    return '<span class="badge badge-center rounded-pill bg-label-primary me-1"><i class="icon-base bx bx-money"></i></span> Efectivo';
+                } elseif ($data->tipo_pago == '04') {
+                    return '<span class="badge badge-center rounded-pill bg-label-success me-1"><i class="icon-base bx bx-receipt"></i></span> Cheque';
+                } elseif ($data->tipo_pago == '05') {
+                    return '<span class="badge badge-center rounded-pill bg-label-danger me-1"><i class="icon-base bx bx-transfer"></i></span> Transferencia';
+                } else {
+                    return '<span class="badge badge-center rounded-pill bg-label-secondary me-1"><i class="icon-base bx bx-help-circle"></i></span> Otro';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                switch ($data->status) {
+                    case 'PAID':
+                        return '<span class="badge badge-center rounded-pill bg-label-success me-1">
+                        <i class="icon-base bx bx-check-circle"></i>
+                    </span> Pagado';
+                    case 'PENDING':
+                        return '<span class="badge badge-center rounded-pill bg-label-warning me-1">
+                        <i class="icon-base bx bx-time-five"></i>
+                    </span> Pendiente';
+                    case 'CANCEL':
+                        return '<span class="badge badge-center rounded-pill bg-label-danger me-1">
+                        <i class="icon-base bx bx-x-circle"></i>
+                    </span> Cancelado';
+                    default:
+                        return '<span class="badge badge-center rounded-pill bg-label-secondary me-1">
+                        <i class="icon-base bx bx-help-circle"></i>
+                    </span> Desconocido';
+                }
+            })
+            ->addColumn('total', function ($data) {
+                $monto = ($data->total ?? 0) + ($data->iva ?? 0) - ($data->retencion ?? 0);
+                return '$' . number_format($monto, 2);
+            })
+            ->rawColumns(['cliente', 'usuario', 'total', 'numero_documento', 'tipo_pago', 'status'])
+            ->make(true);
+    }
+
+    public function getResumenMensual(Request $request)
+    {
+        $clienteId = $request->cliente_id;
+        $fechaInicio = $request->fecha_inicio;
+        $fechaFin = $request->fecha_fin;
+
+        $ventas = Sales::selectRaw('
+                DATE_FORMAT(fecha_venta, "%Y-%m") as mes,
+                IFNULL(SUM(IFNULL(total, 0) + IFNULL(iva, 0)), 0) as total_ventas
+            ')
+            ->when($clienteId, function ($query) use ($clienteId) {
+                $query->where('cliente_id', $clienteId);
+            })
+            ->when($fechaInicio && $fechaFin, function ($query) use ($fechaInicio, $fechaFin) {
+                $query->whereBetween('fecha_venta', [$fechaInicio, $fechaFin]);
+            })
+            ->groupBy('mes')
+            ->orderBy('mes')
+            ->get();
+
+
+
+        return response()->json($ventas);
+    }
+
+
 
 
     public function verDetallesdeVenta($id)

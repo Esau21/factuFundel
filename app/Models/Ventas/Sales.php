@@ -30,7 +30,6 @@ class Sales extends Model
         'descDocumento',
         'detalleDocumento',
         'cambio',
-        'documento_dte_id',
         'cheque_bancario_id',
         'cuenta_bancaria_id',
         'monto_efectivo',
