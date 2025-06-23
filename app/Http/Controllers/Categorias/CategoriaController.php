@@ -35,9 +35,11 @@ class CategoriaController extends Controller
                 })
                 ->addColumn('acciones', function ($data) {
                     $editar = '';
+                    $eliminar = '';
                     $eliminarUrl = "javascript:void(0)";
                     $onClickEliminar = "confirmDeleteCategoria({$data->id}); return false;";
 
+                    if (Auth()->user()->can('categoria_edit')) {
                     $editar = '<a href="#" 
                                     class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-categoria"
                                     data-bs-toggle="modal"
@@ -49,11 +51,13 @@ class CategoriaController extends Controller
                                     title="Editar">
                                     <i class="bx bx-edit"></i>
                              </a>';
+                     }
 
-
+                    if (Auth()->user()->can('categoria_delete')) {
                     $eliminar = '<a title="Eliminar" class="btn btn-danger mt-mobile mx-2" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
                                     <i class="bx bx-trash-alt"></i>
                                  </a>';
+                    }
 
                     return $editar . $eliminar;
                 })

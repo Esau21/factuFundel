@@ -1125,9 +1125,14 @@ class SalesController extends Controller
                     }
                 })
                 ->addColumn('total', function ($data) {
-                    $monto = ($data->total ?? 0) + ($data->iva ?? 0);
-                    return '$' . number_format($monto, 2);
+                    $subtotal = ($data->total ?? 0) + ($data->iva ?? 0);
+
+                    if (isset($data->retencion) && $data->retencion > 0) {
+                        $subtotal -= $data->retencion;
+                    }
+                    return '$' . number_format($subtotal, 2);
                 })
+
                 ->addColumn('acciones', function ($data) {
                     $viewsalesdetails = '<a href="#" 
                                                 class="mx-1 btn btn-sm bg-label-success btn-show-details"

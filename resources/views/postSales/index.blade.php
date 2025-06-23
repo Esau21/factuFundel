@@ -66,7 +66,6 @@
                                     <option value="">Seleccione</option>
                                     <option value="1">Contado</option>
                                     <option value="2">Crédito</option>
-                                    <option value="3">Otro</option>
                                 </select>
                             </div>
 

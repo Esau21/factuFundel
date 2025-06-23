@@ -79,10 +79,12 @@ class ProductoController extends Controller
                 })
                 ->addColumn('acciones', function ($data) {
                     $editar = '';
+                    $eliminar = '';
                     $eliminarUrl = "javascript:void(0)";
                     $onClickEliminar = "confirmDeleteProducto({$data->id}); return false;";
 
-                    $editar = '<a href="#" 
+                    if (Auth()->user()->can('edit_producto')) {
+                        $editar = '<a href="#" 
                                     class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-producto"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editProducto"
@@ -102,13 +104,13 @@ class ProductoController extends Controller
                                     title="Editar">
                                     <i class="bx bx-edit"></i>
                              </a>';
+                    }
 
-
-                    $eliminar = '<a title="Eliminar" class="btn btn-danger mt-mobile mx-2" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
+                    if (Auth()->user()->can('delete_producto')) {
+                        $eliminar = '<a title="Eliminar" class="btn btn-danger mt-mobile mx-2" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
                                     <i class="bx bx-trash-alt"></i>
                                  </a>';
-
-
+                    }
                     return $editar . $eliminar;
                 })
                 ->rawColumns(['acciones', 'estado', 'imagen', 'stock', 'stock_minimo'])->make(true);

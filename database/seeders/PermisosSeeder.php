@@ -74,11 +74,20 @@ class PermisosSeeder extends Seeder
         //productos y mas
         Permission::create(['name' => 'productos_y_mas_view']);
         Permission::create(['name' => 'categorias_index']);
+        Permission::create(['name' => 'categoria_create']);
+        Permission::create(['name' => 'categoria_edit']);
+        Permission::create(['name' => 'categoria_delete']);
         Permission::create(['name' => 'productos_index']);
+        Permission::create(['name' => 'create_producto']);
+        Permission::create(['name' => 'edit_producto']);
+        Permission::create(['name' => 'delete_producto']);
+        Permission::create(['name' => 'importar_productos']);
 
         //socios de negocios
         Permission::create(['name' => 'socios_negocios_view']);
         Permission::create(['name' => 'clientes_index']);
+        Permission::create(['name' => 'clientes_add']);
+        Permission::create(['name' => 'edit_cliente']);
         Permission::create(['name' => 'proveedores_index']);
 
         //ventas view

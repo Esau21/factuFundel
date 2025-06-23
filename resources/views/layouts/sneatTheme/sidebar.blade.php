@@ -144,13 +144,13 @@
                             </a>
                         </li>
                     @endcan
-                    @can('proveedores_index')
+                    {{--  @can('proveedores_index')
                         <li class="menu-item">
                             <a href="{{ route('proveedores.index') }}" class="menu-link">
                                 <div class="text-truncate" data-i18n="Proveedores">Proveedores</div>
                             </a>
                         </li>
-                    @endcan
+                    @endcan --}}
                 </ul>
             </li>
         @endcan

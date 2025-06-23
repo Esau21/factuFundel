@@ -14,11 +14,13 @@
                                 <button class="btn btn-success filter-btn" data-tipo="natural">Natural</button>
                                 <button class="btn btn-dark filter-btn" data-tipo="juridica">Jurídico</button>
                             </div>
-                            <a href="{{ route('clientes.add') }}" class="btn btn-primary mt-2 mt-md-0">
-                                <i class="bx bx-plus"></i> Cliente Nuevo
-                            </a>
+                            @can('clientes_add')
+                                <a href="{{ route('clientes.add') }}" class="btn btn-primary mt-2 mt-md-0">
+                                    <i class="bx bx-plus"></i> Cliente Nuevo
+                                </a>
+                            @endcan
                         </div>
-                    </div>                    
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="sysconta-datatable" class="display cell-border stripe hover order-column"

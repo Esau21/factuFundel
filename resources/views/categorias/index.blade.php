@@ -10,8 +10,10 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Categorias del sistema.</h5>
                         <div>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#addCategoria">Agregar categoria</button>
+                            @can('categoria_create')
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addCategoria">Agregar categoria</button>
+                            @endcan
                         </div>
                     </div>
                     <div class="card-body">

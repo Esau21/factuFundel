@@ -55,12 +55,16 @@ class ClienteController extends Controller
                 ->addColumn('es_extranjero', fn($data) => $data->es_extranjero ? 'Sí' : 'No')
                 ->addColumn('pais', fn($data) => $data->pais ?? 'sin data')
                 ->addColumn('acciones', function ($data) {
+
+                    $editar = '';
+
+                    if (Auth()->user()->can('edit_cliente')) {
                     $editar = '<a href="' . route('clientes.edit', $data->id) . '" 
                                     class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-categoria"
                                     title="Editar cliente">
                                     <i class="bx bx-edit"></i>
                                 </a>';
-
+                    }
                     return $editar;
                 })
                 ->rawColumns(['acciones'])
