@@ -25,6 +25,7 @@ class Sales extends Model
         'referencia',
         'periodo',
         'iva',
+        'retencion',
         'observaciones',
         'descDocumento',
         'detalleDocumento',

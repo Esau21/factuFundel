@@ -853,6 +853,7 @@ class SalesController extends Controller
                     ? (collect($bodyDocumento['resumen']['tributos'] ?? [])
                         ->firstWhere('codigo', '20')['valor'] ?? 0)
                     : ($bodyDocumento['resumen']['totalIva'] ?? 0),
+                'retencion' => $tipo_dte === '14' ? $bodyDocumento['resumen']['reteRenta'] : 0,
                 'observaciones' => $request->observaciones ?? null,
                 'descDocumento' => $request->descDocumento ?? null,
                 'detalleDocumento' => $request->detalleDocumento ?? null,

@@ -10,8 +10,10 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Cuentas bancarias | {{ $banco?->nombre }}.</h5>
                         <div>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#addCuentaBancaria">Agregar cuenta bancaria</button>
+                            @can('add_account_bank')
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addCuentaBancaria">Agregar cuenta bancaria</button>
+                            @endcan
                         </div>
                     </div>
                     <div class="card-body">

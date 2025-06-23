@@ -43,19 +43,55 @@ class PermisosSeeder extends Seeder
          * permisos del sistema
          */
 
+         //roles
         Permission::create(['name' => 'rol_index']);
         Permission::create(['name' => 'rol_create']);
         Permission::create(['name' => 'rol_edit']);
         Permission::create(['name' => 'rol_destroy']);
 
+        //permisos
         Permission::create(['name' => 'permission_index']);
         Permission::create(['name' => 'permission_create']);
         Permission::create(['name' => 'permission_edit']);
         Permission::create(['name' => 'permission_destroy']);
 
+        //asigancion de permisos
         Permission::create(['name' => 'assign_index']);
         Permission::create(['name' => 'assign_form']);
         Permission::create(['name' => 'assign_table']);
+
+        //bancos
+        Permission::create(['name' => 'bancos_view']);
+        Permission::create(['name' => 'bancos_index']);
+        Permission::create(['name' => 'cheques_index']);
+        Permission::create(['name' => 'bancos_create']);
+        Permission::create(['name' => 'bancos_edit']);
+        Permission::create(['name' => 'bancos_create_accounts']);
+        Permission::create(['name' => 'cheques_form']);
+        Permission::create(['name' => 'add_account_bank']);
+        Permission::create(['name' => 'edit_cuenta_bank']);
+
+        //productos y mas
+        Permission::create(['name' => 'productos_y_mas_view']);
+        Permission::create(['name' => 'categorias_index']);
+        Permission::create(['name' => 'productos_index']);
+
+        //socios de negocios
+        Permission::create(['name' => 'socios_negocios_view']);
+        Permission::create(['name' => 'clientes_index']);
+        Permission::create(['name' => 'proveedores_index']);
+
+        //ventas view
+        Permission::create(['name' => 'ventas_view']);
+        Permission::create(['name' => 'ventas_index']);
+        Permission::create(['name' => 'ventas_del_dia_index']);
+        Permission::create(['name' => 'ventas_del_mes_index']);
+        
+        //facturacion
+        Permission::create(['name' => 'facturacion_view']);
+        Permission::create(['name' => 'facuracion_index']);
+        Permission::create(['name' => 'correlativos_index']);
+        Permission::create(['name' => 'json_lector_index']);
 
 
         $uadmin->givePermissionTo([
@@ -73,7 +109,6 @@ class PermisosSeeder extends Seeder
         ]);
 
         $root->givePermissionTo([
-            'seguridad_modulo',
             'rol_index',
             'rol_create',
             'rol_edit',
@@ -82,10 +117,6 @@ class PermisosSeeder extends Seeder
             'permission_create',
             'permission_edit',
             'permission_destroy',
-            'user_index',
-            'user_create',
-            'user_edit',
-            'user_destroy',
             'assign_index',
             'assign_form',
             'assign_table',

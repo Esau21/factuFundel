@@ -42,7 +42,8 @@ class BancosController extends Controller
                     $editar = '';
                     $agregarCuentasBancarias = '';
 
-                    $editar = '<a href="#" 
+                    if (Auth()->user()->can('bancos_edit')) {
+                        $editar = '<a href="#" 
                                     class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-banco"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editBanco"
@@ -53,11 +54,15 @@ class BancosController extends Controller
                                     title="Editar">
                                     <i class="bx bx-edit"></i>
                              </a>';
+                    }
+
+                    if (Auth()->user()->can('bancos_create_accounts')) {
                     $agregarCuentasBancarias = '<a href="' . route('cuentas.indexCuentasBancarias', $data->id) . '" 
                                     class="btn btn-dark mt-mobile w-90 mx-2"
                                     title="Agregar cuentas bancarias">
                                     <i class="bx bxs-bank"></i>
                              </a>';
+                    }
 
                     return $editar . $agregarCuentasBancarias;
                 })
@@ -149,6 +154,7 @@ class BancosController extends Controller
             ->addColumn('acciones', function ($data) {
                 $editar = '';
 
+                if (Auth()->user()->can('edit_cuenta_bank')) {
                 $editar = '<a href="#" 
                                     class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-cuentabancaria"
                                     data-bs-toggle="modal"
@@ -161,6 +167,7 @@ class BancosController extends Controller
                                     title="Editar cuenta bancaria">
                                     <i class="bx bx-edit"></i>
                              </a>';
+                }
 
                 return $editar;
             })

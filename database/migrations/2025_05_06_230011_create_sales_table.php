@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('detalleDocumento');
             $table->string('periodo')->nullable();
             $table->decimal('iva', 10, 2)->default(0.00);
+            $table->decimal('retencion', 10,2)->default(0.00);
             $table->text('observaciones');
             $table->decimal('monto_efectivo', 12, 2)->nullable();
             $table->decimal('monto_transferencia', 12, 2)->nullable();

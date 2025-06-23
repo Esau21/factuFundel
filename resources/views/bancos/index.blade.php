@@ -10,8 +10,10 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Bancos del sistema.</h5>
                         <div>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#addBanco">Agregar banco</button>
+                            @can('bancos_create')
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addBanco">Agregar banco</button>
+                            @endcan
                         </div>
                     </div>
                     <div class="card-body">
@@ -71,7 +73,7 @@
                     data: 'codigo',
                     name: 'codigo'
                 },
-                 {
+                {
                     data: 'estado',
                     name: 'estado'
                 },
