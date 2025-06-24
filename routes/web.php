@@ -140,6 +140,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/sales/days/get/data', [SalesController::class, 'ventasDelDia'])->name('sales.ventasDelDia');
     Route::get('/detalles/ventas/{id}', [SalesController::class, 'verDetallesdeVenta'])->name('sales.verDetallesdeVenta');
     Route::get('/sales/ventas/mes', [SalesController::class, 'ventasDelMes'])->name('sales.ventasDelMes');
+    Route::get('/report/mes/pdf', [SalesController::class, 'downloadReportePdfMes'])->name('ventas.descargar.pdf');
+    Route::get('/download/report/mes', [SalesController::class, 'downloadExcelReporteMes'])->name('ventas.descargar.excel');
     Route::get('/get/detallesventas', [SalesController::class, 'getDetalleVentasMensual'])->name('sales.getDetalleVentasMensual');
     Route::get('/ventas/resumen-mensual', [SalesController::class, 'getResumenMensual'])->name('ventas.resumen.mensual');
     Route::get('/generar/pdf/ventas/dia/{id}', [SalesController::class, 'generarPDfDetalles'])->name('sales.generarPDfDetalles');

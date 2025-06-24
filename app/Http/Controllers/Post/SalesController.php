@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Post;
 
+use App\Exports\VentasMensualesExport;
 use App\Helpers\NumeroALetras as HelpersNumeroALetras;
 use App\Http\Controllers\Controller;
 use App\Mail\EnviarDTECliente;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalesController extends Controller
 {
@@ -1437,12 +1439,46 @@ class SalesController extends Controller
             ->orderBy('mes')
             ->get();
 
-
-
         return response()->json($ventas);
     }
 
+    public function downloadExcelReporteMes(Request $request)
+    {
+        $clienteId = $request->cliente_id;
+        $fechaInicio = $request->fecha_inicio;
+        $fechaFin = $request->fecha_fin;
 
+        return Excel::download(new VentasMensualesExport($clienteId, $fechaInicio, $fechaFin), 'reporte_ventas_mes.xlsx');
+    }
+
+
+    public function downloadReportePdfMes(Request $request)
+    {
+        $clienteId = $request->cliente_id;
+        $fechaInicio = $request->fecha_inicio;
+        $fechaFin = $request->fecha_fin;
+
+        $ventas = Sales::with('clientes', 'users')
+            ->when($clienteId, function ($q) use ($clienteId) {
+                $q->where('cliente_id', $clienteId);
+            })
+            ->when($fechaInicio && $fechaFin, function ($q) use ($fechaInicio, $fechaFin) {
+                $q->whereBetween('fecha_venta', [$fechaInicio, $fechaFin]);
+            })
+            ->orderBy('fecha_venta', 'desc')
+            ->get();
+
+        $cliente = null;
+        if ($clienteId) {
+            $cliente = Clientes::find($clienteId);
+        }
+
+        $user = Auth::user();
+
+        $pdf = Pdf::loadView('saleMonth.pdf.reporte-ventas-pdf', compact('ventas', 'cliente', 'fechaInicio', 'fechaFin', 'user'))->setPaper('A4', 'landscape');
+
+        return $pdf->stream('reporte_ventas_mes.pdf');
+    }
 
 
     public function verDetallesdeVenta($id)

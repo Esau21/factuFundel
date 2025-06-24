@@ -3,10 +3,10 @@
 @section('title', 'Ventas')
 
 @section('content')
-
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-4">
+        <div class="row g-4">
+            <!-- Gráfico de ventas -->
+            <div class="col-12 col-lg-5">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="text-center text-muted text-dark"><b>Resumen de ventas del mes</b></h6>
@@ -14,35 +14,46 @@
                     <div class="card-body">
                         <div id="graficoVentasMes"></div>
                     </div>
+                    <div class="card-footer">
+                        <h6 class="text-center text-dark">Descargar resumen de ventas del mes</h6>
+                        <div class="mt-3">
+                            <a href="#" id="btn-descargar-excel" class="btn bg-label-success w-100 mb-3"><i class="bx bx-file"
+                                    style="font-size: 28px;"></i>Descargar excel</a>
+                            <a href="#" id="btn-descargar-pdf" class="btn bg-label-danger w-100 mb-3"><i
+                                    class="bx bx-file" style="font-size: 28px;"></i>Descargar pdf</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-8">
-                <div class="card">
+
+            <!-- Filtros + Tabla -->
+            <div class="col-12 col-lg-7">
+                <div class="card shadow-sm">
                     <div class="card-header">
-                        <h6>Realizar busqueda de ventas del mes</h6>
+                        <h6 class="mb-0">Búsqueda de Ventas del Mes</h6>
                     </div>
                     <div class="card-body">
                         <form id="filtro-form">
                             @csrf
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="cliente_id">Cliente:</label>
-                                    <select id="cliente_id" name="cliente_id" class="form-select select2 w-100">
+                            <div class="row g-3">
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <label for="cliente_id" class="form-label">Cliente</label>
+                                    <select id="cliente_id" name="cliente_id" class="form-select select2">
                                         <option value="">-- Todos los clientes --</option>
                                         @foreach ($clientes as $cliente)
                                             <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-sm-3">
-                                    <label for="fecha_inicio">Desde:</label>
+                                <div class="col-6 col-md-4">
+                                    <label for="fecha_inicio" class="form-label">Desde</label>
                                     <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
                                 </div>
-                                <div class="col-sm-3">
-                                    <label for="fecha_fin">Hasta:</label>
+                                <div class="col-6 col-md-4">
+                                    <label for="fecha_fin" class="form-label">Hasta</label>
                                     <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
                                 </div>
-                                <div class="col-sm-2 d-flex align-items-end">
+                                <div class="col-12 col-md-12 col-lg-4 d-flex align-items-end">
                                     <button type="button" id="btn-filtrar" class="btn bg-label-primary w-100">
                                         <i class="bx bx-filter-alt"></i> Filtrar
                                     </button>
@@ -50,17 +61,18 @@
                             </div>
                         </form>
                     </div>
+
                     <div class="card-footer">
                         <div class="table-responsive">
-                            <table id="tabla-ventas" class="table table-bordered table-hover table-stripe">
-                                <thead class="bg-label-dark">
+                            <table id="tabla-ventas" class="table table-bordered table-hover w-100">
+                                <thead class="bg-label-dark text-white">
                                     <tr>
-                                        <th>Id</th>
+                                        <th>ID</th>
                                         <th>N° Documento</th>
                                         <th>Cliente</th>
                                         <th>Usuario</th>
-                                        <th>Fecha pago</th>
-                                        <th>Tipo pago</th>
+                                        <th>Fecha Pago</th>
+                                        <th>Tipo Pago</th>
                                         <th>Total</th>
                                         <th>Estado</th>
                                     </tr>
@@ -72,13 +84,12 @@
             </div>
         </div>
     </div>
-
 @endsection
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let chart = null;
 
-        // Inicializa la tabla sin cargar datos inicialmente
         let table = $('#tabla-ventas').DataTable({
             processing: true,
             serverSide: true,
@@ -122,7 +133,7 @@
             ]
         });
 
-        document.getElementById('btn-filtrar').addEventListener('click', function() {
+        $('#btn-filtrar').on('click', function() {
             const clienteId = $('#cliente_id').val();
             const fechaInicio = $('#fecha_inicio').val();
             const fechaFin = $('#fecha_fin').val();
@@ -132,23 +143,21 @@
                 return;
             }
 
-            // Fetch para el gráfico
+            // Grafico resumen
             fetch('{{ route('ventas.resumen.mensual') }}?cliente_id=' + clienteId + '&fecha_inicio=' +
                     fechaInicio + '&fecha_fin=' + fechaFin)
                 .then(response => response.json())
                 .then(data => {
                     const contenedor = document.querySelector("#graficoVentasMes");
+                    if (!contenedor) return;
 
-                    if (!contenedor) {
-                        console.error('No existe el contenedor del gráfico');
-                        return;
+                    if (chart) {
+                        chart.destroy();
+                        chart = null;
+                        contenedor.innerHTML = '';
                     }
 
                     if (data.length === 0) {
-                        if (chart) {
-                            chart.destroy();
-                            chart = null;
-                        }
                         contenedor.innerHTML =
                             '<p class="text-center text-muted">No hay datos para mostrar.</p>';
                         return;
@@ -157,27 +166,12 @@
                     const meses = data.map(item => item.mes);
                     const valores = data.map(item => parseFloat(item.total_ventas));
 
-                    if (chart) {
-                        chart.destroy();
-                        chart = null;
-                        contenedor.innerHTML = '';
-                    }
-
-                    var options = {
+                    const options = {
                         chart: {
                             type: 'donut',
                             height: 350,
                             toolbar: {
-                                show: true,
-                                tools: {
-                                    download: true,
-                                    selection: true,
-                                    zoom: true,
-                                    zoomin: true,
-                                    zoomout: true,
-                                    pan: true,
-                                    reset: true
-                                }
+                                show: true
                             }
                         },
                         labels: meses,
@@ -194,7 +188,31 @@
                     chart = new ApexCharts(contenedor, options);
                     chart.render();
                 });
+
             table.ajax.reload();
+        });
+
+
+        document.getElementById('btn-descargar-excel').addEventListener('click', function(e) {
+            e.preventDefault();
+            const clienteId = $('#cliente_id').val();
+            const fechaInicio = $('#fecha_inicio').val();
+            const fechaFin = $('#fecha_fin').val();
+
+            const url =
+                `{{ route('ventas.descargar.excel') }}?cliente_id=${clienteId}&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+            window.open(url, '_blank');
+        });
+
+        document.getElementById('btn-descargar-pdf').addEventListener('click', function(e) {
+            e.preventDefault();
+            const clienteId = $('#cliente_id').val();
+            const fechaInicio = $('#fecha_inicio').val();
+            const fechaFin = $('#fecha_fin').val();
+
+            const url =
+                `{{ route('ventas.descargar.pdf') }}?cliente_id=${clienteId}&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+            window.open(url, '_blank');
         });
     });
 </script>
