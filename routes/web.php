@@ -158,6 +158,8 @@ Route::middleware('auth')->group(function () {
         ->name('documentos-dte.enviar');
     Route::get('/download/history/dte', [DocumentosDTEController::class, 'historialDTEFechasXlsx'])->name('facturacion.historialDTEFechasXlsx');
     Route::post('/facturacion/anular-json/{id}', [DocumentosDTEController::class, 'anularDocumentoTributarioElectronico']);
+    Route::get('/facturacion/obtener-json/{id}', [DocumentosDTEController::class, 'obtenerJsonDte']);
+    Route::post('/reenviar/json/dte/{id}', [DocumentosDTEController::class, 'reenviarDteDocumentoId'])->name('facturacion.reenviarDteDocumentoId');
 });
 
 require __DIR__ . '/auth.php';

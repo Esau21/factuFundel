@@ -1134,7 +1134,11 @@ class SalesController extends Controller
                 })
 
                 ->addColumn('acciones', function ($data) {
-                    $viewsalesdetails = '<a href="#" 
+                    $imprimir = '';
+                    $viewsalesdetails = '';
+
+                    if (Auth()->user()->can('ventas_view_details')) {
+                        $viewsalesdetails = '<a href="#" 
                                                 class="mx-1 btn btn-sm bg-label-success btn-show-details"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#verSale"
@@ -1142,26 +1146,30 @@ class SalesController extends Controller
                                                 title="Ver detalles de esta venta">
                                                 <i class="bx bx-show" style="font-size: 22px;"></i>
                                          </a>';
+                    }
 
-                    $imprimir = '<a href="' . route('sales.generarPDfDetalles', $data->id) . '" 
+                    if (Auth()->user()->can('ventas_print')) {
+                        $imprimir = '<a href="' . route('sales.generarPDfDetalles', $data->id) . '" 
                                     class="mx-1 btn btn-sm bg-label-dark"
                                     title="Imprimir" target="_blank">
                                     <i class="bx bx-printer" style="font-size: 22px;"></i>
                                 </a>';
+                    }
 
 
                     $generarFactura = '';
 
-                    if (
-                        $data?->documentoDte?->tipo_documento !== '15' &&
-                        $data?->documentoDte?->estado !== 'RECIBIDO' &&
-                        $data?->documentoDte?->estado !== 'ANULADO' &&
-                        (
-                            $data?->documentoDte?->estado !== 'FIRMADO' ||
-                            ($data?->documentoDte?->estado === 'FIRMADO' && $data?->documentoDte?->mh_response === null)
-                        )
-                    ) {
-                        $generarFactura = '<a href="#" 
+                    if (Auth()->user()->can('ventas_send_contingencia')) {
+                        if (
+                            $data?->documentoDte?->tipo_documento !== '15' &&
+                            $data?->documentoDte?->estado !== 'RECIBIDO' &&
+                            $data?->documentoDte?->estado !== 'ANULADO' &&
+                            (
+                                $data?->documentoDte?->estado !== 'FIRMADO' ||
+                                ($data?->documentoDte?->estado === 'FIRMADO' && $data?->documentoDte?->mh_response === null)
+                            )
+                        ) {
+                            $generarFactura = '<a href="#" 
                         class="mx-1 btn btn-sm bg-label-danger btn-send-contingencia"
                         data-bs-toggle="modal"
                         data-bs-target="#sendContingencia"
@@ -1169,6 +1177,7 @@ class SalesController extends Controller
                         title="Emitir DTE" target="_blank">
                         <i class="bx bx-file" style="font-size: 22px;"></i>
                     </a>';
+                        }
                     }
                     return '<div class="d-flex justify-content-start text-nowrap">' . $viewsalesdetails . $imprimir . $generarFactura . '</div>';
                 })

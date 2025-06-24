@@ -9,45 +9,49 @@
                 <div class="card h-100 d-flex flex-column">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Ventas del sistema.</h5>
-                        <a href="{{ route('sales.index') }}" class="btn btn-primary mt-2 mt-md-0">
-                            <i class="bx bx-plus"></i> Generar nueva venta
-                        </a>
+                        @can('ventas_create')
+                            <a href="{{ route('sales.index') }}" class="btn btn-primary mt-2 mt-md-0">
+                                <i class="bx bx-plus"></i> Generar nueva venta
+                            </a>
+                        @endcan
                     </div>
                     <div class="card-body">
-                        <form id="filtro-form">
-                            @csrf
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label for="cliente_id">Cliente:</label>
-                                    <select id="cliente_id" name="cliente_id" class="form-select select2 w-100">
-                                        <option value="">-- Todos los clientes --</option>
-                                        @foreach ($clientes as $cliente)
-                                            <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
-                                        @endforeach
-                                    </select>
+                        @can('ventas_form')
+                            <form id="filtro-form">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label for="cliente_id">Cliente:</label>
+                                        <select id="cliente_id" name="cliente_id" class="form-select select2 w-100">
+                                            <option value="">-- Todos los clientes --</option>
+                                            @foreach ($clientes as $cliente)
+                                                <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="fecha_inicio">Desde:</label>
+                                        <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="fecha_fin">Hasta:</label>
+                                        <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
+                                    </div>
+                                    <div class="col-sm-2 d-flex align-items-end">
+                                        <button type="button" id="btn-filtrar" class="btn bg-label-primary w-100">
+                                            <i class="bx bx-filter-alt"></i> Filtrar
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-2 d-flex align-items-end mt-2">
+                                        <button type="button" id="btn-descargar-historial"
+                                            class="btn btn-sm bg-label-danger w-100">
+                                            <i class="bx bxs-file-pdf" style="font-size: 20px; transition: transform 0.2s;"></i>
+                                            Descagar historial
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <label for="fecha_inicio">Desde:</label>
-                                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control">
-                                </div>
-                                <div class="col-sm-3">
-                                    <label for="fecha_fin">Hasta:</label>
-                                    <input type="date" id="fecha_fin" name="fecha_fin" class="form-control">
-                                </div>
-                                <div class="col-sm-2 d-flex align-items-end">
-                                    <button type="button" id="btn-filtrar" class="btn bg-label-primary w-100">
-                                        <i class="bx bx-filter-alt"></i> Filtrar
-                                    </button>
-                                </div>
-                                <div class="col-sm-2 d-flex align-items-end mt-2">
-                                    <button type="button" id="btn-descargar-historial"
-                                        class="btn btn-sm bg-label-danger w-100">
-                                        <i class="bx bxs-file-pdf" style="font-size: 20px; transition: transform 0.2s;"></i>
-                                        Descagar historial
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        @endcan
                         <div class="table-responsive">
                             <table id="sysconta-datatable" class="display cell-border stripe hover order-column"
                                 style="width:100%">

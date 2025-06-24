@@ -43,7 +43,7 @@ class PermisosSeeder extends Seeder
          * permisos del sistema
          */
 
-         //roles
+        //roles
         Permission::create(['name' => 'rol_index']);
         Permission::create(['name' => 'rol_create']);
         Permission::create(['name' => 'rol_edit']);
@@ -93,12 +93,23 @@ class PermisosSeeder extends Seeder
         //ventas view
         Permission::create(['name' => 'ventas_view']);
         Permission::create(['name' => 'ventas_index']);
+        Permission::create(['name' => 'ventas_create']);
+        Permission::create(['name' => 'ventas_form']);
+        Permission::create(['name' => 'ventas_view_details']);
+        Permission::create(['name' => 'ventas_print']);
+        Permission::create(['name' => 'ventas_send_contingencia']);
         Permission::create(['name' => 'ventas_del_dia_index']);
         Permission::create(['name' => 'ventas_del_mes_index']);
-        
+
         //facturacion
         Permission::create(['name' => 'facturacion_view']);
         Permission::create(['name' => 'facuracion_index']);
+        Permission::create(['name' => 'facturacion_mh_response']);
+        Permission::create(['name' => 'facturacion_view_factura']);
+        Permission::create(['name' => 'download_json']);
+        Permission::create(['name' => 'download_pdf_factura']);
+        Permission::create(['name' => 'anulacion_json']);
+        Permission::create(['name' => 'send_factura_mh_response']);
         Permission::create(['name' => 'correlativos_index']);
         Permission::create(['name' => 'json_lector_index']);
 

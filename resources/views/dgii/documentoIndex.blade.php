@@ -106,6 +106,7 @@
         </div>
     </div>
     @include('dgii.modal.anularJson')
+    @include('dgii.modal.reenviarDte')
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

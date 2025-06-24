@@ -81,3 +81,18 @@
     },
     "apendice": null
 }
+
+
+{
+    "version": 2,
+    "ambiente": "00",
+    "versionApp": 2,
+    "estado": "PROCESADO",
+    "codigoGeneracion": "9C8B0554-B64A-40D3-90EF-FA9A8B8A1892",
+    "selloRecibido": "2025FCE46EB7175D416F9B9060FBF8AAAD56U2VG",
+    "fhProcesamiento": "23\/06\/2025 19:09:44",
+    "clasificaMsg": "10",
+    "codigoMsg": "001",
+    "descripcionMsg": "RECIBIDO",
+    "observaciones": []
+}
