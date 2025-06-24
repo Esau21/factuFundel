@@ -228,14 +228,14 @@
                                         <select name="tipo_contribuyente" id="tipo_contribuyente" class="form-control"
                                             required>
                                             <option value="">Elegir</option>
-                                            <option value="contribuyente"
-                                                {{ $cliente->tipo_contribuyente == 'contribuyente' ? 'selected' : '' }}>
-                                                Contribuyente</option>
-                                            <option value="gubernamental"
-                                                {{ $cliente->tipo_contribuyente == 'gubernamental' ? 'selected' : '' }}>
-                                                Gubernamental</option>
+                                            <option value="gran_contribuyente"
+                                                {{ $cliente->tipo_contribuyente == 'gran_contribuyente' ? 'selected' : '' }}>
+                                                Gran Contribuyente</option>
+                                            <option value="mediano_contribuyente"
+                                                {{ $cliente->tipo_contribuyente == 'mediano_contribuyente' ? 'selected' : '' }}>
+                                                Mediano Contribuyente</option>
                                             <option value="exento"
-                                                {{ $cliente->tipo_contribuyente == 'exento' ? 'selected' : '' }}>Exento
+                                                {{ $cliente->tipo_contribuyente == 'exento' ? 'selected' : '' }}>Otros
                                             </option>
                                             <option value="consumidor_final"
                                                 {{ $cliente->tipo_contribuyente == 'consumidor_final' ? 'selected' : '' }}>

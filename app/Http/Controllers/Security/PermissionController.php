@@ -25,7 +25,10 @@ class PermissionController extends Controller
                 })
                 ->addColumn('acciones', function ($data) {
                     $editar =  '';
-                    $editar = '<a href="#" 
+                    $eliminar = '';
+
+                    if (Auth()->user()->can('permission_edit')) {
+                        $editar = '<a href="#" 
                                 class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-role"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editPermiso"
@@ -34,12 +37,15 @@ class PermissionController extends Controller
                                 title="Editar">
                                 <i class="bx bx-edit"></i>
                                 </a>';
-
+                    }
                     $eliminarUrl = "javascript:void(0)";
                     $onClickEliminar = "confirmDeletePermiso({$data->id}); return false;";
-                    $eliminar = '<a title="Eliminar" class="btn btn-danger mx-1" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
+
+                    if (Auth()->user()->can('permission_destroy')) {
+                        $eliminar = '<a title="Eliminar" class="btn btn-danger mx-1" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
                                     <i class="bx bx-trash-alt"></i>
                                  </a>';
+                    }
 
                     return $editar .  $eliminar;
                 })

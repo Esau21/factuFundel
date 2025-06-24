@@ -26,8 +26,10 @@ class RoleController extends Controller
                 })
                 ->addColumn('acciones', function ($data) {
                     $editar =  '';
+                    $eliminar = '';
 
-                    $editar = '<a href="#" 
+                    if (Auth()->user()->can('rol_edit')) {
+                        $editar = '<a href="#" 
                                 class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-role"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editRole"
@@ -36,12 +38,16 @@ class RoleController extends Controller
                                 title="Editar">
                                 <i class="bx bx-edit"></i>
                                 </a>';
+                    }
 
                     $eliminarUrl = "javascript:void(0)";
                     $onClickEliminar = "confirmDeleteRole({$data->id}); return false;";
-                    $eliminar = '<a title="Eliminar" class="btn btn-danger mx-1" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
+
+                    if (Auth()->user()->can('rol_destroy')) {
+                        $eliminar = '<a title="Eliminar" class="btn btn-danger mx-1" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
                                     <i class="bx bx-trash-alt"></i>
                                  </a>';
+                    }
 
                     return $editar .  $eliminar;
                 })

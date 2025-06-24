@@ -157,11 +157,12 @@ class DocumentosDTEController extends Controller
                         }
                     }
 
-                    if (
-                        ($data->estado !== 'FIRMADO' && $data->estado !== 'PROCESADO' && $data->estado !== 'RECIBIDO' && $data->estado !== 'ANULADO')
-                        || $data->mh_response === null
-                    ) {
-                        $sendDtefailMhResponse = '<a href="#" 
+                    if (Auth()->user()->can('reenvio_json')) {
+                        if (
+                            ($data->estado !== 'FIRMADO' && $data->estado !== 'PROCESADO' && $data->estado !== 'RECIBIDO' && $data->estado !== 'ANULADO')
+                            || $data->mh_response === null
+                        ) {
+                            $sendDtefailMhResponse = '<a href="#" 
                                                     class="mx-1 d-inline-block btn btn-sm bg-label-info btn-reenvio-json" 
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#reenviarJson"
@@ -170,8 +171,9 @@ class DocumentosDTEController extends Controller
                                                     style="text-decoration: none;" target="_blank">
                                                     <i class="bx bxl-gmail" style="font-size: 28px; transition: transform 0.2s;"></i>
                                                 </a>';
-                    } else {
-                        $sendDtefailMhResponse = '';
+                        } else {
+                            $sendDtefailMhResponse = '';
+                        }
                     }
 
 

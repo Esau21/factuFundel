@@ -342,7 +342,6 @@ class SalesController extends Controller
         $sumas = 0.00;
         $descuentoTotal = 0.00;
         $porcentajeIVA = 0.13;
-        $aplicaIVA = true;
 
         foreach ($request->producto_id as $index => $productoId) {
             $cantidad = (int) $request->cantidad[$index];
@@ -350,7 +349,6 @@ class SalesController extends Controller
             $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.00;
 
             $ventaGravada = round(($cantidad * $precioUnitario) - $descuento, 2);
-            $iva = round($ventaGravada * $porcentajeIVA, 2);
 
             $sumas += $ventaGravada;
             $descuentoTotal += $descuento;
@@ -363,7 +361,7 @@ class SalesController extends Controller
                 "cantidad" => $cantidad,
                 "codigo" => (string) $producto->codigo,
                 "codTributo" => null,
-                "numeroDocumento" =>  null,
+                "numeroDocumento" => null,
                 "uniMedida" => (int) $producto->unidad->codigo,
                 "descripcion" => $producto->nombre,
                 "precioUni" => round($precioUnitario, 2),
@@ -380,8 +378,25 @@ class SalesController extends Controller
         }
 
         $ivaTotal = round($sumas * $porcentajeIVA, 2);
-        $ivaRetenido = 0.00; // No aplica retención en CCF
-        $total = round($sumas + $ivaTotal - $ivaRetenido - $descuentoTotal, 2);
+        /**
+         * Obtenemos el cliente
+         */
+        $cliente = Clientes::find($request->cliente_id);
+
+        /**
+         * Total bruto antes de retención
+         */
+        $montoTotalOperacion = round($sumas + $ivaTotal, 2);
+
+        /**
+         * Aplicar retención solo si es gran contribuyente (retención sobre el monto con IVA)
+         */
+        $ivaRetenido = ($cliente && $cliente->tipo_contribuyente === 'gran_contribuyente') ? round($montoTotalOperacion * 0.01, 2) : 0.00;
+
+        /**
+         * Total a pagar ya con retención aplicada
+         */
+        $total = round($montoTotalOperacion - $ivaRetenido - $descuentoTotal, 2);
 
         $tributos = [
             [
@@ -407,7 +422,7 @@ class SalesController extends Controller
             "reteRenta" => 0.00,
             "subTotalVentas" => round($sumas, 2),
             "tributos" => $tributos,
-            "montoTotalOperacion" => round($sumas + $ivaTotal - $ivaRetenido, 2),
+            "montoTotalOperacion" => $montoTotalOperacion, /* Aquí no se resta la retención */
             "totalPagar" => $total,
             "saldoFavor" => 0.00,
             "totalLetras" => HelpersNumeroALetras::convertir($total, 'DÓLARES'),
@@ -416,7 +431,7 @@ class SalesController extends Controller
             "pagos" => (int)$request->tipo_venta === 2 ? [
                 [
                     "codigo" => "02",
-                    "montoPago" => round($sumas + $ivaTotal - $ivaRetenido, 2),
+                    "montoPago" => round($montoTotalOperacion - $ivaRetenido, 2),
                     "plazo" => $request->plazo ?? null,
                     "referencia" => $request->referencia ?? "",
                     "periodo" => !empty($request->periodo) ? (int)$request->periodo : null,
@@ -437,14 +452,15 @@ class SalesController extends Controller
         $totalDescuento = 0.0;
         $totalIva = 0.0;
         $porcentajeIVA = 0.13;
-        /**Equivale al 13% */
 
         foreach ($request->producto_id as $index => $productoId) {
             $cantidad = (int) $request->cantidad[$index];
             $precioUnitarioSinIVA = (float) $request->precio_unitario[$index];
-            /**Precio cin Iva */
+
+            /**
+             * Precio con IVA
+             */
             $precioUnitarioConIVA = round($precioUnitarioSinIVA * (1 + $porcentajeIVA), 4);
-            /**ahora incluye el 13% */
 
             $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.0;
 
@@ -469,7 +485,6 @@ class SalesController extends Controller
                 "uniMedida" => (int)$producto->unidad->codigo,
                 "descripcion" => $producto->nombre,
                 "precioUni" => round($precioUnitarioConIVA, 2),
-                /**Precio con IVA */
                 "montoDescu" => round($descuento, 3),
                 "ventaNoSuj" => 0,
                 "ventaExenta" => 0,
@@ -481,10 +496,24 @@ class SalesController extends Controller
             ];
         }
 
-
         $montoOperacion = round($totalVentaGravada, 2);
         $ivaTotal = round($totalIva, 2);
-        $totalPagar = round($montoOperacion, 2);
+
+        $cliente = Clientes::find($request->cliente_id);
+
+        /**
+         * Solo si es gran contribuyente aplicamos la retención del 1%
+         */
+        if ($cliente && $cliente->tipo_contribuyente === 'gran_contribuyente') {
+            $ivaRete1 = round($montoOperacion * 0.01, 2);
+        } else {
+            $ivaRete1 = 0.00;
+        }
+
+        /**
+         * Total a pagar ya con la retención aplicada
+         */
+        $totalPagar = round($montoOperacion - $ivaRete1, 2);
 
         $resumen = [
             "totalNoSuj" => 0,
@@ -498,11 +527,11 @@ class SalesController extends Controller
             "totalDescu" => round($totalDescuento, 2),
             "tributos" => [],
             "subTotal" => $montoOperacion,
-            "ivaRete1" => 0,
+            "ivaRete1" => $ivaRete1,
             "reteRenta" => 0,
             "montoTotalOperacion" => $montoOperacion,
             "totalNoGravado" => 0,
-            "totalPagar" => $montoOperacion,
+            "totalPagar" => $totalPagar,
             "totalLetras" => HelpersNumeroALetras::convertir($totalPagar, 'DÓLARES'),
             "totalIva" => $ivaTotal,
             "saldoFavor" => 0,
@@ -510,7 +539,7 @@ class SalesController extends Controller
             "pagos" => [
                 [
                     "codigo" => "01",
-                    "montoPago" => $montoOperacion,
+                    "montoPago" => $totalPagar,
                     "plazo" => $request->plazo ?? null,
                     "referencia" => $request->referencia ?? "",
                     "periodo" => !empty($request->periodo) ? (int)$request->periodo : null,
@@ -524,6 +553,7 @@ class SalesController extends Controller
             "resumen" => $resumen,
         ];
     }
+
 
     protected function generarBodyExcluido(Request $request): array
     {

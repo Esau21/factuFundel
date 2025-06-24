@@ -3,71 +3,76 @@
 @section('title', 'Asignacion-de-permisos')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card h-100 d-flex flex-column">
-                <div class="card-header">
-                    <h3 class="card-title mb-0">Permisos y asignación al sistema</h3>
-                </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card h-100 d-flex flex-column">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Permisos y asignación al sistema</h3>
+                    </div>
 
-                <div class="card-body">
-                    <form action="{{ route('asignar.storeAsignarPermisosRoles') }}" method="POST" id="form">
-                        @csrf
-                        <div class="row mb-4 align-items-end">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="role_id" class="alert alert-warning d-flex align-items-center gap-2" role="alert">
-                                        <i class='bx bx-error-circle fs-4'></i>
-                                        ¡Importante! Tienes que seleccionar un rol
-                                      </label>                                                                        
-                                    <select class="form-control select2" name="role_id" id="role_id" style="width: 100%;">
-                                        <option value="">Elegir</option>
-                                        @foreach ($roles as $r)
-                                            <option value="{{ $r->id }}">{{ $r->name }}</option>
-                                        @endforeach
-                                    </select>
+                    <div class="card-body">
+                        @can('assign_form')
+                            <form action="{{ route('asignar.storeAsignarPermisosRoles') }}" method="POST" id="form">
+                                @csrf
+                                <div class="row mb-4 align-items-end">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="role_id" class="alert alert-warning d-flex align-items-center gap-2"
+                                                role="alert">
+                                                <i class='bx bx-error-circle fs-4'></i>
+                                                ¡Importante! Tienes que seleccionar un rol
+                                            </label>
+                                            <select class="form-control select2" name="role_id" id="role_id"
+                                                style="width: 100%;">
+                                                <option value="">Elegir</option>
+                                                @foreach ($roles as $r)
+                                                    <option value="{{ $r->id }}">{{ $r->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button type="button" id="asignar-todo" class="btn btn-outline-success w-100">
+                                            Asignar todo <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button type="button" id="revocar-todo" class="btn btn-outline-danger w-100">
+                                            Revocar todo <i class="fas fa-ban"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-4">
-                                <button type="button" id="asignar-todo" class="btn btn-outline-success w-100">
-                                    Asignar todo <i class="fas fa-sync-alt"></i>
-                                </button>
-                            </div>
-
-                            <div class="col-md-4">
-                                <button type="button" id="revocar-todo" class="btn btn-outline-danger w-100">
-                                    Revocar todo <i class="fas fa-ban"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table id="sysconta-datatable" class="display cell-border stripe hover order-column">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="text-left">ID</th>
-                                        <th class="text-left">Nombre</th>
-                                        <th class="text-left">Asignar</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th class="no-search"></th>
-                                        <th></th>
-                                        <th class="no-search"></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </form>
+                                <div class="table-responsive">
+                                    @can('assign_table')
+                                        <table id="sysconta-datatable" class="display cell-border stripe hover order-column">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th class="text-left">ID</th>
+                                                    <th class="text-left">Nombre</th>
+                                                    <th class="text-left">Asignar</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th class="no-search"></th>
+                                                    <th></th>
+                                                    <th class="no-search"></th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    @endcan
+                                </div>
+                            </form>
+                        @endcan
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>

@@ -207,10 +207,10 @@
                                         <select name="tipo_contribuyente" id="tipo_contribuyente" class="form-control"
                                             required>
                                             <option value="">Elegir</option>
-                                            <option value="contribuyente">Contribuyente</option>
-                                            <option value="gubernamental">Gubernamental</option>
-                                            <option value="exento">Exento</option>
+                                            <option value="gran_contribuyente">Gran Contribuyente</option>
+                                            <option value="mediano_contribuyente">Mediano Contribuyente</option>
                                             <option value="consumidor_final">Consumidor Final</option>
+                                            <option value="exento">Otros</option>
                                         </select>
                                         <span class="input-group-text cursor-pointer"><span
                                                 class="card-type me-n2"></span></span>

@@ -10,8 +10,10 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">Permisos del sistema.</h5>
                         <div>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#addPermiso">Agregar permiso</button>
+                            @can('permission_create')
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addPermiso">Agregar permiso</button>
+                            @endcan
                         </div>
                     </div>
                     <div class="card-body">

@@ -110,6 +110,7 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'download_pdf_factura']);
         Permission::create(['name' => 'anulacion_json']);
         Permission::create(['name' => 'send_factura_mh_response']);
+        Permission::create(['name' => 'reenvio_json']);
         Permission::create(['name' => 'correlativos_index']);
         Permission::create(['name' => 'json_lector_index']);
 
