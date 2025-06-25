@@ -36,7 +36,7 @@
         <!-- Layouts -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <img src="{{ asset('assets/img/gear.png') }}" class="menu-icon tf-icons" alt="img">
+                <img src="{{ asset('assets/img/ajustes.png') }}" class="menu-icon tf-icons" alt="img">
                 <div class="text-truncate" data-i18n="Layouts">Configuraciones</div>
             </a>
 
