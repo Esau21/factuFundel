@@ -44,21 +44,21 @@ class UserController extends Controller
                 })
                 ->addColumn('status', function ($data) {
                     if ($data->status == 'Active') {
-                        return '<span class="badge bg-success">Activo</span>';
+                        return '<span class="badge bg-label-success"><i class="icon-base bx bx-check-circle"></i> Activo</span>';
                     } elseif ($data->status == 'Locked') {
-                        return '<span class="badge bg-danger">Bloqueado</span>';
+                        return '<span class="badge bg-label-danger"><i class="icon-base bx bx-x-circle"></i> Bloqueado</span>';
                     }
                     return $data->status;
                 })
                 ->addColumn('acciones', function ($data) {
                     $editar = '';
 
-                    $ver = '<a href="' . route('usuarios.showUser', $data->id) . '" title="Ver" class="btn btn-warning mx-1">
-                               <i class="bx bxl-trip-advisor"></i>
+                    $ver = '<a href="' . route('usuarios.showUser', $data->id) . '" title="Ver usuario" class="mx-1 btn btn-sm bg-label-info">
+                               <i class="bx bxl-trip-advisor" style="font-size: 22px;"></i>
                            </a>';
 
                     $editar = '<a href="#" 
-                                class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-user"
+                                class="mx-1 btn btn-sm bg-label-primary btn-editar-user"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editUser"
                                 data-id="' . $data->id . '"
@@ -67,14 +67,14 @@ class UserController extends Controller
                                 data-profile="' . e($data->profile) . '"
                                 data-status="' . $data->status . '"
                                 data-empresa_id="' . $data->empresa_id . '"
-                                title="Editar">
-                                <i class="bx bx-edit"></i>
+                                title="Editar usuario">
+                                <i class="bx bx-edit" style="font-size: 22px;"></i>
                                 </a>';
 
                     $eliminarUrl = "javascript:void(0)";
                     $onClickEliminar = "confirmDeleteUser({$data->id}); return false;";
-                    $eliminar = '<a title="Eliminar" class="btn btn-danger  mx-1" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
-                                     <i class="bx bx-trash-alt"></i>
+                    $eliminar = '<a title="Eliminar" class="mx-1 btn btn-sm bg-label-danger" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
+                                     <i class="bx bx-trash" style="font-size: 22px;"></i>
                                  </a>';
 
                     return '<div class="d-flex justify-content-center">' . $editar . $ver . $eliminar . '</div>';

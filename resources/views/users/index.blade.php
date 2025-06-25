@@ -33,23 +33,23 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="text-left">ID</th>
+                                        <th class="text-left">Acciones</th>
                                         <th class="text-left">Nombre</th>
                                         <th class="text-left">Empresa</th>
                                         <th class="text-left">Email</th>
                                         <th class="text-left">Perfil</th>
                                         <th class="text-left">Estado</th>
-                                        <th class="text-left">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
                                         <th class="no-search"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -79,6 +79,12 @@
                     name: 'id'
                 },
                 {
+                    data: 'acciones',
+                    name: 'acciones',
+                    orderable: true,
+                    searchable: true
+                },
+                {
                     data: 'name',
                     name: 'name'
                 },
@@ -98,12 +104,6 @@
                     data: 'status',
                     name: 'status'
                 },
-                {
-                    data: 'acciones',
-                    name: 'acciones',
-                    orderable: true,
-                    searchable: true
-                }
             ],
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
