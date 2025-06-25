@@ -378,6 +378,7 @@ class SalesController extends Controller
         }
 
         $ivaTotal = round($sumas * $porcentajeIVA, 2);
+
         /**
          * Obtenemos el cliente
          */
@@ -389,14 +390,14 @@ class SalesController extends Controller
         $montoTotalOperacion = round($sumas + $ivaTotal, 2);
 
         /**
-         * Aplicar retención solo si es gran contribuyente (retención sobre el monto con IVA)
+         * Aplicar retención solo si es gran contribuyente (retención sobre el monto sin IVA)
          */
-        $ivaRetenido = ($cliente && $cliente->tipo_contribuyente === 'gran_contribuyente') ? round($montoTotalOperacion * 0.01, 2) : 0.00;
+        $ivaRetenido = ($cliente && $cliente->tipo_contribuyente === 'gran_contribuyente') ? round($sumas * 0.01, 2) : 0.00;
 
         /**
          * Total a pagar ya con retención aplicada
          */
-        $total = round($montoTotalOperacion - $ivaRetenido - $descuentoTotal, 2);
+        $total = round($montoTotalOperacion - $ivaRetenido, 2);
 
         $tributos = [
             [
@@ -431,7 +432,7 @@ class SalesController extends Controller
             "pagos" => (int)$request->tipo_venta === 2 ? [
                 [
                     "codigo" => "02",
-                    "montoPago" => round($montoTotalOperacion - $ivaRetenido, 2),
+                    "montoPago" => $total,
                     "plazo" => $request->plazo ?? null,
                     "referencia" => $request->referencia ?? "",
                     "periodo" => !empty($request->periodo) ? (int)$request->periodo : null,
@@ -452,14 +453,13 @@ class SalesController extends Controller
         $totalDescuento = 0.0;
         $totalIva = 0.0;
         $porcentajeIVA = 0.13;
+        $totalVentaSinIVA = 0.0; /* Acumulador para la base sin IVA (para calcular la retención) */
 
         foreach ($request->producto_id as $index => $productoId) {
             $cantidad = (int) $request->cantidad[$index];
             $precioUnitarioSinIVA = (float) $request->precio_unitario[$index];
 
-            /**
-             * Precio con IVA
-             */
+            /* Precio con IVA */
             $precioUnitarioConIVA = round($precioUnitarioSinIVA * (1 + $porcentajeIVA), 4);
 
             $descuento = isset($request->descuento_en_dolar[$index]) ? (float) $request->descuento_en_dolar[$index] : 0.0;
@@ -472,6 +472,7 @@ class SalesController extends Controller
             $ivaItem = $ventaGravada - $base;
 
             $totalVentaGravada += round($ventaGravada, 3);
+            $totalVentaSinIVA += round(($precioUnitarioSinIVA * $cantidad) - $descuento, 3);
             $totalDescuento += round($descuento, 3);
             $totalIva += round($ivaItem, 2);
 
@@ -502,10 +503,10 @@ class SalesController extends Controller
         $cliente = Clientes::find($request->cliente_id);
 
         /**
-         * Solo si es gran contribuyente aplicamos la retención del 1%
+         * Solo si es gran contribuyente aplicamos la retención del 1% sobre la base sin IVA
          */
         if ($cliente && $cliente->tipo_contribuyente === 'gran_contribuyente') {
-            $ivaRete1 = round($montoOperacion * 0.01, 2);
+            $ivaRete1 = round($totalVentaSinIVA * 0.01, 2);
         } else {
             $ivaRete1 = 0.00;
         }
@@ -553,7 +554,6 @@ class SalesController extends Controller
             "resumen" => $resumen,
         ];
     }
-
 
     protected function generarBodyExcluido(Request $request): array
     {

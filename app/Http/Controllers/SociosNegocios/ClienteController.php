@@ -30,10 +30,24 @@ class ClienteController extends Controller
             return DataTables::of($data)
                 ->addColumn('nombre', fn($data) => $data->nombre)
                 ->addColumn('nombreComercial', fn($data) => $data->nombreComercial)
-                ->addColumn('tipo_documento', fn($data) => $data->tipo_documento)
+                ->addColumn('tipo_documento', function ($data) {
+                    if ($data->tipo_documento == '13') {
+                        return '<span class="badge rounded-pill bg-label-success me-1 d-inline-flex align-items-center">
+                    <i class="icon-base bx bx-file me-1"></i> Dui
+                </span>';
+                    } elseif ($data->tipo_documento == '36') {
+                        return '<span class="badge rounded-pill bg-label-danger me-1 d-inline-flex align-items-center">
+                    <i class="icon-base bx bx-file me-1"></i> Nit
+                </span>';
+                    } else {
+                        return '<span class="badge rounded-pill bg-label-secondary me-1 d-inline-flex align-items-center">
+                    <i class="icon-base bx bx-file me-1"></i> Otro
+                </span>';
+                    }
+                })
                 ->addColumn('numero_documento', fn($data) => $data->numero_documento)
-                ->addColumn('nit', fn($data) => $data->nit ?? 'sin data')
-                ->addColumn('nrc', fn($data) => $data->nrc ?? 'sin data')
+                ->addColumn('nit', fn($data) => $data->nit ?? 'sin nit')
+                ->addColumn('nrc', fn($data) => $data->nrc ?? 'sin nrc')
                 ->addColumn('actividad', fn($data) => $data?->actividad?->descActividad ?? 'sin data')
                 ->addColumn('direccion', fn($data) => $data->direccion)
                 ->addColumn(
@@ -50,7 +64,19 @@ class ClienteController extends Controller
                 )
                 ->addColumn('telefono', fn($data) => $data->telefono ?? 'sin data')
                 ->addColumn('correo_electronico', fn($data) => $data->correo_electronico ?? 'sin data')
-                ->addColumn('tipo_contribuyente', fn($data) => $data->tipo_contribuyente)
+                ->addColumn('tipo_contribuyente', function ($data) {
+                    if ($data->tipo_contribuyente == 'gran_contribuyente') {
+                        return '<span class="badge badge-center rounded-pill bg-label-success me-1"><i class="icon-base bx bx-user"></i></span> Gran Contribuyente';
+                    } elseif ($data->tipo_contribuyente == 'mediano_contribuyente') {
+                        return '<span class="badge badge-center rounded-pill bg-label-primary me-1"><i class="icon-base bx bx-user"></i></span> Medio Contribuyente';
+                    } elseif ($data->tipo_contribuyente == 'consumidor_final') {
+                        return '<span class="badge badge-center rounded-pill bg-label-info me-1"><i class="icon-base bx bx-user"></i></span> Consumidor final';
+                    } elseif ($data->tipo_contribuyente == 'exento') {
+                        return '<span class="badge badge-center rounded-pill bg-label-danger me-1"><i class="icon-base bx bx-user"></i></span> Excento';
+                    } else {
+                        return '<span class="badge badge-center rounded-pill bg-label-warning me-1"><i class="icon-base bx bx-user"></i></span> Otro';
+                    }
+                })
                 ->addColumn('tipo_persona', fn($data) => $data->tipo_persona)
                 ->addColumn('es_extranjero', fn($data) => $data->es_extranjero ? 'Sí' : 'No')
                 ->addColumn('pais', fn($data) => $data->pais ?? 'sin data')
@@ -59,7 +85,7 @@ class ClienteController extends Controller
                     $editar = '';
 
                     if (Auth()->user()->can('edit_cliente')) {
-                    $editar = '<a href="' . route('clientes.edit', $data->id) . '" 
+                        $editar = '<a href="' . route('clientes.edit', $data->id) . '" 
                                     class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-categoria"
                                     title="Editar cliente">
                                     <i class="bx bx-edit"></i>
@@ -67,7 +93,7 @@ class ClienteController extends Controller
                     }
                     return $editar;
                 })
-                ->rawColumns(['acciones'])
+                ->rawColumns(['acciones', 'tipo_contribuyente', 'tipo_documento'])
                 ->make(true);
         }
     }

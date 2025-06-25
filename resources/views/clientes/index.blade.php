@@ -9,13 +9,19 @@
                     <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
                         <h5 class="card-title mb-0 w-100 w-md-auto">Clientes del sistema.</h5>
                         <div class="d-flex flex-wrap gap-2 align-items-center w-100 w-md-auto justify-content-md-end">
-                            <div class="btn-group" role="group" aria-label="Filtrar por tipo">
-                                <button class="btn btn-outline-secondary filter-btn active" data-tipo="">Todos</button>
-                                <button class="btn btn-success filter-btn" data-tipo="natural">Natural</button>
-                                <button class="btn btn-dark filter-btn" data-tipo="juridica">Jurídico</button>
+                            <div class="d-flex flex-wrap gap-2" role="group" aria-label="Filtrar por tipo">
+                                <button class="btn bg-label-dark filter-btn active" data-tipo="">
+                                    Todos <i class="icon-base bx bx-user"></i>
+                                </button>
+                                <button class="btn bg-label-primary filter-btn" data-tipo="natural">
+                                    Natural <i class="icon-base bx bx-user"></i>
+                                </button>
+                                <button class="btn bg-label-info filter-btn" data-tipo="juridica">
+                                    Jurídico <i class="icon-base bx bx-user"></i>
+                                </button>
                             </div>
                             @can('clientes_add')
-                                <a href="{{ route('clientes.add') }}" class="btn btn-primary mt-2 mt-md-0">
+                                <a href="{{ route('clientes.add') }}" class="btn bg-label-success mt-2 mt-md-0">
                                     <i class="bx bx-plus"></i> Cliente Nuevo
                                 </a>
                             @endcan
@@ -30,17 +36,17 @@
                                         <th class="text-left">ID</th>
                                         <th class="text-left">Nombre</th>
                                         <th class="text-left">Nombre Comercial</th>
+                                        <th class="text-left">Tipo cliente</th>
                                         <th class="text-left">Tipo documento</th>
                                         <th class="text-left">Numero documento</th>
                                         <th class="text-left">Nit</th>
                                         <th class="text-left">Nrc</th>
-                                        <th class="text-left">Giro</th>
-                                        <th class="text-left">Direccion</th>
                                         <th class="text-left">Departamento</th>
+                                        <th class="text-left">Giro</th>
                                         <th class="text-left">Municipio</th>
                                         <th class="text-left">Telefono</th>
                                         <th class="text-left">Correo</th>
-                                        <th class="text-left">Tipo Contribuyente</th>
+                                        <th class="text-left">Direccion</th>
                                         <th class="text-left">Tipo persona</th>
                                         <th class="text-left">Es extranjero</th>
                                         <th class="text-left">Pais</th>
@@ -109,6 +115,10 @@
                     name: 'nombreComercial'
                 },
                 {
+                    data: 'tipo_contribuyente',
+                    name: 'tipo_contribuyente'
+                },
+                {
                     data: 'tipo_documento',
                     name: 'tipo_documento'
                 },
@@ -125,16 +135,12 @@
                     name: 'nrc'
                 },
                 {
-                    data: 'actividad',
-                    name: 'actividad'
-                },
-                {
-                    data: 'direccion',
-                    name: 'direccion'
-                },
-                {
                     data: 'departamento',
                     name: 'departamento'
+                },
+                {
+                    data: 'actividad',
+                    name: 'actividad'
                 },
                 {
                     data: 'municipio',
@@ -149,8 +155,8 @@
                     name: 'correo_electronico'
                 },
                 {
-                    data: 'tipo_contribuyente',
-                    name: 'tipo_contribuyente'
+                    data: 'direccion',
+                    name: 'direccion'
                 },
                 {
                     data: 'tipo_persona',
