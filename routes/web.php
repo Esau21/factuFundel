@@ -14,19 +14,21 @@ use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\UserController;
 use App\Http\Controllers\SociosNegocios\ClienteController;
 use App\Http\Controllers\SociosNegocios\EmpresaController;
+use App\Models\SociosNegocios\Empresa;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $empresas = Empresa::all();
+    return view('auth.login', compact('empresas'));
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::middleware(['auth', 'estado'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->middleware(['auth', 'verified', 'estado'])
+        ->name('dashboard');
 
-Route::get('/ventas-por-mes', [DashboardController::class, 'ventasPorMes'])->middleware(['auth', 'verified']);
+    Route::get('/ventas-por-mes', [DashboardController::class, 'ventasPorMes'])->middleware(['auth', 'verified', 'estado']);
 
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -162,6 +164,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/facturacion/anular-json/{id}', [DocumentosDTEController::class, 'anularDocumentoTributarioElectronico']);
     Route::get('/facturacion/obtener-json/{id}', [DocumentosDTEController::class, 'obtenerJsonDte']);
     Route::post('/reenviar/json/dte/{id}', [DocumentosDTEController::class, 'reenviarDteDocumentoId'])->name('facturacion.reenviarDteDocumentoId');
+});
+
+Route::get('/notaccess', function () {
+    return view('auth.access');
 });
 
 require __DIR__ . '/auth.php';
