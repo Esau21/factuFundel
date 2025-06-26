@@ -212,7 +212,7 @@
                     @endcan
                     @can('json_lector_index')
                         <li class="menu-item">
-                            <a href="{{ route('sales.index') }}" class="menu-link">
+                            <a href="{{ route('lector.index') }}" class="menu-link">
                                 <div class="text-truncate" data-i18n="Basic">Lector JSON</div>
                             </a>
                         </li>

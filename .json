@@ -1,98 +1,109 @@
 {
-    "identificacion": {
-        "version": 1,
-        "ambiente": "00",
-        "tipoDte": "14",
-        "numeroControl": "DTE-14-00000001-000000000000024",
-        "codigoGeneracion": "9052DB59-4B7F-4283-AEA0-482DE7D00595",
-        "tipoModelo": 1,
-        "tipoOperacion": 1,
-        "tipoContingencia": null,
-        "motivoContin": null,
-        "fecEmi": "2025-06-05",
-        "horEmi": "09:53:49",
-        "tipoMoneda": "USD"
+  "identificacion": {
+    "version": 3,
+    "ambiente": "01",
+    "tipoDte": "05",
+    "numeroControl": "DTE-05-M001P001-000000000000002",
+    "codigoGeneracion": "E057DB28-AE25-4BB7-A23B-3B99207B589F",
+    "tipoModelo": 1,
+    "tipoOperacion": 1,
+    "tipoContingencia": null,
+    "motivoContin": null,
+    "fecEmi": "2025-03-03",
+    "horEmi": "11:12:51",
+    "tipoMoneda": "USD"
+  },
+  "documentoRelacionado": [
+    {
+      "tipoDocumento": "03",
+      "tipoGeneracion": 2,
+      "numeroDocumento": "3A0AE4BE-38B6-45FF-8B8E-4BBA46D2EC70",
+      "fechaEmision": "2025-03-03"
+    }
+  ],
+  "emisor": {
+    "nit": "05012204550011",
+    "nrc": "987727",
+    "nombre": "MIGUEL ANGEL IRAHETA MARTINEZ",
+    "codActividad": "69200",
+    "descActividad": "Actividades de contabilidad, teneduría de libros y auditoría; asesoramiento en materia de impuestos",
+    "nombreComercial": null,
+    "tipoEstablecimiento": "02",
+    "direccion": {
+      "departamento": "06",
+      "municipio": "14",
+      "complemento": "25 CALLE PONIENTE BLVD. DE LOS HEROES, LOCAL 2-12, CONDOMINIO HEROES NORTE"
     },
-    "emisor": {
-        "nrc": "2760965",
-        "nit": "06140607181088",
-        "nombre": "FUNDACION DE DESARROLLO LATINO AMERICANO",
-        "codActividad": "86909",
-        "descActividad": "Otros Servicio relacionados con la salud ncp",
-        "direccion": {
-            "departamento": "00",
-            "municipio": "00",
-            "complemento": "CALLE AL MIRADOR COLONIA ESCALON"
-        },
-        "telefono": "77665545",
-        "correo": "fundelong@gmail.com",
-        "codEstableMH": null,
-        "codEstable": null,
-        "codPuntoVentaMH": null,
-        "codPuntoVenta": null
+    "telefono": "22251172",
+    "correo": "irahetama@yahoo.com"
+  },
+  "receptor": {
+    "nit": "06141507640021",
+    "nrc": "1631610",
+    "nombre": "ASOCIACION DE SEÑORAS DE OFICIALES DE LA FUERZA ARMADA",
+    "codActividad": "68109",
+    "descActividad": "Actividades inmobiliarias realizadas con bienes propios o arrendados n.c.p.",
+    "nombreComercial": null,
+    "direccion": {
+      "departamento": "06",
+      "municipio": "23",
+      "complemento": "CALLE BERNAL, COL. MIRAMONTE PONIENTE, # 581"
     },
-    "sujetoExcluido": {
-        "tipoDocumento": "13",
-        "numDocumento": "061846443",
-        "nombre": "LENTI S.A DE C.V",
-        "codActividad": "96091",
-        "descActividad": "Servicios de sauna y otros servicios para la estética corporal n.c.p.",
-        "direccion": {
-            "departamento": "06",
-            "municipio": "23",
-            "complemento": "CALLE GUADALUPE, BO. SANTA LUCIA, #1324, SAN SALVADOR, SAN SALVADOR"
-        },
-        "telefono": "74474442",
-        "correo": "factura@opticaavplussv.com"
-    },
-    "cuerpoDocumento": [
-        {
-            "numItem": 1,
-            "tipoItem": 2,
-            "cantidad": 1,
-            "codigo": "P00001",
-            "uniMedida": 99,
-            "descripcion": "Convenio con alcaldía municipal santa ana norte",
-            "precioUni": 160,
-            "montoDescu": 0,
-            "compra": 160
-        }
+    "telefono": "22251172",
+    "correo": "irahetama@yahoo.com"
+  },
+  "ventaTercero": null,
+  "cuerpoDocumento": [
+    {
+      "numItem": 1,
+      "tipoItem": 2,
+      "numeroDocumento": "3A0AE4BE-38B6-45FF-8B8E-4BBA46D2EC70",
+      "codigo": null,
+      "codTributo": null,
+      "descripcion": "HONORARIOS POR SERVICIOS PROFESIONALES DE AUDITORIA EXTERNA PRESTADOS DURANTE EL MES DE FEBRERO 2025",
+      "cantidad": 1,
+      "uniMedida": 59,
+      "precioUni": 110.62,
+      "montoDescu": 0,
+      "ventaNoSuj": 0,
+      "ventaExenta": 0,
+      "ventaGravada": 110.62,
+      "tributos": [
+        "20"
+      ]
+    }
+  ],
+  "resumen": {
+    "totalNoSuj": 0,
+    "totalExenta": 0,
+    "totalGravada": 110.62,
+    "subTotalVentas": 110.62,
+    "descuNoSuj": 0,
+    "descuExenta": 0,
+    "descuGravada": 0,
+    "totalDescu": 0,
+    "tributos": [
+      {
+        "codigo": "20",
+        "descripcion": "Impuesto al Valor Agregado 13%",
+        "valor": 14.38
+      }
     ],
-    "resumen": {
-        "totalCompra": 160,
-        "descu": 0,
-        "totalDescu": 0,
-        "subTotal": 160,
-        "ivaRete1": 0,
-        "reteRenta": 16,
-        "totalPagar": 144,
-        "totalLetras": "CIENTO CUARENTA Y CUATRO CON 00\/100 DÓLARES",
-        "condicionOperacion": 1,
-        "pagos": [
-            {
-                "codigo": "01",
-                "montoPago": 144,
-                "plazo": null,
-                "referencia": "",
-                "periodo": null
-            }
-        ],
-        "observaciones": "Sujeto Excluido"
-    },
-    "apendice": null
-}
+    "subTotal": 110.62,
+    "ivaPerci1": 0,
+    "ivaRete1": 0,
+    "montoTotalOperacion": 125,
+    "totalLetras": "CIENTO VEINTICINCO DÓLARES ",
+    "condicionOperacion": 1,
+    "reteRenta": 0
+  },
+  "extension": {
+    "nombEntrega": null,
+    "docuEntrega": null,
+    "nombRecibe": null,
+    "docuRecibe": null,
+    "observaciones": null
+  },
+  "apendice": null
 
-
-{
-    "version": 2,
-    "ambiente": "00",
-    "versionApp": 2,
-    "estado": "PROCESADO",
-    "codigoGeneracion": "9C8B0554-B64A-40D3-90EF-FA9A8B8A1892",
-    "selloRecibido": "2025FCE46EB7175D416F9B9060FBF8AAAD56U2VG",
-    "fhProcesamiento": "23\/06\/2025 19:09:44",
-    "clasificaMsg": "10",
-    "codigoMsg": "001",
-    "descripcionMsg": "RECIBIDO",
-    "observaciones": []
 }

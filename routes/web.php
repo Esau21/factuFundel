@@ -4,6 +4,7 @@ use App\Http\Controllers\Categorias\CategoriaController;
 use App\Http\Controllers\Cobros\BancosController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DGII\DocumentosDTEController;
+use App\Http\Controllers\DGII\LectorJsonController;
 use App\Http\Controllers\Post\SalesController;
 use App\Http\Controllers\Producto\ProductoController;
 use App\Http\Controllers\ProfileController;
@@ -23,12 +24,16 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'estado'])->group(function () {
+
+    //dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware(['auth', 'verified', 'estado'])
         ->name('dashboard');
 
+    //ventas graficos home
     Route::get('/ventas-por-mes', [DashboardController::class, 'ventasPorMes'])->middleware(['auth', 'verified', 'estado']);
 
+    //perfil del usuario
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -164,6 +169,10 @@ Route::middleware(['auth', 'estado'])->group(function () {
     Route::post('/facturacion/anular-json/{id}', [DocumentosDTEController::class, 'anularDocumentoTributarioElectronico']);
     Route::get('/facturacion/obtener-json/{id}', [DocumentosDTEController::class, 'obtenerJsonDte']);
     Route::post('/reenviar/json/dte/{id}', [DocumentosDTEController::class, 'reenviarDteDocumentoId'])->name('facturacion.reenviarDteDocumentoId');
+    Route::get('/documentos/notas/debito/{id}', [DocumentosDTEController::class, 'emitirnotaDebito'])->name('facturacion.notas.debito');
+
+    //herramienta del json
+    Route::get('/lector/json', [LectorJsonController::class, 'index'])->name('lector.index');
 });
 
 Route::get('/notaccess', function () {

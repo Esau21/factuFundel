@@ -51,6 +51,34 @@ class DocumentosDTEController extends Controller
                         return '<span class="badge badge-center rounded-pill bg-label-danger me-1">Otro</span>';
                     }
                 })
+                ->addColumn('emitir_invalidacion', function ($data) {
+                    if ($data->tipo_documento == '01' || $data->tipo_documento == '03') {
+                        $dropdown = '
+                                    <div class="dropdown">
+                                                <button class="btn btn-sm bg-label-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                     Opciones
+                                                </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.notas.debito', $data->id) . '?tipo=debito">
+                                                        <i class="bx bx-credit-card me-2 text-primary" style="font-size: 24px; transition: transform 0.2s;"></i> Emitir Nota de Débito
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '?tipo=credito">
+                                                        <i class="bx bx-credit-card-front me-2 text-info" style="font-size: 24px; transition: transform 0.2s;"></i> Emitir Nota de Crédito
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                    </div>';
+
+                        return $dropdown;
+                    } else {
+                        return '<span class="badge badge-center rounded-pill bg-label-warning me-1">
+                    <i class="icon-base bx bx-minus-back" style="font-size: 28px; transition: transform 0.2s;"></i>
+                </span> No aplica';
+                    }
+                })
                 ->addColumn('numero_control', function ($data) {
                     return '<span class="badge bg-light border text-dark fw-semibold">' . e($data->numero_control) . '</span>';
                 })
@@ -179,8 +207,38 @@ class DocumentosDTEController extends Controller
 
                     return $resMH . $documento . $json . $documentoDownload . $anulacionJson . $sendDtefailMhResponse;
                 })
-                ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision', 'estado'])->make(true);
+                ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision', 'estado', 'emitir_invalidacion'])->make(true);
         }
+    }
+
+    /**
+     * flujo para notas de debito
+     */
+    public function emitirnotaDebito($documentoId)
+    {
+        $documento = DGIIDocumentosDte::find($documentoId);
+        if (!$documento) {
+            return response()->json(['error' => 'No existe el tipo de documento al que quieres emitir la nota de debito'], 405);
+        }
+
+        return view('dgii.notas.debito', compact('documento'));
+    }
+
+    public function storeNotaDebito()
+    {
+        /**
+         * logica para manejar el dte 05
+         */
+    }
+
+    public function emitirnotaCredito()
+    {
+
+    }
+
+    public function storeNotaCredito()
+    {
+
     }
 
     public function obtenerJsonDte($id)

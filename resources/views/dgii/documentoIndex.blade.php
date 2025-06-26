@@ -74,6 +74,7 @@
                                     <tr>
                                         <th class="text-left" style="display: none;">Id</th>
                                         <th class="text-left">Tipo documento</th>
+                                        <th class="text-left">Emitir nota</th>
                                         <th class="text-left">Numero control</th>
                                         <th class="text-left">Codigo generacíon</th>
                                         <th class="text-left">Fecha de Emision</th>
@@ -87,6 +88,7 @@
                                 <tfoot>
                                     <tr>
                                         <th class="no-search" style="display: none;"></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -140,6 +142,10 @@
                 {
                     data: 'tipo_documento',
                     name: 'tipo_documento'
+                },
+                {
+                    data: 'emitir_invalidacion',
+                    name: 'emitir_invalidacion'
                 },
                 {
                     data: 'numero_control',
