@@ -44,7 +44,7 @@ class DocumentosDte extends Model
     {
         $query = DocumentosDte::with(['cliente', 'empresa'])->orderBy('id', 'desc');
 
-        if (in_array($tipo, ['01', '03', '14', '15'])) {
+        if (in_array($tipo, ['01', '03', '14', '15', '05'])) {
             $query->where('tipo_documento', $tipo);
         }
 

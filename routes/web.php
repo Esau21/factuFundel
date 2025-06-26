@@ -170,6 +170,7 @@ Route::middleware(['auth', 'estado'])->group(function () {
     Route::get('/facturacion/obtener-json/{id}', [DocumentosDTEController::class, 'obtenerJsonDte']);
     Route::post('/reenviar/json/dte/{id}', [DocumentosDTEController::class, 'reenviarDteDocumentoId'])->name('facturacion.reenviarDteDocumentoId');
     Route::get('/documentos/notas/debito/{id}', [DocumentosDTEController::class, 'emitirnotaDebito'])->name('facturacion.notas.debito');
+    Route::post('/store/nota/debito/', [DocumentosDTEController::class, 'storeNotaDebito'])->name('facturacion.storeNotaDebito');
 
     //herramienta del json
     Route::get('/lector/json', [LectorJsonController::class, 'index'])->name('lector.index');

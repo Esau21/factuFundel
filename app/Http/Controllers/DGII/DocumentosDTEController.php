@@ -7,12 +7,16 @@ use App\Http\Controllers\Controller;
 use App\Mail\EnviarDTECliente;
 use App\Models\CorrelativoDte;
 use App\Models\DGII\DocumentosDte as DGIIDocumentosDte;
+use App\Models\Producto\Producto;
 use App\Models\SociosNegocios\Clientes;
+use App\Models\SociosNegocios\Empresa;
 use App\Services\DteService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -47,6 +51,8 @@ class DocumentosDTEController extends Controller
                         return '<span class="badge badge-center rounded-pill bg-label-secondary me-1"><i class="icon-base bx bx-receipt"></i></span> Sujeto Excluido';
                     } elseif ($data->tipo_documento == '15') {
                         return '<span class="badge badge-center rounded-pill bg-label-warning me-1"><i class="icon-base bx bx-receipt"></i></span> Comprobante de Donacíon';
+                    } elseif ($data->tipo_documento == '05') {
+                        return '<span class="badge badge-center rounded-pill bg-label-info me-1"><i class="icon-base bx bx-receipt"></i></span> Nota de Débito';
                     } else {
                         return '<span class="badge badge-center rounded-pill bg-label-danger me-1">Otro</span>';
                     }
@@ -60,12 +66,12 @@ class DocumentosDTEController extends Controller
                                                 </button>
                                             <ul class="dropdown-menu">
                                                 <li>
-                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.notas.debito', $data->id) . '?tipo=debito">
+                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.notas.debito', $data->id) . '?tipo=credito">
                                                         <i class="bx bx-credit-card me-2 text-primary" style="font-size: 24px; transition: transform 0.2s;"></i> Emitir Nota de Débito
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '?tipo=credito">
+                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '?tipo=debito">
                                                         <i class="bx bx-credit-card-front me-2 text-info" style="font-size: 24px; transition: transform 0.2s;"></i> Emitir Nota de Crédito
                                                     </a>
                                                 </li>
@@ -221,25 +227,217 @@ class DocumentosDTEController extends Controller
             return response()->json(['error' => 'No existe el tipo de documento al que quieres emitir la nota de debito'], 405);
         }
 
-        return view('dgii.notas.debito', compact('documento'));
+        $productos = Producto::all();
+
+        return view('dgii.notas.debito', compact('documento', 'productos'));
+    }
+    public function storeNotaDebito(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $documento = DGIIDocumentosDte::findOrFail($request->documento_relacionado_id);
+            $empresa = Empresa::findOrFail($documento->empresa_id);
+
+            $codigoEstablecimiento = $empresa->codEstablecimientoMH . $empresa->codPuntoVentaMH;
+            $correlativo = $this->obtenerCorrelativo('05', $codigoEstablecimiento);
+            $numeroControl = $this->generarNumeroControl('05', $codigoEstablecimiento, $correlativo);
+            $codigoGeneracion = Str::uuid()->toString();
+
+            $jsonDte = $this->generarNotaDebitoJson($request, $documento, $empresa, $numeroControl, $codigoGeneracion);
+
+            $token = DteService::loginMH($empresa);
+            $dteFirmado = DteService::firmarDTE($jsonDte, $empresa);
+
+            $mhResponse = DteService::enviarDTE($dteFirmado, $empresa, '05', $codigoGeneracion);
+
+            DGIIDocumentosDte::create([
+                'tipo_documento' => '05',
+                'numero_control' => $numeroControl,
+                'codigo_generacion' => $codigoGeneracion,
+                'fecha_emision' => $request->fecha_emision,
+                'cliente_id' => $documento->cliente_id,
+                'empresa_id' => Auth::user()->empresa_id,
+                'estado' => 'PROCESADO',
+                'json_dte' => json_encode($jsonDte),
+                'sello_recibido' => $mhResponse['selloRecibido'] ?? null,
+                'mh_response' => json_encode($mhResponse)
+            ]);
+
+            DB::commit();
+
+            return response()->json(['success' => 'ok se guardo'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
     }
 
-    public function storeNotaDebito()
+    private function generarNumeroControl(string $tipoDte, string $codigoEstablecimiento, int $correlativo): string
     {
+        /* Asegurarse que el código de establecimiento tenga el formato correcto (ej. MP000001) */
+        $codigoEstablecimientoFormateado = strtoupper($codigoEstablecimiento); // No lo modificamos más
+
+        /* Asegurarse que el correlativo tenga 15 dígitos con ceros a la izquierda */
+        $correlativoFormateado = str_pad((string) $correlativo, 15, '0', STR_PAD_LEFT);
+
+        return "DTE-{$tipoDte}-{$codigoEstablecimientoFormateado}-{$correlativoFormateado}";
+    }
+
+    private function obtenerCorrelativo(string $tipoDte, string $codigoEstablecimiento): int
+    {
+        $registro = CorrelativoDte::firstOrCreate(
+            ['tipo_dte' => $tipoDte, 'codigo_establecimiento' => $codigoEstablecimiento],
+            ['correlativo' => 1]
+        );
+
+        $correlativoActual = $registro->correlativo;
         /**
-         * logica para manejar el dte 05
+         * Incrementamos para el siguiente uso
          */
-    }
+        $registro->increment('correlativo');
 
-    public function emitirnotaCredito()
+        return $correlativoActual;
+    }
+    private function generarNotaDebitoJson($request, $documento, $empresa, $numeroControl, $codigoGeneracion)
     {
+        // Formatear fecha y hora correctamente
+        $fechaEmision = now()->format('Y-m-d');
+        $horaEmision = Carbon::parse($request->hora_emision)->format('H:i:s'); // formato HH:mm:ss
+        $tipoMoneda = $request->tipo_moneda;
 
+        // Validar y asegurar datos del emisor
+        $emisorDireccion = [
+            "departamento" => $empresa->departamento->codigo ?? "00",  // Ajusta según datos reales
+            "municipio" => $empresa->municipio->codigo ?? "00",
+            "complemento" => $empresa->complemento ?? ""
+        ];
+
+        $receptorDireccion = [
+            "departamento" => is_object($documento->cliente->departamento) ? ($documento->cliente->departamento->codigo ?? "00") : ($documento->cliente->departamento ?? "00"),
+            "municipio" => is_object($documento->cliente->municipio) ? ($documento->cliente->municipio->codigo ?? "00") : ($documento->cliente->municipio ?? "00"),
+            "complemento" => $documento->cliente->direccion ?? ""
+        ];
+
+        $totalGravada = 0;
+        $detalleItems = [];
+
+        foreach ($request->detalle as $index => $item) {
+            $cantidad = floatval($item['cantidad']);
+            $precioUni = floatval($item['precio']);
+            $subtotal = round($cantidad * $precioUni, 2);
+
+            $detalleItems[] = [
+                "numItem" => $index + 1,
+                "tipoItem" => 2,
+                "numeroDocumento" => $documento->codigo_generacion,
+                "codigo" => null,
+                "codTributo" => null,
+                "descripcion" => $item['descripcion'],
+                "cantidad" => $cantidad,
+                "uniMedida" => 59,
+                "precioUni" => $precioUni,
+                "montoDescu" => 0,
+                "ventaNoSuj" => 0,
+                "ventaExenta" => 0,
+                "ventaGravada" => $subtotal,
+                "tributos" => ["20"]
+            ];
+
+            $totalGravada += $subtotal;
+        }
+
+        $iva = round($totalGravada * 0.13, 2);
+        $totalOperacion = round($totalGravada + $iva, 2);
+
+        return [
+            "identificacion" => [
+                "version" => 3,
+                "ambiente" => $empresa->ambiente,
+                "tipoDte" => "05",
+                "numeroControl" => $numeroControl,
+                "codigoGeneracion" => strtoupper($codigoGeneracion), // UUID en mayúsculas
+                "tipoModelo" => 1,
+                "tipoOperacion" => 1,
+                "tipoContingencia" => null,
+                "motivoContin" => null,
+                "fecEmi" => $fechaEmision,
+                "horEmi" => $horaEmision,
+                "tipoMoneda" => $tipoMoneda,
+            ],
+            "documentoRelacionado" => [
+                [
+                    "tipoDocumento" => $documento->tipo_documento,
+                    "tipoGeneracion" => 2,
+                    "numeroDocumento" => $documento->codigo_generacion,
+                    "fechaEmision" => $documento->fecha_emision,
+                ]
+            ],
+            "emisor" => [
+                "nit" => $empresa->nit,
+                "nrc" => $empresa->nrc,
+                "nombre" => $empresa->nombre,
+                "codActividad" => $empresa->actividad->codActividad,
+                "descActividad" => $empresa->actividad->descActividad,
+                "nombreComercial" => $empresa->nombreComercial,
+                "tipoEstablecimiento" => (string)($empresa->tipo_establecimiento ?? "02"),
+                "direccion" => $emisorDireccion,
+                "telefono" => $empresa->telefono,
+                "correo" => $empresa->correo,
+            ],
+            "receptor" => [
+                "nit" => $documento->cliente->nit,
+                "nrc" => $documento->cliente->nrc,
+                "nombre" => $documento->cliente->nombre,
+                "codActividad" => $documento->cliente->actividad->codActividad,
+                "descActividad" => $documento->cliente->actividad->descActividad,
+                "nombreComercial" => $documento->cliente->nombreComercial,
+                "direccion" => $receptorDireccion,
+                "telefono" => $documento->cliente->telefono,
+                "correo" => $documento->cliente->correo,
+            ],
+            "ventaTercero" => null,
+            "cuerpoDocumento" => $detalleItems,
+            "resumen" => [
+                "totalNoSuj" => 0,
+                "totalExenta" => 0,
+                "totalGravada" => round($totalGravada, 2),
+                "subTotalVentas" => round($totalGravada, 2),
+                "descuNoSuj" => 0,
+                "descuExenta" => 0,
+                "descuGravada" => 0,
+                "totalDescu" => 0,
+                "tributos" => [
+                    [
+                        "codigo" => "20",
+                        "descripcion" => "Impuesto al Valor Agregado 13%",
+                        "valor" => $iva
+                    ]
+                ],
+                "subTotal" => round($totalGravada, 2),
+                "ivaPerci1" => 0,
+                "ivaRete1" => 0,
+                "montoTotalOperacion" => $totalOperacion,
+                "totalLetras" => strtoupper($request->total_letras),
+                "condicionOperacion" => 1,
+                "reteRenta" => 0
+            ],
+            "extension" => [
+                "nombEntrega" => null,
+                "docuEntrega" => null,
+                "nombRecibe" => null,
+                "docuRecibe" => null,
+                "observaciones" => null
+            ],
+            "apendice" => null
+        ];
     }
 
-    public function storeNotaCredito()
-    {
+    public function emitirnotaCredito() {}
 
-    }
+    public function storeNotaCredito() {}
 
     public function obtenerJsonDte($id)
     {

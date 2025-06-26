@@ -31,6 +31,10 @@
                                 data-tipo="15">
                                 <i class="icon-base bx bx-receipt me-2"></i>Comprobante de donación
                             </button>
+                            <button class="btn bg-label-info filter-btn px-4 py-3 fw-semibold text-nowrap"
+                                data-tipo="05">
+                                <i class="icon-base bx bx-receipt me-2"></i>Nota de Débito
+                            </button>
                         </div>
                     </div>
                     <div class="card-body" class="pt-0">

@@ -1,13 +1,13 @@
 @extends('layouts.sneatTheme.base')
 
-@section('title', 'DocumentosDTE - Notas de Débito')
+@section('title', 'DocumentosDTE - Notas de Crédito')
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="card">
                 <div class="card-header">
-                    <h6>Emitir Nota de Débito</h6>
+                    <h6>Emitir Nota de Crédito</h6>
                 </div>
                 <div class="card-body">
                     {{-- INFORMACIÓN DEL DOCUMENTO RELACIONADO --}}
@@ -36,14 +36,14 @@
                     </div>
 
                     {{-- FORMULARIO PARA LA NOTA DE DÉBITO --}}
-                    <form method="POST">
+                    <form method="POST" action="{{ route('facturacion.storeNotaDebito') }}">
                         @csrf
+                        @method('POST')
                         <input type="hidden" name="documento_relacionado_id" value="{{ $documento->id }}">
-
-                        <h5>Datos de la Nota de Débito</h5>
+                        <h5>Datos de la Nota de Crédito</h5>
                         <div class="row">
                             <div class="col-sm-4">
-                                <label>Fecha Emisión Nota Débito</label>
+                                <label>Fecha Emisión Nota Crédito</label>
                                 <input type="date" name="fecha_emision" class="form-control" required>
                             </div>
                             <div class="col-sm-4">
@@ -59,17 +59,18 @@
                         </div>
 
                         <hr>
-                        <h5>Detalle de Cargos</h5>
+                        <h5>Detalle de Cargos (Motivo de la Nota de Crédito)</h5>
                         <div id="items-container">
                             <div class="item row mb-2">
                                 <div class="col-sm-6">
                                     <label>Descripción</label>
-                                    <input type="text" name="detalle[0][descripcion]" class="form-control" required>
+                                    <input type="text" name="detalle[0][descripcion]" class="form-control"
+                                        placeholder="Ej. Penalización, diferencia, ajuste..." required>
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Cantidad</label>
                                     <input type="number" name="detalle[0][cantidad]" class="form-control" value="1"
-                                        required>
+                                        min="1" required>
                                 </div>
                                 <div class="col-sm-2">
                                     <label>Precio Unitario</label>
@@ -86,36 +87,36 @@
                             <input type="text" name="total_letras" class="form-control" required>
                         </div>
 
-                        <button type="submit" class="btn btn-primary mt-3">Emitir Nota de Débito</button>
+                        <button type="submit" class="btn btn-primary mt-3">Emitir Nota de Crédito</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        function agregarItem() {
-            let container = document.getElementById('items-container');
-            let index = container.children.length;
-
-            let item = `
-        <div class="item row mb-2">
-            <div class="col-sm-6">
-                <label>Descripción</label>
-                <input type="text" name="detalle[${index}][descripcion]" class="form-control" required>
-            </div>
-            <div class="col-sm-2">
-                <label>Cantidad</label>
-                <input type="number" name="detalle[${index}][cantidad]" class="form-control" value="1" required>
-            </div>
-            <div class="col-sm-2">
-                <label>Precio Unitario</label>
-                <input type="number" step="0.01" name="detalle[${index}][precio]" class="form-control" required>
-            </div>
-        </div>
-    `;
-
-            container.insertAdjacentHTML('beforeend', item);
-        }
-    </script>
 @endsection
+
+<script>
+    function agregarItem() {
+        let container = document.getElementById('items-container');
+        let index = container.children.length;
+
+        let item = `
+                <div class="item row mb-2">
+                    <div class="col-sm-6">
+                        <label>Descripción</label>
+                        <input type="text" name="detalle[${index}][descripcion]" class="form-control" placeholder="Ej. Penalización, diferencia, ajuste..." required>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Cantidad</label>
+                        <input type="number" name="detalle[${index}][cantidad]" class="form-control" value="1" min="1" required>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Precio Unitario</label>
+                        <input type="number" step="0.01" name="detalle[${index}][precio]" class="form-control" required>
+                    </div>
+                </div>
+            `;
+
+        container.insertAdjacentHTML('beforeend', item);
+    }
+</script>
