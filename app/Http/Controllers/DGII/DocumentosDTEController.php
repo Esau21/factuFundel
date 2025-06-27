@@ -63,7 +63,7 @@ class DocumentosDTEController extends Controller
                                     <div class="dropdown">
                                         <button class="btn btn-sm bg-label-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Opciones
-                                        </button>
+                                        s</button>
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.notas.credito', $data->id) . '?tipo=credito">
