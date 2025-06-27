@@ -36,7 +36,7 @@
                     </div>
 
                     {{-- FORMULARIO PARA LA NOTA DE DÉBITO --}}
-                    <form method="POST" action="{{ route('facturacion.storeNotaDebito') }}">
+                    <form method="POST" action="{{ route('facturacion.storeNotaCredito') }}">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="documento_relacionado_id" value="{{ $documento->id }}">

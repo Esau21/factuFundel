@@ -52,7 +52,7 @@ class DocumentosDTEController extends Controller
                     } elseif ($data->tipo_documento == '15') {
                         return '<span class="badge badge-center rounded-pill bg-label-warning me-1"><i class="icon-base bx bx-receipt"></i></span> Comprobante de Donacíon';
                     } elseif ($data->tipo_documento == '05') {
-                        return '<span class="badge badge-center rounded-pill bg-label-info me-1"><i class="icon-base bx bx-receipt"></i></span> Nota de Débito';
+                        return '<span class="badge badge-center rounded-pill bg-label-info me-1"><i class="icon-base bx bx-receipt"></i></span> Nota de Crédito';
                     } else {
                         return '<span class="badge badge-center rounded-pill bg-label-danger me-1">Otro</span>';
                     }
@@ -61,28 +61,32 @@ class DocumentosDTEController extends Controller
                     if ($data->tipo_documento == '01' || $data->tipo_documento == '03') {
                         $dropdown = '
                                     <div class="dropdown">
-                                                <button class="btn btn-sm bg-label-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                     Opciones
-                                                </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.notas.debito', $data->id) . '?tipo=credito">
-                                                        <i class="bx bx-credit-card me-2 text-primary" style="font-size: 24px; transition: transform 0.2s;"></i> Emitir Nota de Débito
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '?tipo=debito">
-                                                        <i class="bx bx-credit-card-front me-2 text-info" style="font-size: 24px; transition: transform 0.2s;"></i> Emitir Nota de Crédito
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                    </div>';
-
+                                        <button class="btn btn-sm bg-label-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Opciones
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.notas.credito', $data->id) . '?tipo=credito">
+                                                    <i class="bx bx-credit-card me-2 text-primary" style="font-size: 20px;"></i> Emitir Nota de Crédito
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '?tipo=debito">
+                                                    <i class="bx bx-credit-card-front me-2 text-info" style="font-size: 20px;"></i> Emitir Nota de Débito
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    ';
                         return $dropdown;
+                    } elseif ($data->tipo_documento == '05') {
+                        return '<span class="badge bg-label-dark rounded-pill px-3 py-2 shadow-sm d-inline-flex align-items-center">
+                                    <i class="bx bx-check-circle me-2" style="font-size: 16px;"></i> Nota de Crédito Emitida
+                                </span>';
                     } else {
-                        return '<span class="badge badge-center rounded-pill bg-label-warning me-1">
-                    <i class="icon-base bx bx-minus-back" style="font-size: 28px; transition: transform 0.2s;"></i>
-                </span> No aplica';
+                        return '<span class="badge bg-label-warning rounded-pill px-3 py-2 shadow-sm d-inline-flex align-items-center">
+                                    <i class="bx bx-message-dots me-2" style="font-size: 16px;"></i> No Aplica
+                                </span>';
                     }
                 })
                 ->addColumn('numero_control', function ($data) {
@@ -220,7 +224,7 @@ class DocumentosDTEController extends Controller
     /**
      * flujo para notas de debito
      */
-    public function emitirnotaDebito($documentoId)
+    public function emitirnotaCredito($documentoId)
     {
         $documento = DGIIDocumentosDte::find($documentoId);
         if (!$documento) {
@@ -229,9 +233,10 @@ class DocumentosDTEController extends Controller
 
         $productos = Producto::all();
 
-        return view('dgii.notas.debito', compact('documento', 'productos'));
+        return view('dgii.notas.credito', compact('documento', 'productos'));
     }
-    public function storeNotaDebito(Request $request)
+
+    public function storeNotaCredito(Request $request)
     {
         DB::beginTransaction();
         try {
@@ -303,14 +308,18 @@ class DocumentosDTEController extends Controller
     }
     private function generarNotaDebitoJson($request, $documento, $empresa, $numeroControl, $codigoGeneracion)
     {
-        // Formatear fecha y hora correctamente
+        /**
+         * Formatear fecha y hora correctamente
+         */
         $fechaEmision = now()->format('Y-m-d');
         $horaEmision = Carbon::parse($request->hora_emision)->format('H:i:s'); // formato HH:mm:ss
         $tipoMoneda = $request->tipo_moneda;
 
-        // Validar y asegurar datos del emisor
+        /**
+         * Validar y asegurar datos del emisor
+         */
         $emisorDireccion = [
-            "departamento" => $empresa->departamento->codigo ?? "00",  // Ajusta según datos reales
+            "departamento" => $empresa->departamento->codigo ?? "00",
             "municipio" => $empresa->municipio->codigo ?? "00",
             "complemento" => $empresa->complemento ?? ""
         ];
@@ -358,7 +367,7 @@ class DocumentosDTEController extends Controller
                 "ambiente" => $empresa->ambiente,
                 "tipoDte" => "05",
                 "numeroControl" => $numeroControl,
-                "codigoGeneracion" => strtoupper($codigoGeneracion), // UUID en mayúsculas
+                "codigoGeneracion" => strtoupper($codigoGeneracion),
                 "tipoModelo" => 1,
                 "tipoOperacion" => 1,
                 "tipoContingencia" => null,
@@ -434,10 +443,6 @@ class DocumentosDTEController extends Controller
             "apendice" => null
         ];
     }
-
-    public function emitirnotaCredito() {}
-
-    public function storeNotaCredito() {}
 
     public function obtenerJsonDte($id)
     {
