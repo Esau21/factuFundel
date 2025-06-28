@@ -11,7 +11,7 @@
                         <h5 class="card-title mb-0">Documentos Tributarios Electrónicos.</h5>
                     </div>
                     <div class="card-body">
-                        <div class="btn-group d-flex flex-wrap gap-2" role="group" aria-label="Filtrar por tipo">
+                        <div class="btn-group d-flex flex-wrap gap-1" role="group" aria-label="Filtrar por tipo">
                             <button class="btn bg-label-secondary filter-btn active px-4 py-3 fw-semibold text-nowrap"
                                 data-tipo="">
                                 <i class="icon-base bx bx-receipt me-2"></i>Todos
@@ -34,6 +34,10 @@
                             <button class="btn bg-label-info filter-btn px-4 py-3 fw-semibold text-nowrap"
                                 data-tipo="05">
                                 <i class="icon-base bx bx-receipt me-2"></i>Nota de Crédito
+                            </button>
+                            <button class="btn bg-label-danger filter-btn px-4 py-3 fw-semibold text-nowrap"
+                                data-tipo="06">
+                                <i class="icon-base bx bx-receipt me-2"></i>Nota de Débito
                             </button>
                         </div>
                     </div>

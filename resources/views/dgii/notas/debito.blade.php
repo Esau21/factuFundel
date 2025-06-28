@@ -7,7 +7,7 @@
         <div class="row">
             <div class="card">
                 <div class="card-header">
-                    <h6>Emitir Nota de Crédito</h6>
+                    <h6>Emitir Nota de Débito</h6>
                 </div>
                 <div class="card-body">
                     {{-- INFORMACIÓN DEL DOCUMENTO RELACIONADO --}}
@@ -36,14 +36,14 @@
                     </div>
 
                     {{-- FORMULARIO PARA LA NOTA DE DÉBITO --}}
-                    <form method="POST" id="enviarNotadeCredito">
+                    <form method="POST" id="enviarNotadeDebito">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="documento_relacionado_id" value="{{ $documento->id }}">
-                        <h5>Datos de la Nota de Crédito</h5>
+                        <h5>Datos de la Nota de Débito</h5>
                         <div class="row">
                             <div class="col-sm-4">
-                                <label>Fecha Emisión Nota Crédito</label>
+                                <label>Fecha Emisión Nota Débito</label>
                                 <input type="date" name="fecha_emision" class="form-control" required>
                             </div>
                             <div class="col-sm-4">
@@ -59,7 +59,7 @@
                         </div>
 
                         <hr>
-                        <h5>Detalle de Cargos (Motivo de la Nota de Crédito)</h5>
+                        <h5>Detalle de Cargos (Motivo de la Nota de Débito)</h5>
                         <div id="items-container">
                             <div class="item row mb-2">
                                 <div class="col-sm-6">
@@ -87,7 +87,7 @@
                             <input type="text" name="total_letras" class="form-control" required>
                         </div>
 
-                        <button type="submit" class="btn btn-primary mt-3">Emitir Nota de Crédito</button>
+                        <button type="submit" class="btn btn-primary mt-3">Emitir Nota de Débito</button>
                     </form>
                 </div>
             </div>
@@ -122,14 +122,14 @@
 </script>
 <script>
     $(document).ready(function() {
-        $("#enviarNotadeCredito").on('submit', function(e) {
+        $("#enviarNotadeDebito").on('submit', function(e) {
             e.preventDefault();
             const form = this;
             const formData = new FormData(form);
             var btnSubmit = $(form).find('button[type="submit"]');
             btnSubmit.prop('disabled', true);
 
-            let url = "{{ route('facturacion.storeNotaCredito') }}";
+            let url = "{{ route('facturacion.storeNotaDebito') }}";
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -141,7 +141,7 @@
                 contentType: false,
                 success: function() {
                     Toastify({
-                        text: "Nota de credito emitida correctamente.",
+                        text: "Nota de debito emitida correctamente.",
                         className: "info",
                         style: {
                             background: "linear-gradient(to right, #3b3f5c, #3b3f5c)",

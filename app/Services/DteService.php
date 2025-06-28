@@ -96,6 +96,7 @@ class DteService
         switch ($tipoDte) {
             case '03':
             case '05':
+            case '06':
                 $version = 3;
                 break;
             case '01':

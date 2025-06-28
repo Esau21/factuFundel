@@ -169,8 +169,10 @@ Route::middleware(['auth', 'estado'])->group(function () {
     Route::post('/facturacion/anular-json/{id}', [DocumentosDTEController::class, 'anularDocumentoTributarioElectronico']);
     Route::get('/facturacion/obtener-json/{id}', [DocumentosDTEController::class, 'obtenerJsonDte']);
     Route::post('/reenviar/json/dte/{id}', [DocumentosDTEController::class, 'reenviarDteDocumentoId'])->name('facturacion.reenviarDteDocumentoId');
-    Route::get('/documentos/notas/debito/{id}', [DocumentosDTEController::class, 'emitirnotaCredito'])->name('facturacion.notas.credito');
-    Route::post('/store/nota/debito/', [DocumentosDTEController::class, 'storeNotaCredito'])->name('facturacion.storeNotaCredito');
+    Route::get('/documentos/notas/credito/{documentoId}', [DocumentosDTEController::class, 'emitirnotaCredito'])->name('facturacion.notas.credito');
+    Route::post('/store/nota/credito/', [DocumentosDTEController::class, 'storeNotaCredito'])->name('facturacion.storeNotaCredito');
+    Route::get('/emitir/nota/debito/{documentoId}', [DocumentosDTEController::class, 'emitirnotaDebito'])->name('facturacion.notas.debito');
+    Route::post('/store/nota/debido', [DocumentosDTEController::class, 'storeNotaDebito'])->name('facturacion.storeNotaDebito');
 
     //herramienta del json
     Route::get('/lector/json', [LectorJsonController::class, 'index'])->name('lector.index');
