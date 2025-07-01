@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">
                         <div class="card-body pb-0 px-0 px-md-6">
-                            <img src="{{ empresaLogo() }}" height="175" alt="View Badge User" />
+                            <img src="{{ empresaLogo() }}" height="120" alt="View Badge User" />
                         </div>
                     </div>
                 </div>

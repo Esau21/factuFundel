@@ -854,7 +854,6 @@ class SalesController extends Controller
                 ];
             }
 
-
             $documentoDte = DocumentosDte::create([
                 'tipo_documento' => $tipo_dte,
                 'numero_control' => $numeroControl,
@@ -945,6 +944,26 @@ class SalesController extends Controller
                 'sello_recibido' => $mhResponse['selloRecibido'] ?? null,
                 'mh_response' => json_encode($mhResponse, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
             ]);
+
+            /**
+             * Agregar firmaElectronica dentro del JSON del DTE
+             */
+            $jsonDTE['dteJson']['firmaElectronica'] = [
+                'ambiente' => $ambiente,
+                'version' => $version,
+                'tipoDte' => $tipo_dte,
+                'codigoGeneracion' => $codigoGeneracion,
+                'firmaElectronica' => $mhResponse['firmaElectronica'] ?? null,
+                'selloRecibido' => $mhResponse['selloRecibido'] ?? null,
+            ];
+
+            /**
+             * Actualizar el documento DTE con la firma electrónica agregada
+             */
+            $documentoDte->update([
+                'json_dte' => json_encode($jsonDTE['dteJson'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
+            ]);
+
 
             /**
              * enviamos el tipo de dte generado al correo del cliente.

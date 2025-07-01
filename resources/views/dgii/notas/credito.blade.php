@@ -82,11 +82,6 @@
                         <button type="button" class="btn btn-sm btn-success mb-3" onclick="agregarItem()">Agregar
                             Ítem</button>
 
-                        <div class="form-group">
-                            <label>Total en Letras</label>
-                            <input type="text" name="total_letras" class="form-control" required>
-                        </div>
-
                         <button type="submit" class="btn btn-primary mt-3">Emitir Nota de Crédito</button>
                     </form>
                 </div>

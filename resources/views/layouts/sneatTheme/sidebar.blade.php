@@ -3,7 +3,7 @@
         <a href="{{ route('dashboard') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <span class="text-primary">
-                    <img src="{{ empresaLogo() }}" class="img-fluid" width="100" alt="LOGO">
+                    <img src="{{ empresaLogo() }}" class="img-fluid" width="50" alt="LOGO">
                 </span>
             </span>
         </a>

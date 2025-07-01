@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DGII;
 
 use App\Exports\HistorialDTEExport;
+use App\Helpers\NumeroALetras;
 use App\Http\Controllers\Controller;
 use App\Mail\EnviarDTECliente;
 use App\Models\CorrelativoDte;
@@ -509,7 +510,7 @@ class DocumentosDTEController extends Controller
                 "ivaPerci1" => 0,
                 "ivaRete1" => 0,
                 "montoTotalOperacion" => $totalOperacion,
-                "totalLetras" => strtoupper($request->total_letras),
+                "totalLetras" => NumeroALetras::convertir($totalOperacion),
                 "condicionOperacion" => 1,
                 "reteRenta" => 0
             ],
@@ -710,7 +711,7 @@ class DocumentosDTEController extends Controller
                 "ivaPerci1" => 0,
                 "ivaRete1" => 0,
                 "montoTotalOperacion" => $totalOperacion,
-                "totalLetras" => strtoupper($request->total_letras),
+                "totalLetras" => NumeroALetras::convertir($totalOperacion),
                 "condicionOperacion" => 1,
                 "reteRenta" => 0,
                 "numPagoElectronico" => "0",
@@ -918,6 +919,8 @@ class DocumentosDTEController extends Controller
                         return '<span class="badge badge-center rounded-pill bg-label-warning me-1"><i class="icon-base bx bx-receipt"></i></span>' . $data->tipo_dte . ' | Comprobante de Donacíon';
                     } elseif ($data->tipo_dte == '05') {
                         return '<span class="badge badge-center rounded-pill bg-label-info me-1"><i class="icon-base bx bx-receipt"></i></span>' . $data->tipo_dte . ' | Nota de Crédito';
+                    } elseif ($data->tipo_dte == '06') {
+                        return '<span class="badge badge-center rounded-pill bg-label-danger me-1"><i class="icon-base bx bx-receipt"></i></span>' . $data->tipo_dte . ' | Nota de Débito';
                     } else {
                         return '<span class="badge badge-center rounded-pill bg-label-danger me-1">Otro</span>';
                     }
