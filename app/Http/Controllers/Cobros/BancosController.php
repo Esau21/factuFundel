@@ -44,7 +44,7 @@ class BancosController extends Controller
 
                     if (Auth()->user()->can('bancos_edit')) {
                         $editar = '<a href="#" 
-                                    class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-banco"
+                                    class="btn bg-label-primary mt-mobile w-90 mx-2 btn-editar-banco"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editBanco"
                                     data-id="' . $data->id . '"
@@ -52,15 +52,15 @@ class BancosController extends Controller
                                     data-codigo="' . e($data->codigo) . '"
                                     data-estado="' . e($data->estado) . '"
                                     title="Editar">
-                                    <i class="bx bx-edit"></i>
+                                    <i class="bx bx-edit" style="font-size: 20px; transition: transform 0.2s;"></i>
                              </a>';
                     }
 
                     if (Auth()->user()->can('bancos_create_accounts')) {
                     $agregarCuentasBancarias = '<a href="' . route('cuentas.indexCuentasBancarias', $data->id) . '" 
-                                    class="btn btn-dark mt-mobile w-90 mx-2"
+                                    class="btn bg-label-info mt-mobile w-90 mx-2"
                                     title="Agregar cuentas bancarias">
-                                    <i class="bx bxs-bank"></i>
+                                    <i class="bx bxs-user-account" style="font-size: 20px; transition: transform 0.2s;"></i>
                              </a>';
                     }
 
@@ -156,7 +156,7 @@ class BancosController extends Controller
 
                 if (Auth()->user()->can('edit_cuenta_bank')) {
                 $editar = '<a href="#" 
-                                    class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-cuentabancaria"
+                                    class="btn bg-label-primary mt-mobile w-90 mx-2 btn-editar-cuentabancaria"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editCuentaBancaria"
                                     data-id="' . $data->id . '"
@@ -165,7 +165,7 @@ class BancosController extends Controller
                                     data-titular="' . e($data->titular) . '"
                                     data-estado="' . e($data->estado) . '"
                                     title="Editar cuenta bancaria">
-                                    <i class="bx bx-edit"></i>
+                                    <i class="bx bx-edit" style="font-size: 20px; transition: transform 0.2s;"></i>
                              </a>';
                 }
 

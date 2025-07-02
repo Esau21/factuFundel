@@ -254,30 +254,39 @@
         }
 
 
-
         function actualizarTotal() {
-            let total = 0;
+            let subtotal = 0;
             let totalItems = 0;
 
             $('.sub_total').each(function() {
-                total += parseFloat($(this).val()) || 0;
+                subtotal += parseFloat($(this).val()) || 0;
             });
 
             $('.cantidad').each(function() {
                 totalItems += parseInt($(this).val()) || 0;
             });
 
-            // Mostrar total y cantidad de ítems
-            $('#totalAmount').text(total.toFixed(2));
-            $('#totalItems').text(totalItems);
+            // Calcular IVA (13% sobre subtotal SIN IVA)
+            const iva = subtotal * 0.13;
 
-            // Calcular y mostrar IVA (13%)
-            let iva = total - (total / 1.13);
+            // Calcular retención si es GC (1% del IVA)
+            let retencion = 0;
+            if (window.esGranContribuyente === true) {
+                retencion = +(iva * 0.01);
+            }
+
+            // Total final = subtotal + IVA - retención
+            const totalFinal = subtotal + iva - retencion;
+
+            // Mostrar valores (excepto retención)
+            $('#subtotalAmount').text(subtotal.toFixed(2));
             $('#IvaAmount').text(iva.toFixed(2));
+            $('#totalAmount').text(totalFinal.toFixed(2));
+            $('#totalItems').text(totalItems);
 
             // Calcular cambio
             let efectivo = parseFloat($('#cash').val()) || 0;
-            let cambio = efectivo - total;
+            let cambio = efectivo - totalFinal;
             $('#changeAmount').text(cambio >= 0 ? cambio.toFixed(2) : "0.00");
             $('#cambioInput').val(cambio >= 0 ? cambio.toFixed(2) : 0);
         }

@@ -259,15 +259,29 @@
 
                         <h5 class="text-center text-primary fw-bold mb-4 border-bottom pb-2">*** RESUMEN DE VENTAS ***</h5>
 
-                        <div class="card bg-gradient bg-light border-0 shadow-sm mb-4 rounded-3">
+                        <!-- Subtotal sin IVA -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal:</span>
+                            <strong>$<span id="subtotalAmount">0.00</span></strong>
+                        </div>
+
+                        <!-- IVA -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">IVA (13%):</span>
+                            <strong>$<span id="IvaAmount">0.00</span></strong>
+                        </div>
+
+                        <!-- Total general -->
+                        <div class="card bg-gradient bg-light border-0 shadow-sm my-3 rounded-3">
                             <div class="card-body text-center">
                                 <h3 class="text-success text-uppercase fw-bold mb-2">
-                                    Total: $<span id="totalAmount">0.00</span>
+                                    Total a pagar: $<span id="totalAmount">0.00</span>
                                 </h3>
                                 <h5 class="text-secondary">Artículos: <span id="totalItems">0</span></h5>
                             </div>
                         </div>
 
+                        <!-- Cambio -->
                         <div class="text-center mb-4">
                             <span class="badge bg-warning text-dark fs-5 px-4 py-2 rounded-pill">
                                 Cambio: $<span id="changeAmount">0.00</span>
@@ -275,6 +289,7 @@
                         </div>
                         <input type="hidden" name="cambio" id="cambioInput" value="0">
 
+                        <!-- Botón guardar -->
                         <div class="d-grid gap-2">
                             <button
                                 class="btn btn-lg btn-primary fw-bold d-flex align-items-center justify-content-center gap-2"
@@ -287,6 +302,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- Modal con spinner -->
         <div class="modal fade" id="spinnerModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"

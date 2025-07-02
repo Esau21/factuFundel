@@ -55,16 +55,24 @@ class ProductoController extends Controller
                 })
                 ->addColumn('stock', function ($data) {
                     if ($data->stock >= 20) {
-                        return '<span class="badge rounded-pill bg-primary text-white px-3 py-1">' . $data->stock . '</span>';
+                        return '<span class="badge rounded-pill bg-label-primary d-inline-flex align-items-center px-2 py-1">
+                                    <i class="bx bx-store me-1" style="font-size: 16px;"></i>' . $data->stock . '
+                                </span>';
                     } else {
-                        return '<span class="badge rounded-pill bg-warning text-white px-3 py-1">' . $data->stock . '</span>';
+                        return '<span class="badge rounded-pill bg-label-danger d-inline-flex align-items-center px-2 py-1">
+                                    <i class="bx bx-store me-1" style="font-size: 16px;"></i>' . $data->stock . '
+                                </span>';
                     }
                 })
                 ->addColumn('stock_minimo', function ($data) {
                     if ($data->stock_minimo >= 20) {
-                        return '<span class="badge rounded-pill bg-success text-white px-3 py-1">' . $data->stock_minimo . '</span>';
+                        return '<span class="badge rounded-pill bg-label-success d-inline-flex align-items-center px-2 py-1" style="font-size: 13px;">
+                                    <i class="bx bx-store me-1" style="font-size: 14px;"></i>' . $data->stock_minimo . '
+                                </span>';
                     } else {
-                        return '<span class="badge rounded-pill bg-warning text-white px-3 py-1">' . $data->stock_minimo . '</span>';
+                        return '<span class="badge rounded-pill bg-label-warning d-inline-flex align-items-center px-2 py-1" style="font-size: 13px;">
+                                    <i class="bx bx-store me-1" style="font-size: 14px;"></i>' . $data->stock_minimo . '
+                                </span>';
                     }
                 })
                 ->addColumn('estado', function ($data) {
@@ -84,8 +92,8 @@ class ProductoController extends Controller
                     $onClickEliminar = "confirmDeleteProducto({$data->id}); return false;";
 
                     if (Auth()->user()->can('edit_producto')) {
-                        $editar = '<a href="#" 
-                                    class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-producto"
+                        $editar = '<a href="#" style="font-size: 20px; transition: transform 0.2s;"
+                                    class="btn bg-label-primary mt-mobile w-90 mx-2 btn-editar-producto"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editProducto"
                                     data-id="' . $data->id . '"
@@ -107,8 +115,8 @@ class ProductoController extends Controller
                     }
 
                     if (Auth()->user()->can('delete_producto')) {
-                        $eliminar = '<a title="Eliminar" class="btn btn-danger mt-mobile mx-2" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
-                                    <i class="bx bx-trash-alt"></i>
+                        $eliminar = '<a title="Eliminar" class="btn bg-label-danger mt-mobile mx-2" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
+                                    <i class="bx bx-trash-alt" style="font-size: 20px; transition: transform 0.2s;"></i>
                                  </a>';
                     }
                     return $editar . $eliminar;

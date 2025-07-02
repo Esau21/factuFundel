@@ -31,7 +31,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="text-left">ID</th>
-                                        <th class="text-left">Imagen</th>
+                                        <th class="text-left">Acciones</th>
                                         <th class="text-left">Codigo</th>
                                         <th class="text-left">Nombre</th>
                                         <th class="text-left">Categoria</th>
@@ -39,27 +39,27 @@
                                         <th class="text-left">U.medida</th>
                                         <th class="text-left">Precio_compra</th>
                                         <th class="text-left">Precio_venta</th>
+                                        <th class="text-left">Imagen</th>
                                         <th class="text-left">Stock</th>
                                         <th class="text-left">Stock_minimo</th>
                                         <th class="text-left">Estado</th>
-                                        <th class="text-left">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
                                         <th class="no-search"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -89,8 +89,10 @@
                     name: 'id'
                 },
                 {
-                    data: 'imagen',
-                    name: 'imagen'
+                    data: 'acciones',
+                    name: 'acciones',
+                    orderable: true,
+                    searchable: true
                 },
                 {
                     data: 'codigo',
@@ -121,6 +123,10 @@
                     name: 'precio_venta'
                 },
                 {
+                    data: 'imagen',
+                    name: 'imagen'
+                },
+                {
                     data: 'stock',
                     name: 'stock'
                 },
@@ -131,12 +137,6 @@
                 {
                     data: 'estado',
                     name: 'estado'
-                },
-                {
-                    data: 'acciones',
-                    name: 'acciones',
-                    orderable: true,
-                    searchable: true
                 }
             ],
             language: {

@@ -41,7 +41,7 @@ class CategoriaController extends Controller
 
                     if (Auth()->user()->can('categoria_edit')) {
                     $editar = '<a href="#" 
-                                    class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-categoria"
+                                    class="btn bg-label-primary mt-mobile w-90 mx-2 btn-editar-categoria"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editCategoria"
                                     data-id="' . $data->id . '"
@@ -49,13 +49,13 @@ class CategoriaController extends Controller
                                     data-descripcion="' . e($data->categoria_descripcion) . '"
                                     data-estado="' . $data->estado . '"
                                     title="Editar">
-                                    <i class="bx bx-edit"></i>
+                                    <i class="bx bx-edit" style="font-size: 20px; transition: transform 0.2s;"></i>
                              </a>';
                      }
 
                     if (Auth()->user()->can('categoria_delete')) {
-                    $eliminar = '<a title="Eliminar" class="btn btn-danger mt-mobile mx-2" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
-                                    <i class="bx bx-trash-alt"></i>
+                    $eliminar = '<a title="Eliminar" class="btn bg-label-danger mt-mobile mx-2" href="' . $eliminarUrl . '" onclick="' . $onClickEliminar . '">
+                                    <i class="bx bx-trash-alt" style="font-size: 20px; transition: transform 0.2s;"></i>
                                  </a>';
                     }
 

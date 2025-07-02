@@ -86,9 +86,9 @@ class ClienteController extends Controller
 
                     if (Auth()->user()->can('edit_cliente')) {
                         $editar = '<a href="' . route('clientes.edit', $data->id) . '" 
-                                    class="btn btn-primary mt-mobile w-90 mx-2 btn-editar-categoria"
+                                    class="btn bg-label-primary mt-mobile w-90 mx-2 btn-editar-categoria"
                                     title="Editar cliente">
-                                    <i class="bx bx-edit"></i>
+                                    <i class="bx bx-edit" style="font-size: 20px; transition: transform 0.2s;"></i>
                                 </a>';
                     }
                     return $editar;

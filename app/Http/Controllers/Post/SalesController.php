@@ -884,7 +884,11 @@ class SalesController extends Controller
                     ? (collect($bodyDocumento['resumen']['tributos'] ?? [])
                         ->firstWhere('codigo', '20')['valor'] ?? 0)
                     : ($bodyDocumento['resumen']['totalIva'] ?? 0),
-                'retencion' => $tipo_dte === '14' ? $bodyDocumento['resumen']['reteRenta'] : 0,
+                'retencion' => match ($tipo_dte) {
+                    '14' => $bodyDocumento['resumen']['reteRenta'] ?? 0,
+                    '01', '03' => $bodyDocumento['resumen']['ivaRete1'] ?? 0,
+                    default => 0,
+                },
                 'observaciones' => $request->observaciones ?? null,
                 'descDocumento' => $request->descDocumento ?? null,
                 'detalleDocumento' => $request->detalleDocumento ?? null,
@@ -1176,14 +1180,14 @@ class SalesController extends Controller
                     }
                 })
                 ->addColumn('total', function ($data) {
-                    $subtotal = ($data->total ?? 0) + ($data->iva ?? 0);
+                    $total = $data->total ?? 0;
 
                     if (isset($data->retencion) && $data->retencion > 0) {
-                        $subtotal -= $data->retencion;
+                        $total -= $data->retencion;
                     }
-                    return '$' . number_format($subtotal, 2);
-                })
 
+                    return '$' . number_format($total, 2);
+                })
                 ->addColumn('acciones', function ($data) {
                     $imprimir = '';
                     $viewsalesdetails = '';
