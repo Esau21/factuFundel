@@ -14,7 +14,7 @@
                                         class="fw-semibold">{{ Auth::user()->empresa?->nombre ?? 'Sin empresa' }}</span>
                                 </div>
                             </div>
-                            <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
+                            <a href="{{ route('sales.getdays') }}" class="btn btn-sm btn-outline-primary">Ventas del dia</a>
                         </div>
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">
@@ -184,7 +184,7 @@
                                 </div>
                             </div>
                             <p class="mb-1">Transacciones</p>
-                            <h4 class="card-title mb-3">${{ $totalTransaccionesCuentasBancarias }}</h4>
+                            <h4 class="card-title mb-3">{{ $totalTransaccionesCuentasBancarias }}</h4>
                         </div>
                     </div>
                 </div>

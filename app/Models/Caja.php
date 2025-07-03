@@ -29,7 +29,7 @@ class Caja extends Model
 
     public static function getindexData()
     {
-        $data = Caja::select('.*')->orderBy('id', 'desc')->get();
+        $data = Caja::select('*')->orderBy('id', 'desc')->get();
 
         return $data;
     }

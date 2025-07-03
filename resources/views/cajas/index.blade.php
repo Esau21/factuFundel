@@ -1,6 +1,6 @@
 @extends('layouts.sneatTheme.base')
 
-@section('title', 'Cajas')
+@section('title', 'Control de cajas')
 
 @section('content')
     <div class="container-fluid">
@@ -8,11 +8,11 @@
             <div class="col-12">
                 <div class="card h-100 d-flex flex-column">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">Categorias del sistema.</h5>
+                        <h5 class="card-title mb-0">Cajas del sistema.</h5>
                         <div>
                             @can('categoria_create')
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#addCategoria">Agregar categoria</button>
+                                <button type="button" class="btn bg-label-primary" data-bs-toggle="modal"
+                                    data-bs-target="#addCaja">Aperturar nueva caja</button>
                             @endcan
                         </div>
                     </div>
@@ -23,8 +23,16 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="text-left">ID</th>
-                                        <th class="text-left">Nombre categoria</th>
-                                        <th class="text-left">Descripcion categoria</th>
+                                        <th class="text-left">Usuario</th>
+                                        <th class="text-left">Fecha Apertura</th>
+                                        <th class="text-left">Fecha Cierre</th>
+                                        <th class="text-left">Monto Inicial</th>
+                                        <th class="text-left">Total Efectivo</th>
+                                        <th class="text-left">Total Targeta</th>
+                                        <th class="text-left">Total Otros</th>
+                                        <th class="text-left">Total Declarado</th>
+                                        <th class="text-left">Diferencia</th>
+                                        <th class="text-left">Observaciones</th>
                                         <th class="text-left">Estado</th>
                                         <th class="text-left">Acciones</th>
                                     </tr>
@@ -32,6 +40,14 @@
                                 <tfoot>
                                     <tr>
                                         <th class="no-search"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -45,8 +61,8 @@
             </div>
         </div>
     </div>
-    @include('categorias.modal.form')
-    @include('categorias.modal.formedit')
+    @include('cajas.modal.form')
+    @include('cajas.modal.cerrar')
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -59,18 +75,50 @@
             lengthChange: true,
             autoWidth: false,
             pagingType: 'simple_numbers',
-            ajax: '{!! route('categorias.getCategories') !!}',
+            ajax: '{!! route('cajas.getIndexCaja') !!}',
             columns: [{
                     data: 'id',
                     name: 'id'
                 },
                 {
-                    data: 'categoria_nombre',
-                    name: 'categoria_nombre'
+                    data: 'usuario',
+                    name: 'usuario'
                 },
                 {
-                    data: 'categoria_descripcion',
-                    name: 'categoria_descripcion'
+                    data: 'fecha_apertura',
+                    name: 'fecha_apertura'
+                },
+                {
+                    data: 'fecha_cierre',
+                    name: 'fecha_cierre'
+                },
+                {
+                    data: 'monto_inicial',
+                    name: 'monto_inicial'
+                },
+                {
+                    data: 'total_efectivo',
+                    name: 'total_efectivo'
+                },
+                {
+                    data: 'total_tarjeta',
+                    name: 'total_tarjeta'
+                },
+                {
+                    data: 'total_otros',
+                    name: 'total_otros'
+                },
+                {
+                    data: 'total_declarado',
+                    name: 'total_declarado'
+                },
+                {
+                    data: 'diferencia',
+                    name: 'diferencia'
+                },
+                {
+                    data: 'observaciones',
+                    name: 'observaciones'
                 },
                 {
                     data: 'estado',

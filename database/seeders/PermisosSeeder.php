@@ -114,6 +114,10 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'correlativos_index']);
         Permission::create(['name' => 'json_lector_index']);
 
+        //Cajas
+        Permission::create(['name' => 'caja_cerrar']);
+        Permission::create(['name' => 'caja_delete']);
+
 
         $uadmin->givePermissionTo([
             'rol_index',

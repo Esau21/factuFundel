@@ -191,22 +191,15 @@
 
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <img src="{{ asset('assets/img/caja-registradora.png') }}" class="menu-icon tf-icons" alt="img">
-                <div class="text-truncate" data-i18n="Authentications">Caja</div>
+                <img src="{{ asset('assets/img/caja-registradora.png') }}" class="menu-icon tf-icons"
+                    alt="img">
+                <div class="text-truncate" data-i18n="Authentications">Control de Caja</div>
             </a>
             <ul class="menu-sub">
                 @can('ventas_del_dia_index')
                     <li class="menu-item">
-                        <a href="{{ route('sales.getdays') }}" class="menu-link">
-                            <div class="text-truncate" data-i18n="Basic">Ventas del dia</div>
-                        </a>
-                    </li>
-                @endcan
-                
-                @can('ventas_del_mes_index')
-                    <li class="menu-item">
-                        <a href="{{ route('sales.ventasDelMes') }}" class="menu-link">
-                            <div class="text-truncate" data-i18n="Basic">Ventas del mes</div>
+                        <a href="{{ route('cajas.index') }}" class="menu-link">
+                            <div class="text-truncate" data-i18n="Basic">Listado de Cajas</div>
                         </a>
                     </li>
                 @endcan

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Caja\CajaController;
 use App\Http\Controllers\Categorias\CategoriaController;
 use App\Http\Controllers\Cobros\BancosController;
 use App\Http\Controllers\DashboardController;
@@ -173,6 +174,12 @@ Route::middleware(['auth', 'estado'])->group(function () {
     Route::post('/store/nota/credito/', [DocumentosDTEController::class, 'storeNotaCredito'])->name('facturacion.storeNotaCredito');
     Route::get('/emitir/nota/debito/{documentoId}', [DocumentosDTEController::class, 'emitirnotaDebito'])->name('facturacion.notas.debito');
     Route::post('/store/nota/debido', [DocumentosDTEController::class, 'storeNotaDebito'])->name('facturacion.storeNotaDebito');
+
+    //Cajas
+    Route::get('/cajas/index', [CajaController::class, 'index'])->name('cajas.index');
+    Route::get('/cajas/get/index/data', [CajaController::class, 'getIndexCaja'])->name('cajas.getIndexCaja');
+    Route::post('/store/apertura/caja', [CajaController::class, 'storeCaja'])->name('cajas.storeCaja');
+    Route::post('/cajas/{id}/cerrar', [CajaController::class, 'cerrarCaja'])->name('cajas.cerrar');
 
     //herramienta del json
     Route::get('/lector/json', [LectorJsonController::class, 'index'])->name('lector.index');
