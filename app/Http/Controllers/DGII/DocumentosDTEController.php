@@ -806,6 +806,8 @@ class DocumentosDTEController extends Controller
         $view = match ($tipo_dte) {
             '01' => 'documentos.pdf.fe',
             '03' => 'documentos.pdf.ccf',
+            '05' => 'documentos.pdf.nc',
+            '06' => 'documentos.pdf.nd',
             '14' => 'documentos.pdf.se',
             '15' => 'documentos.pdf.cd',
             default => abort(404, 'Tipo de documento no soportado.')
@@ -1014,6 +1016,8 @@ class DocumentosDTEController extends Controller
         $view = match ($documento->tipo_documento) {
             '01' => 'documentos.pdf.fe',
             '03' => 'documentos.pdf.ccf',
+            '05' => 'documentos.pdf.nc',
+            '06' => 'documentos.pdf.nd',
             '14' => 'documentos.pdf.se',
             '15' => 'documentos.pdf.cd',
             default => abort(404, 'Tipo de documento no soportado.')
