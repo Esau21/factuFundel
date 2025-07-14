@@ -202,7 +202,7 @@ class DocumentosDTEController extends Controller
                             </a>';
                     }
 
-                    if (Auth()->user()->can('facturacion_view_factura')) {
+                    /* if (Auth()->user()->can('facturacion_view_factura')) {
                         $documento = '<a href="' . route('facturacion.generarDocumentoElectronico', $data->id) . '" 
                                     class="btn btn-sm mx-1 d-inline-block bg-label-success" 
                                     title="Mostrar Factura"
@@ -211,7 +211,7 @@ class DocumentosDTEController extends Controller
                                         style="font-size: 28px; transition: transform 0.2s;">
                                     </i>
                                 </a>';
-                    }
+                    } */
 
                     if (Auth()->user()->can('download_json')) {
                         $json = '<a href="' . route('facturacion.getDocumentoTributarioJson', $data->id) . '" 
@@ -276,14 +276,14 @@ class DocumentosDTEController extends Controller
                     }
 
 
-                    $debito = '';
+                 /*    $debito = '';
 
                     $debito = ' <a class="dropdown-item d-flex align-items-center" href="' . route('facturacion.notas.debito', $data->id) . '?tipo=debito">
                                                     <i class="bx bx-credit-card-front me-2 text-info" style="font-size: 20px;"></i> Emitir Nota de Débito
-                                                </a>';
+                                                </a>'; */
 
 
-                    return $resMH . $documento . $json . $documentoDownload . $anulacionJson . $sendDtefailMhResponse . $debito;
+                    return $resMH . $documento . $json . $documentoDownload . $anulacionJson . $sendDtefailMhResponse;
                 })
                 ->rawColumns(['acciones', 'numero_control', 'codigo_generacion', 'tipo_documento', 'fecha_emision', 'estado', 'emitir_invalidacion'])->make(true);
         }

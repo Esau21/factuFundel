@@ -77,12 +77,16 @@
                                     <input type="number" step="0.01" name="detalle[0][precio]" class="form-control"
                                         required>
                                 </div>
+
+                                <div class="col-sm-2 d-flex align-items-end">
+                                    <button type="button" class="btn btn-success mb-3" onclick="agregarItem()">Agregar
+                                        Ítem</button>
+                                </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-sm btn-success mb-3" onclick="agregarItem()">Agregar
-                            Ítem</button>
-
-                        <button type="submit" class="btn btn-primary mt-3">Emitir Nota de Crédito</button>
+                        <div class="d-flex gap-2 align-items-center mb-3">
+                            <button type="submit" class="btn btn-primary mt-3">Emitir Nota de Crédito</button>
+                        </div>
                     </form>
                 </div>
             </div>
