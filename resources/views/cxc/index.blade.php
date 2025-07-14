@@ -20,7 +20,7 @@
                                         <th class="text-left">Ov</th>
                                         <th class="text-left">Cliente</th>
                                         <th class="text-left">Monto</th>
-                                        <th class="text-left">Saldo Pendinte</th>
+                                        <th class="text-left">Saldo Pendiente</th>
                                         <th class="text-left">Metodo de pago</th>
                                         <th class="text-left">Acciones</th>
                                     </tr>

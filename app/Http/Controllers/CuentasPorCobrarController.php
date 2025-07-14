@@ -46,12 +46,38 @@ class CuentasPorCobrarController extends Controller
                     }
                 })
                 ->addColumn('acciones', function ($data) {
-                    return 'Acciones';
+                   $verAccount = '';
+
+                    if (Auth()->user()->can('categoria_edit')) {
+                        $verAccount = '<a title="Ver cuenta" class="btn bg-label-success mt-mobile mx-2" href="">
+                                    <i class="bx bxs-user-account" style="font-size: 20px; transition: transform 0.2s;"></i>
+                                 </a>';
+                    }
+
+                    if (Auth()->user()->can('categoria_delete')) {
+                        $eliminar = '<a title="Reporte Cuentas por Cobrar" class="btn bg-label-danger mt-mobile mx-2" href="">
+                                    <i class="bx bxs-note" style="font-size: 20px; transition: transform 0.2s;"></i>
+                                 </a>';
+                    }
+
+                    return $verAccount . $eliminar;
                 })
                 ->rawColumns(['acciones', 'metodo_pago'])->make(true);
         }
     }
 
+
+
+    public function reporteporUsuarioCuentasxC($id)
+    {
+        $CxC = CuentasPorCobrar::find($id);
+
+        if(!$CxC){
+            return response()->json(['error' => 'No se encontro la cuenta del cliente']);
+        }
+
+        
+    }
 
 
     public function abonosIndex()
