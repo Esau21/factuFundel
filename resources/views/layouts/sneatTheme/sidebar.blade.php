@@ -188,24 +188,6 @@
             </li>
         @endcan
 
-
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <img src="{{ asset('assets/img/caja-registradora.png') }}" class="menu-icon tf-icons"
-                    alt="img">
-                <div class="text-truncate" data-i18n="Authentications">Control de Caja</div>
-            </a>
-            <ul class="menu-sub">
-                @can('ventas_del_dia_index')
-                    <li class="menu-item">
-                        <a href="{{ route('cajas.index') }}" class="menu-link">
-                            <div class="text-truncate" data-i18n="Basic">Listado de Cajas</div>
-                        </a>
-                    </li>
-                @endcan
-            </ul>
-        </li>
-
         @can('facturacion_view')
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -237,5 +219,31 @@
                 </ul>
             </li>
         @endcan
+
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <img src="{{ asset('assets/img/c.png') }}" class="menu-icon tf-icons" alt="img">
+                <div class="text-truncate" data-i18n="Authentications">Cuentas por cobrar</div>
+            </a>
+            <ul class="menu-sub">
+                @can('ventas_del_dia_index')
+                    <li class="menu-item">
+                        <a href="{{ route('cxc.index') }}" class="menu-link">
+                            <div class="text-truncate" data-i18n="Basic">Listado de CxC</div>
+                        </a>
+                    </li>
+                @endcan
+                @can('ventas_del_dia_index')
+                    <li class="menu-item">
+                        <a href="{{ route('cxc.abonosIndex') }}" class="menu-link">
+                            <div class="text-truncate" data-i18n="Basic">Abonos</div>
+                        </a>
+                    </li>
+                @endcan
+            </ul>
+        </li>
+
+
     </ul>
 </aside>

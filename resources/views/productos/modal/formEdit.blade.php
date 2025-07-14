@@ -54,7 +54,7 @@
                      <div class="col-4 form-control-validation">
                          <label class="form-label w-100" for="categoria_id">Categoria</label>
                          <div class="input-group input-group-merge">
-                             <select name="categoria_id" id="categoria_id" class="select2"
+                             <select name="categoria_id" id="categoria_id" class="form-control w-100 select2"
                                  data-dropdown-parent="#editProducto">
                                  <option value="">Elegir</option>
                                  @foreach ($categorias as $c)
@@ -68,7 +68,7 @@
                      <div class="col-6 form-control-validation">
                          <label class="form-label w-100" for="item_id">Elegir el bien o servicio</label>
                          <div class="input-group input-group-merge">
-                             <select name="item_id" id="item_id" class="form-select"
+                             <select name="item_id" id="item_id" class="form-select w-100"
                                  data-dropdown-parent="#editProducto">
                                  <option value="">Selecciona</option>
                                  @foreach ($items as $i)

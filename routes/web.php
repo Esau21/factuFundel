@@ -3,6 +3,7 @@
 use App\Http\Controllers\Caja\CajaController;
 use App\Http\Controllers\Categorias\CategoriaController;
 use App\Http\Controllers\Cobros\BancosController;
+use App\Http\Controllers\CuentasPorCobrarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DGII\DocumentosDTEController;
 use App\Http\Controllers\DGII\LectorJsonController;
@@ -180,6 +181,13 @@ Route::middleware(['auth', 'estado'])->group(function () {
     Route::get('/cajas/get/index/data', [CajaController::class, 'getIndexCaja'])->name('cajas.getIndexCaja');
     Route::post('/store/apertura/caja', [CajaController::class, 'storeCaja'])->name('cajas.storeCaja');
     Route::post('/cajas/{id}/cerrar', [CajaController::class, 'cerrarCaja'])->name('cajas.cerrar');
+    Route::delete('/cajas/delete/{id}', [CajaController::class, 'eliminarCaja'])->name('cajas.eliminarCaja');
+
+    //CxC
+    Route::get('/cuentas/por/cobrar', [CuentasPorCobrarController::class, 'index'])->name('cxc.index');
+    Route::get('/cxc/getData', [CuentasPorCobrarController::class, 'indexGetDataCxC'])->name('cxc.indexGetDataCxC');
+    Route::get('/abonos/cxc', [CuentasPorCobrarController::class, 'abonosIndex'])->name('cxc.abonosIndex');
+    Route::post('/abono/cuenta/store', [CuentasPorCobrarController::class, 'registrarAbono'])->name('store.abono.cuenta');
 
     //herramienta del json
     Route::get('/lector/json', [LectorJsonController::class, 'index'])->name('lector.index');

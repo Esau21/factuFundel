@@ -10,6 +10,7 @@ use App\Models\Bancos\Bancos;
 use App\Models\Bancos\ChequeRecibido;
 use App\Models\Bancos\CuentasBancarias;
 use App\Models\CorrelativoDte;
+use App\Models\CXC\CuentasPorCobrar;
 use App\Models\DGII\DocumentosDte;
 use App\Models\Producto\Producto;
 use App\Models\SociosNegocios\Clientes;
@@ -868,13 +869,16 @@ class SalesController extends Controller
             /**
              * Guardamos la venta
              */
+
+            $estadoVenta = $request->tipo_venta == 1 ? 'PAID' : 'PENDING';
+
             $sale = Sales::create([
                 'cliente_id' => $request->cliente_id,
                 'user_id' => Auth::id(),
                 'fecha_venta' => Carbon::now(),
                 'total' => $request->total,
                 'cambio' => floatval($request->cambio),
-                'status' => 'PAID',
+                'status' => $estadoVenta,
                 'tipo_pago' => $tipo_pago,
                 'tipo_venta' => $request->tipo_venta,
                 "plazo" => $request->plazo ?? null,
@@ -897,6 +901,26 @@ class SalesController extends Controller
                 'cuenta_bancaria_id' => $request->cuenta_bancaria_id ?? null,
                 'documento_dte_id' => $documentoDte->id,
             ]);
+
+            if ($request->tipo_venta == 1) {
+                CuentasPorCobrar::create([
+                    'sale_id' => $sale->id,
+                    'monto' => $request->total,
+                    'saldo_pendiente' => 0, 
+                    'fecha_pago' => now(),
+                    'metodo_pago' => $request->tipo_pago,
+                ]);
+            } else if ($request->tipo_venta == 2) {
+                CuentasPorCobrar::create([
+                    'sale_id' => $sale->id,
+                    'monto' => $request->total,
+                    'saldo_pendiente' => $request->total, 
+                    'fecha_pago' => null,
+                    'metodo_pago' => null,
+                ]);
+            }
+
+
 
             if ($tipo_pago === '04') {
                 $cheque = $sale->cheque()->create([

@@ -4,6 +4,7 @@ namespace App\Models\Ventas;
 
 use App\Models\Bancos\ChequeRecibido;
 use App\Models\Bancos\CuentasBancarias;
+use App\Models\CXC\CuentasPorCobrar;
 use App\Models\DGII\DocumentosDte;
 use App\Models\SociosNegocios\Clientes;
 use App\Models\User;
@@ -94,5 +95,20 @@ class Sales extends Model
         }
 
         return $query->get();
+    }
+
+    public function pagos()
+    {
+        return $this->hasMany(CuentasPorCobrar::class, 'sale_id');
+    }
+
+    public function saldoPendiente()
+    {
+        return $this->total - $this->pagos()->sum('monto');
+    }
+
+    public function estaPagado()
+    {
+        return $this->saldoPendiente() <= 0;
     }
 }

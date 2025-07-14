@@ -25,31 +25,43 @@ class CajaController extends Controller
                     return $data?->user?->name ?? '';
                 })
                 ->addColumn('fecha_apertura', function ($data) {
-                    return $data?->fecha_apertura ?? '';
+                    if ($data?->fecha_apertura) {
+                        \Carbon\Carbon::setLocale('es');
+                        return \Carbon\Carbon::parse($data->fecha_apertura)->translatedFormat('j \d\e F \d\e Y');
+                    }
+                    return '';
                 })
                 ->addColumn('fecha_cierre', function ($data) {
-                    return $data?->fecha_cierre ?? '';
+                    if ($data?->fecha_cierre) {
+                        \Carbon\Carbon::setLocale('es');
+                        return \Carbon\Carbon::parse($data->fecha_cierre)->translatedFormat('j \d\e F \d\e Y');
+                    }
+                    return '';
                 })
                 ->addColumn('monto_inicial', function ($data) {
-                    return $data?->monto_inicial ?? '';
+                    return '$' . $data?->monto_inicial ?? '';
                 })
                 ->addColumn('total_efectivo', function ($data) {
-                    return $data?->total_efectivo ?? '';
+                    return '$' . $data?->total_efectivo ?? '';
                 })
                 ->addColumn('total_tarjeta', function ($data) {
-                    return $data?->total_tarjeta ?? '';
+                    return '$' . $data?->total_tarjeta ?? '';
                 })
                 ->addColumn('total_otros', function ($data) {
-                    return $data?->total_otros ?? '';
+                    return '$' . $data?->total_otros ?? '';
                 })
                 ->addColumn('total_declarado', function ($data) {
-                    return $data?->total_declarado ?? '';
+                    return '$' . $data?->total_declarado ?? '';
                 })
                 ->addColumn('diferencia', function ($data) {
-                    return $data?->diferencia ?? '';
+                    return '$' . $data?->diferencia ?? '';
                 })
                 ->addColumn('estado', function ($data) {
-                    return $data?->estado ?? '';
+                    if ($data->estado == 'abierta') {
+                        return '<span class="badge bg-label-success">ABIERTA</span>';
+                    } else {
+                        return '<span class="badge bg-label-danger">CERRADA</span>';
+                    }
                 })
                 ->addColumn('observaciones', function ($data) {
                     return $data?->observaciones ?? '';
@@ -79,7 +91,7 @@ class CajaController extends Controller
 
                     return $cerrarCaja . $eliminar;
                 })
-                ->rawColumns(['acciones'])->make(true);
+                ->rawColumns(['acciones', 'estado'])->make(true);
         }
     }
 
@@ -149,5 +161,23 @@ class CajaController extends Controller
         }
 
         return response()->json(['error' => 'Algo salio mal al querer cerrar la caja'], 405);
+    }
+
+
+    public function eliminarCaja($id)
+    {
+        $caja = Caja::find($id);
+
+        if (!$caja) {
+            return response()->json(['error' => 'Upps no se encontro la caja que quieres eliminar'], 422);
+        }
+
+        $caja->delete();
+
+        if ($caja) {
+            return response()->json(['success' => 'La caja se elimino con exito'], 200);
+        }
+
+        return response()->json(['error' => 'Algo salio mal al querer intentar eliminar la caja'], 405);
     }
 }

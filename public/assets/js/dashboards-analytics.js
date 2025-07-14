@@ -108,9 +108,324 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
   // Total Revenue Report Chart - Bar Chart
   // --------------------------------------------------------------------
+  const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
+    totalRevenueChartOptions = {
+      series: [
+        {
+          name: new Date().getFullYear() - 1,
+          data: [18, 7, 15, 29, 18, 12, 9]
+        },
+        {
+          name: new Date().getFullYear() - 2,
+          data: [-13, -18, -9, -14, -8, -17, -15]
+        }
+      ],
+      chart: {
+        height: 300,
+        stacked: true,
+        type: 'bar',
+        toolbar: { show: false }
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '30%',
+          borderRadius: 8,
+          startingShape: 'rounded',
+          endingShape: 'rounded',
+          borderRadiusApplication: 'around'
+        }
+      },
+      colors: [config.colors.primary, config.colors.info],
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 6,
+        lineCap: 'round',
+        colors: [cardColor]
+      },
+      legend: {
+        show: true,
+        horizontalAlign: 'left',
+        position: 'top',
+        markers: {
+          size: 4,
+          radius: 12,
+          shape: 'circle',
+          strokeWidth: 0
+        },
+        fontSize: '13px',
+        fontFamily: fontFamily,
+        fontWeight: 400,
+        labels: {
+          colors: legendColor,
+          useSeriesColors: false
+        },
+        itemMargin: {
+          horizontal: 10
+        }
+      },
+      grid: {
+        strokeDashArray: 7,
+        borderColor: borderColor,
+        padding: {
+          top: 0,
+          bottom: -8,
+          left: 20,
+          right: 20
+        }
+      },
+      fill: {
+        opacity: [1, 1]
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        labels: {
+          style: {
+            fontSize: '13px',
+            fontFamily: fontFamily,
+            colors: labelColor
+          }
+        },
+        axisTicks: {
+          show: false
+        },
+        axisBorder: {
+          show: false
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: '13px',
+            fontFamily: fontFamily,
+            colors: labelColor
+          }
+        }
+      },
+      responsive: [
+        {
+          breakpoint: 1700,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 10,
+                columnWidth: '35%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 1440,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 12,
+                columnWidth: '43%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 1300,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 11,
+                columnWidth: '45%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 1200,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 11,
+                columnWidth: '37%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 1040,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 12,
+                columnWidth: '45%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 991,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 12,
+                columnWidth: '33%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 768,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 11,
+                columnWidth: '28%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 640,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 11,
+                columnWidth: '30%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 576,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 10,
+                columnWidth: '38%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 440,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 10,
+                columnWidth: '50%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 380,
+          options: {
+            plotOptions: {
+              bar: {
+                borderRadius: 9,
+                columnWidth: '60%'
+              }
+            }
+          }
+        }
+      ],
+      states: {
+        hover: {
+          filter: {
+            type: 'none'
+          }
+        },
+        active: {
+          filter: {
+            type: 'none'
+          }
+        }
+      }
+    };
+  if (typeof totalRevenueChartEl !== undefined && totalRevenueChartEl !== null) {
+    const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
+    totalRevenueChart.render();
+  }
 
   // Growth Chart - Radial Bar Chart
   // --------------------------------------------------------------------
+  const growthChartEl = document.querySelector('#growthChart'),
+    growthChartOptions = {
+      series: [78],
+      labels: ['Growth'],
+      chart: {
+        height: 200,
+        type: 'radialBar'
+      },
+      plotOptions: {
+        radialBar: {
+          size: 150,
+          offsetY: 10,
+          startAngle: -150,
+          endAngle: 150,
+          hollow: {
+            size: '55%'
+          },
+          track: {
+            background: cardColor,
+            strokeWidth: '100%'
+          },
+          dataLabels: {
+            name: {
+              offsetY: 15,
+              color: legendColor,
+              fontSize: '15px',
+              fontWeight: '500',
+              fontFamily: fontFamily
+            },
+            value: {
+              offsetY: -25,
+              color: headingColor,
+              fontSize: '22px',
+              fontWeight: '500',
+              fontFamily: fontFamily
+            }
+          }
+        }
+      },
+      colors: [config.colors.primary],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'dark',
+          shadeIntensity: 0.5,
+          gradientToColors: [config.colors.primary],
+          inverseColors: true,
+          opacityFrom: 1,
+          opacityTo: 0.6,
+          stops: [30, 70, 100]
+        }
+      },
+      stroke: {
+        dashArray: 5
+      },
+      grid: {
+        padding: {
+          top: -35,
+          bottom: -10
+        }
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none'
+          }
+        },
+        active: {
+          filter: {
+            type: 'none'
+          }
+        }
+      }
+    };
+  if (typeof growthChartEl !== undefined && growthChartEl !== null) {
+    const growthChart = new ApexCharts(growthChartEl, growthChartOptions);
+    growthChart.render();
+  }
 
   // Revenue Bar Chart
   // --------------------------------------------------------------------
@@ -190,7 +505,108 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
   // Profit Report Line Chart
   // --------------------------------------------------------------------
-
+  const profileReportChartEl = document.querySelector('#profileReportChart'),
+    profileReportChartConfig = {
+      chart: {
+        height: 75,
+        width: 240,
+        type: 'line',
+        toolbar: {
+          show: false
+        },
+        dropShadow: {
+          enabled: true,
+          top: 10,
+          left: 5,
+          blur: 3,
+          color: config.colors.warning,
+          opacity: 0.15
+        },
+        sparkline: {
+          enabled: true
+        }
+      },
+      grid: {
+        show: false,
+        padding: {
+          right: 8
+        }
+      },
+      colors: [config.colors.warning],
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        width: 5,
+        curve: 'smooth'
+      },
+      series: [
+        {
+          data: [110, 270, 145, 245, 205, 285]
+        }
+      ],
+      xaxis: {
+        show: false,
+        lines: {
+          show: false
+        },
+        labels: {
+          show: false
+        },
+        axisBorder: {
+          show: false
+        }
+      },
+      yaxis: {
+        show: false
+      },
+      responsive: [
+        {
+          breakpoint: 1700,
+          options: {
+            chart: {
+              width: 200
+            }
+          }
+        },
+        {
+          breakpoint: 1579,
+          options: {
+            chart: {
+              width: 180
+            }
+          }
+        },
+        {
+          breakpoint: 1500,
+          options: {
+            chart: {
+              width: 160
+            }
+          }
+        },
+        {
+          breakpoint: 1450,
+          options: {
+            chart: {
+              width: 140
+            }
+          }
+        },
+        {
+          breakpoint: 1400,
+          options: {
+            chart: {
+              width: 240
+            }
+          }
+        }
+      ]
+    };
+  if (typeof profileReportChartEl !== undefined && profileReportChartEl !== null) {
+    const profileReportChart = new ApexCharts(profileReportChartEl, profileReportChartConfig);
+    profileReportChart.render();
+  }
 
   // Order Statistics Chart
   // --------------------------------------------------------------------

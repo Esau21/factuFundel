@@ -8,7 +8,7 @@
                      document.write(new Date().getFullYear());
                  </script>
                  , made with ❤️ by
-                 <a href="https://themeselection.com" target="_blank" class="footer-link">fundel</a>
+                 <a href="https://themeselection.com" target="_blank" class="footer-link">{{ empresaDatos() }}</a>
              </div>
          </div>
      </div>
