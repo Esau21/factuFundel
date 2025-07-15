@@ -17,27 +17,27 @@ class ConfiguracionesSeeder extends Seeder
     {
 
         Empresa::create([
-            'nombre' => 'FUNDACION DE DESARROLLO LATINO AMERICANO',
-            'nombreComercial' => 'FUNDEL',
+            'nombre' => 'TU EMPRESA',
+            'nombreComercial' => 'EMPRESA EJEMPLO',
             'tipo_documento' => '36',
             'departamento_id' => 1,
             'municipio_id' => 1,
-            'complemento' => 'CALLE AL MIRADOR COLONIA ESCALON',
-            'nit' => '06140607181088',
-            'nrc' => '2760965',
-            'telefono' => '77665545',
-            'correo' => 'fundelong@gmail.com',
+            'complemento' => 'SAN SALVADOR EJEMPLO DE TU DIREECION',
+            'nit' => 'XXXXXXX',
+            'nrc' => 'XXXXXXXX',
+            'telefono' => 'XXXXXXX',
+            'correo' => 'tucorreo@gmail.com',
             'logo' => asset('img/camara1.png'),
             'actividad_economica_id' => 1,
             'tipoEstablecimiento' => '01',
-            'nombre_establecimiento' => 'FundelcasaMatriz',
-            'token' => 'tokentokentokentoken',
-            'token_expire' => 'token_expiredffrrffvrfvfv',
+            'nombre_establecimiento' => 'casa matriz',
+            'token' => 'XXXXX',
+            'token_expire' => 'XXXXXXX',
             'ambiente' => '00',
             'codPuntoVentaMH' => 'P001',
             'codEstablecimientoMH' => 'M001',
-            'claveAPI' => Crypt::encryptString('Fundel@2025**'),
-            'claveCert' => Crypt::encryptString('FundelOng@2025##')
+            'claveAPI' => Crypt::encryptString('XXXXXXXXXX'),
+            'claveCert' => Crypt::encryptString('XXXXXXXXXX')
         ]);
     }
 }
