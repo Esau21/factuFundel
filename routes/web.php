@@ -191,6 +191,7 @@ Route::middleware(['auth', 'estado'])->group(function () {
 
     //herramienta del json
     Route::get('/lector/json', [LectorJsonController::class, 'index'])->name('lector.index');
+    Route::post('/conver/to/json/excel', [LectorJsonController::class, 'uploadFile'])->name('lector.uploadFile');
 });
 
 Route::get('/notaccess', function () {

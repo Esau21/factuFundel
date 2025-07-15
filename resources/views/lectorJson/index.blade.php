@@ -1,204 +1,258 @@
 @extends('layouts.sneatTheme.base')
 
-@section('title', 'Lector JSON')
-
 @section('content')
-    {{-- DROPZONE CSS --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
-
     <style>
-        .dropzone {
-            border: 2px dashed #03C988;
-            background: #f0fdf4;
-            border-radius: 10px;
-            padding: 50px;
-            text-align: center;
-            color: #4b5563;
-            transition: background 0.3s;
+        body {
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .dropzone:hover {
-            background: #e7fdf1;
+        /* Solo unos detalles para la zona de dropzone */
+        .dropzone-wrapper {
+            cursor: pointer;
+            user-select: none;
+            border: 2px dashed #20c997;
+            /* bootstrap "success" color */
+            border-radius: 0.5rem;
+            padding: 3rem 2rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
-        .dropzone .dz-message {
-            font-size: 18px;
-            color: #10b981;
+        .dropzone-wrapper.dragover {
+            background-color: #d1e7dd !important;
+            /* bg success light */
+            border-color: #157347 !important;
+            /* bootstrap dark success */
         }
 
-        .file-item {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            margin-bottom: 10px;
+        #file-upload {
+            display: none;
         }
 
-        .file-item img {
-            width: 40px;
-            margin-right: 15px;
-        }
-
-        .file-name {
-            font-weight: bold;
-            color: #374151;
-        }
-
-        .btn {
-            background-color: #03C988;
-            color: white;
-            border: none;
-        }
-
-        .btn:hover {
-            background-color: #00b09b;
+        #clean_data {
+            cursor: pointer;
         }
     </style>
 
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow">
-                    <div class="card-header bg-white text-center">
-                        <h2 class="text-dark font-weight-bold mb-2">
-                            Conversor <span class="text-warning">JSON</span>
+    <div class="container upload-section mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow rounded-4">
+                    <div class="card-header text-center bg-white border-0">
+                        <h2 class="fw-bold">
+                            Cargar archivos <span class="text-success">DTE</span>
                             <ion-icon name="arrow-forward-outline"></ion-icon>
                             <span class="text-success">Excel</span>
                         </h2>
-                        <p class="text-muted">Arrastra o selecciona múltiples archivos JSON</p>
+                        <p class="text-muted">Carga múltiples archivos JSON arrastrando o seleccionando archivos.</p>
                     </div>
-
                     <div class="card-body">
-                        <form action="#" method="POST" class="dropzone" id="jsonDropzone"
-                            enctype="multipart/form-data">
+                        <form id="upload-form" method="POST" action="{{ route('lector.uploadFile') }}"
+                            enctype="multipart/form-data" class="text-center">
                             @csrf
-                            <div class="dz-message">
-                                <ion-icon name="cloud-upload-outline" size="large"></ion-icon><br>
-                                Arrastra tus archivos JSON aquí o haz clic para seleccionarlos
-                            </div>
+                            @method('POST')
+
+                            <label id="dropzone" for="file-upload" class="dropzone-wrapper d-block mx-auto">
+                                <ion-icon name="cloud-upload-outline" style="font-size: 3rem; color: #20c997;"></ion-icon>
+                                <p class="fs-5 fw-semibold mb-0">Arrastra tus archivos JSON aquí o haz clic para
+                                    seleccionarlos</p>
+                                <input id="file-upload" type="file" name="file[]" multiple>
+                            </label>
+
+                            <button type="submit" class="btn bg-label-success btn-lg mt-4 w-90" id="btn-file" disabled>
+                                Convertir a Excel
+                            </button>
                         </form>
 
-                        <div id="loading" class="text-center mt-3" style="display: none;">
-                            <div class="spinner-border text-success" role="status"></div>
+                        <div id="loading" class="mt-3 text-center" style="display: none;">
+                            <div class="spinner-border text-dark" role="status">
+                                <span class="visually-hidden">Procesando...</span>
+                            </div>
                         </div>
-
-                        <div id="file-list" class="mt-4"></div>
-
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <button id="convertir"
-                                class="btn bg-label-success text-success border d-inline-flex align-items-center px-3 py-2"
-                                disabled>
-                                <i class="bx bx-file me-2" style="font-size: 18px;"></i> Convertir a Excel
-                            </button>
-
-                            <button id="limpiar"
-                                class="btn bg-label-danger text-danger border d-inline-flex align-items-center px-3 py-2"
-                                style="display: none;">
-                                <i class="bx bxs-trash me-2" style="font-size: 18px;"></i> Limpiar
-                            </button>
-                        </div>
-
+                    </div>
+                    <div class="card-footer bg-white border-0 text-start">
+                        <h5 id="text-h5-json" class="fw-bold mb-3" style="display: none;">Archivos JSON cargados:</h5>
+                        <div id="file-list" class="mb-3"></div>
+                        <button id="clean_data" class="btn bg-label-danger" style="display: none;">
+                            <i class="bx bx-recycle"></i> Limpiar selección
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    {{-- DROPZONE + TOASTIFY --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const dropzone = document.getElementById("dropzone");
+        const subirArchivo = document.getElementById("file-upload");
+        const listarArchivo = document.getElementById("file-list");
+        const texttoH5 = document.getElementById("text-h5-json");
+        const Clear = document.getElementById("clean_data");
+        const btnFile = document.getElementById("btn-file");
 
-    <script>
-        Dropzone.autoDiscover = false;
+        function mostrarArchivos(files) {
+            listarArchivo.innerHTML = '';
+            [...files].forEach(file => {
+                const item = document.createElement('div');
+                item.classList.add('d-flex', 'align-items-center', 'mb-2', 'border', 'rounded', 'p-2',
+                    'bg-white', 'shadow-sm');
+                item.innerHTML = `
+                <div class="flex-grow-1">
+                    <div class="fw-bold">${file.name}</div>
+                    <div class="text-muted small">${formatFileSize(file.size)}</div>
+                </div>
+            `;
+                listarArchivo.appendChild(item);
+            });
 
-        let filesSeleccionados = [];
+            texttoH5.innerHTML =
+                `Archivos JSON cargados: <span class="badge bg-success">${files.length}</span>`;
+            texttoH5.style.display = 'block';
+            Clear.style.display = 'inline-block';
+            btnFile.disabled = false;
+        }
 
-        const dropzone = new Dropzone("#jsonDropzone", {
-            paramName: "file[]",
-            maxFilesize: 5, // MB
-            acceptedFiles: ".json",
-            uploadMultiple: true,
-            autoProcessQueue: false,
-            addRemoveLinks: true,
-            dictRemoveFile: "Eliminar",
-            parallelUploads: 10,
-            init: function() {
-                const btnConvertir = document.getElementById('convertir');
-                const limpiarBtn = document.getElementById('limpiar');
-                const loading = document.getElementById('loading');
-                const fileList = document.getElementById('file-list');
+        function formatFileSize(size) {
+            if (size === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(size) / Math.log(k));
+            return (size / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+        }
 
-                this.on("addedfile", function(file) {
-                    filesSeleccionados.push(file);
-                    btnConvertir.disabled = false;
-                    limpiarBtn.style.display = "block";
-                });
+        subirArchivo.addEventListener('change', function() {
+            if (this.files.length) {
+                mostrarArchivos(this.files);
+            } else {
+                listarArchivo.innerHTML = '';
+                texttoH5.style.display = 'none';
+                Clear.style.display = 'none';
+                btnFile.disabled = true;
+            }
+        });
 
-                this.on("removedfile", function(file) {
-                    filesSeleccionados = filesSeleccionados.filter(f => f.name !== file.name);
-                    if (filesSeleccionados.length === 0) {
-                        btnConvertir.disabled = true;
-                        limpiarBtn.style.display = "none";
-                    }
-                });
+        Clear.addEventListener('click', () => {
+            listarArchivo.innerHTML = '';
+            texttoH5.style.display = 'none';
+            Clear.style.display = 'none';
+            subirArchivo.value = '';
+            btnFile.disabled = true;
+        });
 
-                btnConvertir.addEventListener('click', () => {
-                    if (filesSeleccionados.length > 0) {
-                        loading.style.display = "block";
+        dropzone.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
 
-                        this.options.url = ""; // Ajusta aquí tu ruta
-                        this.processQueue();
-                    }
-                });
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('dragover');
+        });
 
-                this.on("successmultiple", function(files, response) {
-                    const blob = new Blob([response], {
-                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = "json_convertido.xlsx";
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
+        dropzone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            subirArchivo.files = files;
+            mostrarArchivos(files);
+        });
+
+        btnFile.disabled = true;
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#upload-form').on('submit', function(event) {
+            event.preventDefault();
+            let formData = new FormData(this);
+            $('#loading').show();
+
+            $.ajax({
+                url: '{{ route('lector.uploadFile') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(blob, status, xhr) {
+                    let link = document.createElement('a');
+                    let url = window.URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = 'dte-transformado-by-moranZsoft.xlsx';
+                    document.body.append(link);
+                    link.click();
+                    link.remove();
                     window.URL.revokeObjectURL(url);
 
                     Toastify({
-                        text: "¡Excel generado correctamente!",
-                        duration: 3000,
+                        text: "✅ Se ha descargado el excel correctamente",
+                        duration: 2000,
                         gravity: "top",
-                        position: "center",
-                        backgroundColor: "#03C988",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #3b3f5c, #3b3f5c)",
+                        stopOnFocus: true,
+                        close: true,
+                        style: {
+                            borderRadius: "8px",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                            fontWeight: "600",
+                            fontSize: "16px",
+                        }
                     }).showToast();
 
-                    this.removeAllFiles();
-                    filesSeleccionados = [];
-                    btnConvertir.disabled = true;
-                    limpiarBtn.style.display = "none";
-                    loading.style.display = "none";
-                });
 
-                this.on("errormultiple", function(files, response) {
-                    Toastify({
-                        text: "Ocurrió un error con los archivos.",
-                        duration: 3000,
-                        gravity: "top",
-                        position: "center",
-                        backgroundColor: "#FF0000",
-                    }).showToast();
-                    loading.style.display = "none";
-                });
+                    $('#loading').hide();
+                    $('#file-list').empty();
+                    $('#text-h5-json').hide();
+                    $('#clean_data').hide();
+                    $('#file-upload').val('');
+                    $('#btn-file').prop('disabled', true);
+                },
+                error: function(jqXHR) {
+                    setTimeout(() => {
+                        if (jqXHR.status == 415) {
+                            Toastify({
+                                text: "Error, uno o más archivos cargados no son JSON",
+                                duration: 5000,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "linear-gradient(to right, #FF0000, #FF0000)",
+                            }).showToast();
+                        } else if (jqXHR.status == 400) {
+                            Toastify({
+                                text: "solo puedes procesar 500 dte al dia",
+                                duration: 25000,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "linear-gradient(to right, #667BC6, #667BC6)",
+                            }).showToast();
+                        } else {
+                            Toastify({
+                                text: "Error desconocido, contacte al administrador",
+                                duration: 5000,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "linear-gradient(to right, #FF0000, #FF0000)",
+                            }).showToast();
+                        }
 
-                limpiarBtn.addEventListener('click', () => {
-                    this.removeAllFiles();
-                    filesSeleccionados = [];
-                    btnConvertir.disabled = true;
-                    limpiarBtn.style.display = "none";
-                });
-            }
+                        $('#file-list').empty();
+                        $('#text-h5-json').hide();
+                        $('#clean_data').hide();
+                        $('#file-upload').val('');
+                        $('#btn-file').prop('disabled', true);
+                        $('#loading').hide();
+                    }, 1000);
+                }
+            });
         });
-    </script>
-@endsection
+    });
+</script>
