@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\CXC\Abono;
 use App\Models\CXC\CuentasPorCobrar;
 use App\Models\SociosNegocios\Clientes;
+use App\Models\SociosNegocios\Empresa;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -46,21 +48,16 @@ class CuentasPorCobrarController extends Controller
                     }
                 })
                 ->addColumn('acciones', function ($data) {
-                   $verAccount = '';
 
-                    if (Auth()->user()->can('categoria_edit')) {
-                        $verAccount = '<a title="Ver cuenta" class="btn bg-label-success mt-mobile mx-2" href="">
+                    $verAccount = '';
+
+                    if (Auth()->user()->can('cxc_account')) {
+                        $verAccount = '<a title="Reporte Cuentas por Cobrar" class="btn bg-label-danger mt-mobile mx-2" href="' . route('cxc.reporteporUsuarioCxC', $data->id) . '" target="_blank">
                                     <i class="bx bxs-user-account" style="font-size: 20px; transition: transform 0.2s;"></i>
                                  </a>';
                     }
 
-                    if (Auth()->user()->can('categoria_delete')) {
-                        $eliminar = '<a title="Reporte Cuentas por Cobrar" class="btn bg-label-danger mt-mobile mx-2" href="">
-                                    <i class="bx bxs-note" style="font-size: 20px; transition: transform 0.2s;"></i>
-                                 </a>';
-                    }
-
-                    return $verAccount . $eliminar;
+                    return $verAccount;
                 })
                 ->rawColumns(['acciones', 'metodo_pago'])->make(true);
         }
@@ -68,16 +65,36 @@ class CuentasPorCobrarController extends Controller
 
 
 
-    public function reporteporUsuarioCuentasxC($id)
+    public function reporteporUsuarioCxC($clienteId)
     {
-        $CxC = CuentasPorCobrar::find($id);
 
-        if(!$CxC){
-            return response()->json(['error' => 'No se encontro la cuenta del cliente']);
+         $detalles_empresa = Empresa::first();
+
+        if(!$detalles_empresa){
+            return response()->json(['error' => 'Error no se encontro la empresa'], 405);
         }
 
-        
+        $cuentas = CuentasPorCobrar::whereHas('sale', function ($query) use ($clienteId) {
+            $query->where('cliente_id', $clienteId);
+        })
+            ->where('saldo_pendiente', '>', 0) 
+            ->get();
+
+        if ($cuentas->isEmpty()) {
+            return response()->json(['error' => 'No se encontraron cuentas por cobrar para este cliente'], 404);
+        }
+
+        $cliente = Clientes::find($clienteId);
+
+        $pdf = Pdf::loadView('cxc.reportes.cxc_por_cliente', [
+            'cuentas' => $cuentas,
+            'cliente' => $cliente,
+            'detalles_empresa' => $detalles_empresa
+        ]);
+
+        return $pdf->stream('Reporte_Cuentas_Por_Cobrar_' . $clienteId . '.pdf');
     }
+
 
 
     public function abonosIndex()

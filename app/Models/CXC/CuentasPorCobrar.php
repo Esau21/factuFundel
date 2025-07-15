@@ -24,8 +24,8 @@ class CuentasPorCobrar extends Model
 
     public static function getCxC()
     {
-        $data = CuentasPorCobrar::select('*')->orderBy('id', 'desc')->get();
-
-        return $data;
+        return CuentasPorCobrar::where('saldo_pendiente', '>', 0)
+            ->orderBy('id', 'desc')
+            ->get();
     }
 }

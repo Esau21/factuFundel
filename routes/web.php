@@ -188,6 +188,7 @@ Route::middleware(['auth', 'estado'])->group(function () {
     Route::get('/cxc/getData', [CuentasPorCobrarController::class, 'indexGetDataCxC'])->name('cxc.indexGetDataCxC');
     Route::get('/abonos/cxc', [CuentasPorCobrarController::class, 'abonosIndex'])->name('cxc.abonosIndex');
     Route::post('/abono/cuenta/store', [CuentasPorCobrarController::class, 'registrarAbono'])->name('store.abono.cuenta');
+    Route::get('/detalle/cxc/{clienteId}', [CuentasPorCobrarController::class, 'reporteporUsuarioCxC'])->name('cxc.reporteporUsuarioCxC');
 
     //herramienta del json
     Route::get('/lector/json', [LectorJsonController::class, 'index'])->name('lector.index');
